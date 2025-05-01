@@ -10,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: '/private/',
       },
     ],
-    sitemap: 'https://techmorphers.com/sitemap.xml',
+    sitemap: 'https://www.techmorphers.com/sitemap.xml',
   };
 }
