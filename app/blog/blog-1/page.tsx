@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Script from 'next/script'
 
 export const metadata: Metadata = {
   title: "Tech Morphers",
@@ -50,7 +51,7 @@ const page = () => {
   }
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <Script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="flex flex-col items-center justify-center h-screen">
         <h1 className="text-4xl font-bold">Blog 1</h1>
         <p>Blog 1 is a blog post about the latest trends in software development.</p>
