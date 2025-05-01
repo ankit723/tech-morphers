@@ -51,7 +51,7 @@ const page = () => {
   }
   return (
     <>
-      <Script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <Script id="blog-2-json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="flex flex-col items-center justify-center h-screen">
         <h1 className="text-4xl font-bold">Blog 2</h1>
         <p>Blog 2 is a blog post about the latest trends in software development.</p>

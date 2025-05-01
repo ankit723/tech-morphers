@@ -51,7 +51,7 @@ const page = () => {
   }
   return (
     <>
-      <Script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <Script id="home-json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="flex flex-col items-center justify-center h-screen">
         <h1 className="text-4xl font-bold">Tech Morphers</h1>
       </div>

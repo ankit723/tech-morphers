@@ -50,7 +50,7 @@ const page = () => {
   }
   return (
     <>
-      <Script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <Script id="case-study-2-json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="flex flex-col items-center justify-center h-screen">
         <h1 className="text-4xl font-bold">Case Study 2</h1>
         <p>Case Study 2 is a case study about the latest trends in software development.</p>
