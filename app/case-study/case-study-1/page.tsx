@@ -15,13 +15,15 @@ export const metadata: Metadata = {
     description: "Tech Morphers is a software development company that builds custom software solutions for businesses.",
     url: "https://www.techmorphers.com",
     siteName: "Tech Morphers",
-    images: [{ url: "https://www.techmorphers.com/og-image.png", width: 1200, height: 630, alt: "Tech Morphers" }],
+    images: [{ url: "https://www.techmorphers.com/og-image.png", width: 1200, height: 630, alt: "Tech Morphers", type: "image/png" }],
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Tech Morphers",
     description: "Tech Morphers is a software development company that builds custom software solutions for businesses.",
-    images: [{ url: "https://www.techmorphers.com/og-image.png", width: 1200, height: 630, alt: "Tech Morphers" }],
+    images: [{ url: "https://www.techmorphers.com/og-image.png", width: 1200, height: 630, alt: "Tech Morphers", type: "image/png" }],
+    
   },
   icons: {
     icon: "/favicon.ico",

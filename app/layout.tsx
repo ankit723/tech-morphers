@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
+import Script from "next/script";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -52,8 +52,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Tech Morphers",
+    url: "https://www.techmorphers.com",
+    logo: "https://www.techmorphers.com/og-image.png",
+    sameAs: [
+      "https://x.com/techmorphers",
+      "https://www.linkedin.com/company/techmorphers",
+      "https://www.facebook.com/techmorphers",
+      "https://www.instagram.com/techmorphers",
+    ],
+  }
   return (
     <html lang="en">
+      <Script id="json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
