@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Script from 'next/script'
+import LandingPage from './components/Home/Landingpage'
 
 export const metadata: Metadata = {
   title: "Tech Morphers",
@@ -49,11 +50,16 @@ const page = () => {
       "https://www.instagram.com/techmorphers",
     ],
   }
+  const toggleTheme = async () => {
+    "use server"
+    // Your logic here (e.g. dark/light mode toggle)
+  };
   return (
     <>
       <Script id="home-json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="flex flex-col items-center justify-center h-screen">
-        <h1 className="text-4xl font-bold">Tech Morphers</h1>
+      <div className=" h-screen">
+        {/* <h1 className="text-4xl font-bold">Tech Morphers</h1> */}
+        <LandingPage toggleTheme={toggleTheme}/>
       </div>
     </>
   )
