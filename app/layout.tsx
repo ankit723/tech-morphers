@@ -67,7 +67,11 @@ export default function RootLayout({
   }
   return (
     <html lang="en">
-      <Script id="json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <head>
+        <link rel="canonical" href="https://www.techmorphers.com.tech" />
+
+       <Script id="json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
