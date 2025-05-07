@@ -1,5 +1,8 @@
 import { Metadata } from 'next'
 import Script from 'next/script'
+import Home from './components/home/Home'
+import CTABanner from './components/home/CTABanner'
+import NavBar from './components/home/NavBar'
 
 export const metadata: Metadata = {
   title: "Tech Morphers",
@@ -52,8 +55,10 @@ const page = () => {
   return (
     <>
       <Script id="home-json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="flex flex-col items-center justify-center h-screen">
-        <h1 className="text-4xl font-bold">Tech Morphers</h1>
+      <div className="">
+        <NavBar/>
+        <Home/>
+        <CTABanner/>
       </div>
     </>
   )
