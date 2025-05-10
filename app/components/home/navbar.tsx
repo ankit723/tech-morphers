@@ -503,7 +503,10 @@ const Navbar = () => {
           <Image src="/logo.png" alt="Tech Morphers" fill className="object-contain" />
         </motion.div>
         <span className="text-black font-bold text-xl tracking-widest">
-          
+          <div className="flex justify-center md:gap-20 items-center mb-4 text-4xl md:text-5xl  lg:text-7xl font-bold text-white">
+              <div className="bg-[url(/home/Group42.png)] p-4 lg:px-8 lg:py-4 rounded-xl">TECH</div>
+              <div className="bg-[url(/home/Group2.png)] p-4 lg:px-8 lg:py-4 rounded-xl">Morphers</div>
+            </div>
         </span>
       </div>
 
