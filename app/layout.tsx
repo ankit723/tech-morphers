@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-
-import "./globals.css";
 import Script from "next/script";
+import "./globals.css";
+import { ThemeProvider } from "@/providers/themeProvider";
+
 
 
 export const metadata: Metadata = {
@@ -61,13 +62,19 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="canonical" href="https://www.techmorphers.com" />
-
-       <Script id="json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <Script id="json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
       <body
-        className={`antialiased`}
+        className={`antialiased bg-gradient-to-b dark:from-[#0A0A1B] dark:to-[#1A1A35] from-white to-white`}
       >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="white"
+          enableSystem
+          storageKey="techmorphers-theme"
+        >
         {children}
+        </ThemeProvider>
       </body>
     </html>
   );

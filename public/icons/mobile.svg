@@ -1,0 +1,10 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="5" y="2" width="14" height="20" rx="2" stroke="url(#mobileGradient)" stroke-width="2" />
+  <circle cx="12" cy="18" r="1" fill="#03A0FF" />
+  <defs>
+    <linearGradient id="mobileGradient" x1="5" y1="2" x2="19" y2="22" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0123FE"/>
+      <stop offset="1" stop-color="#03A0FF"/>
+    </linearGradient>
+  </defs>
+</svg> 

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { ModeToggle } from "@/components/ui/themeToggle";
 
 const Navbar = () => {
   const router = useRouter();
@@ -483,7 +484,7 @@ const Navbar = () => {
 
   return (
     <motion.nav 
-      className="fixed top-0 left-0 right-0 flex justify-between items-center py-4 px-10 z-40 bg-white/5 backdrop-blur-md border-b border-white/10"
+      className="fixed top-0 left-0 right-0 flex justify-between items-center py-4 px-10 z-40 bg-gradient-to-r dark:from-[#0A0A1B] dark:to-[#1A1A35] from-white to-white"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -496,18 +497,30 @@ const Navbar = () => {
       {/* Logo */}
       <div className="flex items-center">
         <motion.div 
-          className="relative w-10 h-10 mr-3"
+          className="relative w-14 h-14 mr-2"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           <Image src="/logo.png" alt="Tech Morphers" fill className="object-contain" />
         </motion.div>
-        <span className="text-black font-bold text-xl tracking-widest">
-          <div className="flex justify-center md:gap-20 items-center mb-4 text-4xl md:text-5xl  lg:text-7xl font-bold text-white">
-              <div className="bg-[url(/home/Group42.png)] p-4 lg:px-8 lg:py-4 rounded-xl">TECH</div>
-              <div className="bg-[url(/home/Group2.png)] p-4 lg:px-8 lg:py-4 rounded-xl">Morphers</div>
-            </div>
-        </span>
+        <div className="flex items-center font-bold">
+          <motion.div 
+            className="relative h-12 w-24 mr-0.5"
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 400 }}
+          >
+            <Image src="/home/Group42.png" alt="Tech" fill className="" />
+            <span className="absolute inset-0 flex items-center justify-center text-white text-sm tracking-wider">TECH</span>
+          </motion.div>
+          <motion.div 
+            className="relative h-12 w-32"
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 400 }}
+          >
+            <Image src="/home/Group2.png" alt="Morphers" fill className="" />
+            <span className="absolute inset-0 flex items-center justify-center text-white text-sm tracking-wider">MORPHERS</span>
+          </motion.div>
+        </div>
       </div>
 
       {/* Dynamic Island Container */}
@@ -607,36 +620,30 @@ const Navbar = () => {
       <div className="flex items-center space-x-6">
         {[
           { label: "Contact" },
-          { label: "Support", hasNotification: true },
+          { label: "Support"},
           { label: "Login" }
         ].map((item, i) => (
-          <motion.div 
-            key={i}
-            className="relative group"
-            initial={{ opacity: 0, x: 10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.1 }}
+          <motion.div
+            key={item.label}
+            className="relative group bg-[#0123FE] rounded-xl px-4 py-3 text-white shadow-md hover:shadow-lg focus:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer outline-none"
+            whileHover={{ scale: 1.05 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ delay: i * 0.1, duration: 0.4 }}
+            role="button"
+            tabIndex={0}
           >
-            <motion.span 
-              className="text-white/70 text-xs tracking-wider cursor-pointer relative"
-              whileHover={{ color: "#ffffff" }}
+            <motion.span
+              className="text-xs sm:text-sm tracking-wider font-semibold"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               {item.label.toUpperCase()}
-              {item.hasNotification && (
-                <motion.div 
-                  className="absolute -top-1 -right-2 w-1.5 h-1.5 bg-white rounded-full"
-                  animate={{ 
-                    opacity: [1, 0.5, 1]
-                  }}
-                  transition={{ 
-                    repeat: Infinity, 
-                    duration: 2 
-                  }}
-                />
-              )}
             </motion.span>
           </motion.div>
         ))}
+        <ModeToggle />
       </div>
     </motion.nav>
   );

@@ -1,0 +1,10 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M7 15C4.79086 15 3 13.2091 3 11C3 8.79086 4.79086 7 7 7C7.03315 7 7.06622 7.00032 7.09922 7.00097C7.5261 4.69233 9.54465 3 12 3C14.4553 3 16.4739 4.69233 16.9008 7.00097C16.9338 7.00032 16.9669 7 17 7C19.2091 7 21 8.79086 21 11C21 13.2091 19.2091 15 17 15" stroke="url(#saasGradient)" stroke-width="2" stroke-linecap="round" />
+  <path d="M12 15V21M12 21L9 18M12 21L15 18" stroke="#0123FE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  <defs>
+    <linearGradient id="saasGradient" x1="3" y1="3" x2="21" y2="15" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0123FE"/>
+      <stop offset="1" stop-color="#03A0FF"/>
+    </linearGradient>
+  </defs>
+</svg> 
