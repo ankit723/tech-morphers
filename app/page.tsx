@@ -3,6 +3,11 @@ import Script from 'next/script'
 import Home from './components/home/Home'
 import CTABanner from './components/home/CTABanner'
 import NavBar from './components/home/NavBar'
+import DesignProcess from './components/home/design-process'
+import ServicesAndPortfolio from './components/home/ServicesAndPortfolio'
+import FAQAndNewsletter from './components/home/faq-and-newsletter'
+import Footer from './components/home/Footer'
+
 
 export const metadata: Metadata = {
   title: "Tech Morphers",
@@ -59,6 +64,10 @@ const page = () => {
         <NavBar/>
         <Home/>
         <CTABanner/>
+        <DesignProcess/>
+        <ServicesAndPortfolio/>
+        <FAQAndNewsletter />
+        <Footer/>
       </div>
     </>
   )

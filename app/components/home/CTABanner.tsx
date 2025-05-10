@@ -1,11 +1,12 @@
-import Link from "next/link"
-import { ArrowRight } from "lucide-react"
-import Image from "next/image"
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import CardCarousel from "./animations/cardCarousel";
 
 interface CTABannerProps {
-  title?: string
-  buttonText?: string
-  buttonLink?: string
+  title?: string;
+  buttonText?: string;
+  buttonLink?: string;
 }
 
 export default function CTABanner({
@@ -15,17 +16,17 @@ export default function CTABanner({
 }: CTABannerProps) {
   return (
     <>
-      {/* TRUST NUMBER NOT WORDS */}
+      {/* Trust Section */}
       <section className="w-full py-16 md:py-24 bg-white">
         <div className="px-4 max-w-[1400px] mx-auto">
-        <h2 className="text-center text-6xl md:text-8xl lg:text-[150px] font-semibold mb-24 tracking-tighter leading-none">
+          <h2 className="text-center text-6xl md:text-8xl lg:text-[150px] font-semibold mb-24 tracking-tighter leading-none">
             <div className="text-left ml-1 group">
-              <span className="text-black group-hover:text-[#2442ff]">TRUST </span>
-              <span className="text-[#2442ff] group-hover:text-black">NUMBER</span>
+              <span className="text-black group-hover:text-[#2442ff] transition-colors duration-300">TRUST </span>
+              <span className="text-[#2442ff] group-hover:text-black transition-colors duration-300">NUMBER</span>
             </div>
             <div className="text-right mr-32 group">
-              <span className="text-[#2442ff] group-hover:text-black">NOT</span>
-              <span className="text-black group-hover:text-[#2442ff]">WORDS</span>
+              <span className="text-[#2442ff] group-hover:text-black transition-colors duration-300">NOT</span>
+              <span className="text-black group-hover:text-[#2442ff] transition-colors duration-300">WORDS</span>
             </div>
           </h2>
 
@@ -38,12 +39,18 @@ export default function CTABanner({
         </div>
       </section>
 
-      {/* CTA Banner */}
+      {/* CTA Section */}
       <section className="w-full px-4 py-8">
-        <div className="relative overflow-hidden rounded-[30px] bg-gradient-to-r from-[#0a2088] via-[#1e3ad4] to-[#2442ff] px-8 py-12 md:px-16">
+        <article className="relative overflow-hidden rounded-[30px] bg-gradient-to-r from-[#0a2088] via-[#1e3ad4] to-[#2442ff] px-8 py-12 md:px-16">
           {/* Gradient Background Overlays */}
-          <div className="absolute inset-0 bg-[#0a2088] opacity-40 rounded-full scale-150 translate-x-1/2 -translate-y-1/4 blur-3xl pointer-events-none"></div>
-          <div className="absolute inset-0 bg-[#2442ff] opacity-30 rounded-full scale-150 -translate-x-1/3 translate-y-1/4 blur-2xl pointer-events-none"></div>
+          <div 
+            className="absolute inset-0 bg-[#0a2088] opacity-40 rounded-full scale-150 translate-x-1/2 -translate-y-1/4 blur-3xl pointer-events-none" 
+            aria-hidden="true"
+          />
+          <div 
+            className="absolute inset-0 bg-[#2442ff] opacity-30 rounded-full scale-150 -translate-x-1/3 translate-y-1/4 blur-2xl pointer-events-none" 
+            aria-hidden="true"
+          />
 
           {/* CTA Content */}
           <div className="relative flex flex-col md:flex-row justify-between items-center gap-6">
@@ -51,49 +58,65 @@ export default function CTABanner({
             <Link
               href={buttonLink}
               className="bg-black hover:bg-gray-900 text-white px-8 py-4 rounded-full flex items-center gap-2 transition-all text-lg"
+              aria-label={buttonText}
             >
               {buttonText}
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
-        </div>
+        </article>
       </section>
 
-      <section className=" ">
-        <div className=" ">
-          <h2 className="text-4xl text-center sm:text-7xl md:text-8xl lg:text-9xl font-bold leading-[0.95] ">
-            <div className="text-[#2442ff] hover:text-black transition-colors duration-300 block">WE CREATE BRAND</div>
-            <div className="hover:text-[#2442ff] text-black transition-colors duration-300 block">THAT PEOPLE WANT
-
-            </div>
-            <div className="text-black hover:text-[#2442ff] transition-colors duration-300 block">TALK ABOUT</div>
+      {/* Brand Section */}
+      <section className="py-8">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl text-center sm:text-7xl md:text-8xl lg:text-9xl font-bold leading-[0.95]">
+            <span className="text-[#2442ff] hover:text-black transition-colors duration-300 block">WE CREATE BRAND</span>
+            <span className="hover:text-[#2442ff] text-black transition-colors duration-300 block">THAT PEOPLE WANT</span>
+            <span className="text-black hover:text-[#2442ff] transition-colors duration-300 block">TALK ABOUT</span>
           </h2>
         </div>
       </section>
-      <div className=" mt-10">
+
+      {/* Image Section */}
+      <figure className="mt-10">
         <Image
           src="/home/sc.png"
-          alt="Tech Morphers Logo"
+          alt="Tech Morphers showcase"
           width={1000}
-          height={1000}
+          height={500}
           className="w-full"
+          priority
         />
-      </div>
-      
+      </figure>
+
+      {/* Carousel Section */}
+      <section className="py-8">
+        <CardCarousel />
+        <figure className="mt-8">
+          <Image
+            src="/home/Group.svg"
+            alt="Tech Morphers decorative element"
+            width={800}
+            height={200}
+            className="w-[70%] mx-auto"
+          />
+        </figure>
+      </section>
     </>
-  )
+  );
 }
 
 interface StatProps {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 
 function Stat({ value, label }: StatProps) {
   return (
-    <div className="flex flex-col items-start">
+    <article className="flex flex-col items-start">
       <span className="text-[#2442ff] text-5xl md:text-6xl font-semibold">{value}</span>
       <span className="text-black mt-2 text-2xl leading-tight font-semibold">{label}</span>
-    </div>
-  )
+    </article>
+  );
 }
