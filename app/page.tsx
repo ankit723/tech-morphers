@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Script from 'next/script'
+import Navbar from './components/home/navbar'
 
 export const metadata: Metadata = {
   title: "Tech Morphers",
@@ -36,25 +37,9 @@ export const metadata: Metadata = {
 }
 
 const page = () => {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Tech Morphers",
-    url: "https://www.techmorphers.com",
-    logo: "https://www.techmorphers.com/og-image.png",
-    sameAs: [
-      "https://x.com/techmorphers",
-      "https://www.linkedin.com/company/techmorphers",
-      "https://www.facebook.com/techmorphers",
-      "https://www.instagram.com/techmorphers",
-    ],
-  }
   return (
     <>
-      <Script id="home-json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="flex flex-col items-center justify-center h-screen">
-        <h1 className="text-4xl font-bold">Tech Morphers</h1>
-      </div>
+      <Navbar />
     </>
   )
 }

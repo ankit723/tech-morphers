@@ -113,11 +113,33 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+@font-face {
+  font-family: 'Gotham';
+  src: url('/Gotham-font-family/Gotham/Gotham-Book.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gotham';
+  src: url('/Gotham-font-family/Gotham/Gotham-BookItalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Gotham';
+  src: url('/Gotham-font-family/Gotham/Gotham-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Gotham', sans-serif;
   }
 }
