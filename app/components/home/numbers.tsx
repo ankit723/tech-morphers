@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { motion , useScroll, useTransform} from 'framer-motion'
 import LetterHover from '@/components/ui/letterHover'
 import Link from 'next/link'
 
@@ -20,6 +21,13 @@ const Numbers = () => {
     const statsRef = useRef<HTMLDivElement>(null)
     const ctaRef = useRef<HTMLDivElement>(null)
     const statItemsRef = useRef<HTMLDivElement[]>([])
+
+    const { scrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["start start", "end start"]
+    })
+
+    const headerScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95])
     
     useEffect(() => {
         // Ensure refs are available
@@ -34,7 +42,7 @@ const Numbers = () => {
                     duration: 1,
                     scrollTrigger: {
                         trigger: sectionRef.current,
-                        start: 'top 80%',
+                        start: 'top 90%',
                         toggleActions: 'play none none reverse'
                     }
                 }
@@ -213,37 +221,40 @@ const Numbers = () => {
     };
     
     return (
-        <section ref={sectionRef} className="overflow-hidden flex flex-col gap-40">
-            <div className="container mx-auto px-4 md:px-8">
-                <div ref={firstRowRef} className="flex flex-col md:flex-row gap-10 md:gap-20 justify-start">
+        <section ref={sectionRef} className="overflow-hidden flex flex-col gap-28 mt-26 md:-mt-26">
+            <motion.div 
+                style={{ scale: headerScale }}
+                className="container mx-auto px-4 md:px-8 cursor-default"
+            >
+                <div ref={firstRowRef} className="flex gap-5 md:gap-10 justify-start">
                     <LetterHover 
                         text="TRUST" 
                         initialColor="dark-adaptive" 
                         endColor="blue-700" 
-                        className="text-[5rem] md:text-[8rem] font-bold" 
+                        className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold" 
                     />
                     <LetterHover 
                         text="NUMBERS" 
                         initialColor="blue-700" 
                         endColor="dark-adaptive" 
-                        className="text-[5rem] md:text-[8rem] font-bold" 
+                        className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold" 
                     />
                 </div>
-                <div ref={secondRowRef} className="flex flex-col md:flex-row gap-10 md:gap-20 justify-end">
+                <div ref={secondRowRef} className="flex gap-5 md:gap-10 justify-end mt-3 md:-mt-3">
                     <LetterHover 
                         text="NOT" 
                         initialColor="blue-700" 
                         endColor="dark-adaptive" 
-                        className="text-[5rem] md:text-[8rem] font-bold" 
+                        className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold" 
                     />
                     <LetterHover 
                         text="WORDS" 
                         initialColor="dark-adaptive" 
                         endColor="blue-700" 
-                        className="text-[5rem] md:text-[8rem] font-bold" 
+                        className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold" 
                     />
                 </div>
-            </div>
+            </motion.div>
 
             {/* Stats section - appears as user scrolls */}
             <div ref={statsRef} className="container mx-auto relative z-10 px-4 md:px-8">
@@ -273,11 +284,11 @@ const Numbers = () => {
                     >
                         <h3 
                             data-value={stat.value}
-                            className="stat-number text-[6rem] font-bold text-blue-700 dark:text-blue-700 mb-2"
+                            className="stat-number text-5xl sm:text-6xl md:text-7xl lg:text-[6rem] font-bold text-blue-700 dark:text-blue-700 mb-2"
                         >
                             {stat.value}
                         </h3>
-                        <p className="text-left text-2xl text-gray-700 dark:text-gray-200">
+                        <p className="text-left text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 dark:text-gray-200">
                             {stat.label}
                         </p>
                     </div>
@@ -290,22 +301,22 @@ const Numbers = () => {
             
                 <div 
                     ref={ctaRef}
-                    className="bg-blue-900 py-14 md:py-20 relative overflow-hidden px-4 md:px-8 rounded-4xl"
+                    className="bg-blue-950 py-14 md:py-20 relative overflow-hidden px-4 md:px-8 rounded-4xl"
                 >
                     {/* Background elements */}
                     <div className="absolute inset-0 opacity-30">
-                        <div className="absolute w-96 h-96 transform rotate-12 bg-blue-600 -top-18 -left-20"></div>
+                        <div className="absolute w-96 h-96 transform rotate-12 bg-primary z-10 -top-18 -left-20"></div>
                         <div className="absolute w-96 h-96 rounded-full bg-blue-500  bottom-10 right-10"></div>
                     </div>
                     
                     <div className="container mx-auto px-4 md:px-8 relative z-10 flex flex-col md:flex-row justify-between items-center">
-                        <h2 className="text-white text-7xl md:text-7xl font-bold mb-8 md:mb-0">
+                        <h2 className="text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-8 md:mb-0 text-center md:text-left">
                             Ready to work with us ?
                         </h2>
                         
                         <Link 
                             href="/contact" 
-                            className="cta-button bg-black hover:bg-black/90 text-white font-medium py-4 px-8 rounded-full flex items-center justify-center transition-all"
+                            className="cta-button bg-black hover:bg-black/90 text-white font-medium py-3 px-6 sm:py-4 sm:px-8 rounded-full flex items-center justify-center transition-all text-sm sm:text-base"
                         >
                             Get Started
                             <svg 

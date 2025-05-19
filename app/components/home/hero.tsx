@@ -216,7 +216,7 @@ const Hero = () => {
   return (
     <div 
       ref={containerRef}
-      className="relative min-h-screen w-full overflow-hidden pt-24"
+      className="relative min-h-screen w-full overflow-hidden mt-20"
       onMouseMove={handleMouseMove}
     >
       {/* Animated background with gradient mesh */}
@@ -271,7 +271,7 @@ const Hero = () => {
         {/* Text content */}
         <div 
           ref={textRef} 
-          className="w-full lg:w-1/2 text-gray-800 dark:text-white mb-10 lg:mb-0"
+          className="w-full lg:w-1/2 text-gray-800 dark:text-white mb-10 lg:mb-0 text-center lg:text-left"
         >
           <motion.div 
             className="hero-text mb-3 inline-flex items-center rounded-full border border-gray-200 dark:border-white/10 bg-white/60 dark:bg-white/5 backdrop-blur-sm px-4 py-1.5"
@@ -300,7 +300,7 @@ const Hero = () => {
             Tech Morphers delivers cutting-edge technology solutions that empower businesses to thrive in the digital landscape.
           </p>
           
-          <div className="hero-text flex flex-wrap gap-4">
+          <div className="hero-text flex flex-wrap gap-4 justify-center lg:justify-start">
             <motion.button
               className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-[#0123FE] dark:to-[#03A0FF] rounded-xl text-white font-semibold shadow-lg relative overflow-hidden group glow-element"
               variants={buttonVariants}
@@ -336,7 +336,7 @@ const Hero = () => {
 
           {/* Service tags */}
           <motion.div 
-            className="hero-text mt-12 flex flex-wrap gap-3"
+            className="hero-text mt-12 flex flex-wrap gap-3 justify-center lg:justify-start"
             variants={containerVariants}
             initial="hidden"
             animate="visible"

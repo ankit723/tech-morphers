@@ -5,16 +5,32 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ModeToggle } from "@/components/ui/themeToggle";
 
+// Helper for sidebar scroll lock
+const toggleScrollLock = (lock: boolean) => {
+  if (typeof window !== 'undefined') {
+    document.body.style.overflow = lock ? 'hidden' : '';
+  }
+};
+
 const Navbar = () => {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Set mounted state on component mount
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Effect to handle body scroll lock when sidebar is open
+  useEffect(() => {
+    toggleScrollLock(isSidebarOpen);
+    return () => {
+      toggleScrollLock(false); // Ensure scroll lock is removed on unmount
+    };
+  }, [isSidebarOpen]);
 
   const toggleExpand = (section?: string) => {
     if (section) {
@@ -24,6 +40,10 @@ const Navbar = () => {
       setIsExpanded(!isExpanded);
       setActiveSection(null);
     }
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
   // Island variants
@@ -484,7 +504,7 @@ const Navbar = () => {
 
   return (
     <motion.nav 
-      className="fixed top-0 left-0 right-0 flex justify-between items-center py-4 px-10 z-40 bg-gradient-to-r dark:from-[#0A0A1B] dark:to-[#1A1A35] from-white to-white"
+      className="fixed left-0 right-0 top-0 flex justify-between items-center py-4 px-6 sm:px-10 z-40 bg-gradient-to-r dark:from-[#0A0A1B] dark:to-[#1A1A35] from-white to-white"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -523,8 +543,8 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Dynamic Island Container */}
-      <div className="absolute left-1/2 transform -translate-x-1/2">
+      {/* Dynamic Island Container - Hidden on small screens */}
+      <div className="absolute left-1/2 transform -translate-x-1/2 hidden lg:block">
         {/* Dynamic Island */}
         <motion.div 
           className="relative border border-white/10 flex items-center justify-center overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.3)] z-50"
@@ -616,12 +636,12 @@ const Navbar = () => {
         </motion.div>
       </div>
 
-      {/* Right side elements */}
-      <div className="flex items-center space-x-6">
+      {/* Right side elements - Hidden on small screens */}
+      <div className="hidden lg:flex items-center space-x-6">
         {[
-          { label: "Contact" },
-          { label: "Support"},
-          { label: "Login" }
+          { label: "Contact", path: "/contact" },
+          { label: "Support", path: "/support" },
+          { label: "Login", path: "/login" }
         ].map((item, i) => (
           <motion.div
             key={item.label}
@@ -633,6 +653,7 @@ const Navbar = () => {
             transition={{ delay: i * 0.1, duration: 0.4 }}
             role="button"
             tabIndex={0}
+            onClick={() => router.push(item.path)}
           >
             <motion.span
               className="text-xs sm:text-sm tracking-wider font-semibold"
@@ -645,6 +666,101 @@ const Navbar = () => {
         ))}
         <ModeToggle />
       </div>
+
+      {/* Hamburger Menu - Visible on small screens */}
+      <div className="lg:hidden flex items-center">
+        <ModeToggle /> 
+        <button
+          onClick={toggleSidebar}
+          className="ml-4 p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
+          aria-label="Open menu"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={isSidebarOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}></path>
+          </svg>
+        </button>
+      </div>
+
+      {/* Sidebar */}
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+              onClick={toggleSidebar}
+            />
+            {/* Sidebar Panel */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="fixed top-0 right-0 h-full w-72 bg-white dark:bg-gray-900 shadow-lg z-50 p-6 flex flex-col"
+            >
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Menu</h2>
+                <button
+                  onClick={toggleSidebar}
+                  className="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
+                  aria-label="Close menu"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <nav className="flex flex-col space-y-4">
+                {[
+                  { label: "Services", section: "services" },
+                  { label: "Products", section: "products" },
+                  { label: "Resources", section: "resources" },
+                ].map((item) => (
+                  <button
+                    key={item.label}
+                    onClick={() => {
+                      // For now, just close sidebar. Later, this could scroll to sections or navigate.
+                      // toggleExpand(item.section); // This was for the dynamic island, might need different logic for sidebar
+                      console.log(`Navigate to ${item.label}`);
+                      toggleSidebar();
+                    }}
+                    className="text-left py-2 px-3 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    {item.label}
+                  </button>
+                ))}
+                
+                <hr className="my-4 border-gray-200 dark:border-gray-700" />
+
+                {[
+                  { label: "Contact", path: "/contact" },
+                  { label: "Support", path: "/support" },
+                  { label: "Login", path: "/login" }
+                ].map((item) => (
+                  <button
+                    key={item.label}
+                    onClick={() => {
+                      router.push(item.path);
+                      toggleSidebar();
+                    }}
+                    className="text-left py-2 px-3 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    {item.label}
+                  </button>
+                ))}
+                
+                <div className="mt-auto pt-6">
+                  {/* <ModeToggle /> Moved outside for better placement on mobile nav header */}
+                </div>
+              </nav>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 };

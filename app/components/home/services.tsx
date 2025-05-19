@@ -4,6 +4,10 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import dynamic from 'next/dynamic'
+
+// Dynamically import Lottie to prevent server-side rendering issues
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
 
 const Services = () => {
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -12,12 +16,52 @@ const Services = () => {
   const textRef = useRef<HTMLParagraphElement>(null)
   const underlineRef = useRef<HTMLDivElement>(null)
   const [isClient, setIsClient] = useState(false)
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null)
+  const [clickedCard, setClickedCard] = useState<string | null>(null)
+  const [animationData, setAnimationData] = useState<Record<string, any>>({})
+
+
   
   // Set isClient to true once component mounts
   useEffect(() => {
     setIsClient(true)
   }, [])
   
+  // Load animation data
+  useEffect(() => {
+    const loadAnimations = async () => {
+      try {
+        const webDevAnimation = await fetch('/animations/web-dev.json').then(res => res.json())
+        const mobileDevAnimation = await fetch('/animations/mobile-dev.json').then(res => res.json())
+        const designAnimation = await fetch('/animations/design.json').then(res => res.json())
+        const gameDevAnimation = await fetch('/animations/tech-animation.json').then(res => res.json())
+        
+        setAnimationData({
+          'web': webDevAnimation,
+          'mobile': mobileDevAnimation,
+          'design': designAnimation,
+          'game-development': gameDevAnimation
+        })
+      } catch (error) {
+        console.error('Failed to load animations:', error)
+      }
+    }
+    
+    if (isClient) {
+      loadAnimations()
+    }
+  }, [isClient])
+  
+  // Handle card click with timeout to reset
+  const handleCardClick = (id: string) => {
+    setClickedCard(id)
+    
+    // Reset clicked state after animation completes
+    setTimeout(() => {
+      setClickedCard(null)
+    }, 800)
+  }
+
   // Register ScrollTrigger
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -96,7 +140,6 @@ const Services = () => {
     
     ScrollTrigger.batch(cards, {
       interval: 0.1,
-      batchMax: 4,
       onEnter: batch => {
         gsap.to(batch, {
           opacity: 1,
@@ -193,10 +236,107 @@ const Services = () => {
     }
   ]
 
+  // Animation variants for the Lottie container
+  const lottieVariants = {
+    web: { 
+      hidden: { x: '-100%', opacity: 0 },
+      visible: { 
+        x: 0, 
+        opacity: 1,
+        transition: { 
+          type: "spring", 
+          stiffness: 120, 
+          damping: 12,
+          mass: 1
+        }
+      }
+    },
+    mobile: { 
+      hidden: { y: '100%', opacity: 0 },
+      visible: { 
+        y: 0, 
+        opacity: 1,
+        transition: { 
+          type: "spring", 
+          stiffness: 120, 
+          damping: 12,
+          mass: 1
+        }
+      }
+    },
+    design: { 
+      hidden: { scale: 2, opacity: 0 },
+      visible: { 
+        scale: 1, 
+        opacity: 1,
+        transition: { 
+          type: "spring", 
+          stiffness: 120, 
+          damping: 12,
+          mass: 1
+        }
+      }
+    },
+    game: { 
+      hidden: { y: '-100%', opacity: 0, rotate: 10 },
+      visible: { 
+        y: 0, 
+        opacity: 1,
+        rotate: 0,
+        transition: { 
+          type: "spring", 
+          stiffness: 120, 
+          damping: 12,
+          mass: 1
+        }
+      }
+    }
+  }
+
+  // Animation for the Lottie wrapper
+  const lottieWrapperVariants = {
+    hidden: {
+      opacity: 0,
+      backdropFilter: "blur(0px)"
+    },
+    visible: {
+      opacity: 1,
+      backdropFilter: "blur(4px)",
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut"
+      }
+    }
+  }
+
+  // Card click animation variants
+  const cardClickVariants = {
+    initial: { scale: 1 },
+    clicked: { 
+      scale: [1, 0.95, 1.05, 1],
+      transition: { 
+        duration: 0.6,
+        times: [0, 0.2, 0.5, 0.8],
+        ease: "easeInOut" 
+      }
+    }
+  }
+
+  // Helper function to get the correct animation variant based on service ID
+  const getAnimationVariant = (serviceId: string) => {
+    switch(serviceId) {
+      case 'web': return lottieVariants.web;
+      case 'mobile': return lottieVariants.mobile;
+      case 'design': return lottieVariants.design;
+      case 'game-development': return lottieVariants.game;
+      default: return lottieVariants.web;
+    }
+  }
+
   return (
     <section
       ref={sectionRef}
-      className="py-20 md:py-28 overflow-hidden"
+      className="py-20 md:py-28 overflow-hidden -mt-20"
     >
       <div className="container mx-auto px-4 md:px-8">
         <div className="text-center mb-20 relative">
@@ -204,7 +344,7 @@ const Services = () => {
             ref={headingRef}
             className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-white mb-6 inline-block relative"
           >
-            Our Services
+            The services which we offer
             <div 
               ref={underlineRef}
               className="absolute bottom-0 left-0 h-[3px] bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-[#0123FE] dark:to-[#03A0FF] rounded-full" 
@@ -225,12 +365,29 @@ const Services = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
         >
           {services.map((service) => (
-            <div
+            <motion.div
               key={service.id}
-              className="service-card bg-white dark:bg-[#0D0D1F] border border-gray-200 dark:border-[#1A1A35] rounded-2xl overflow-hidden shadow-sm"
+              className="service-card bg-white dark:bg-[#0D0D1F] border border-gray-200 dark:border-[#1A1A35] rounded-2xl overflow-hidden shadow-sm relative cursor-pointer"
+              onHoverStart={() => setHoveredCard(service.id)}
+              onHoverEnd={() => setHoveredCard(null)}
+              onClick={() => handleCardClick(service.id)}
+              whileHover={{ 
+                y: -10,
+                boxShadow: "0px 20px 40px rgba(0, 0, 0, 0.1)",
+                transition: { duration: 0.3 }
+              }}
+              animate={clickedCard === service.id ? "clicked" : "initial"}
+              variants={cardClickVariants}
             >
               <div className={`h-2 w-full bg-gradient-to-r ${service.color}`}></div>
-              <div className="p-6 md:p-8 grid grid-rows-3 h-full">
+              
+              {/* Content container with conditional opacity */}
+              <div 
+                className="p-6 md:p-8 grid grid-rows-3 h-full relative z-10 transition-opacity duration-300"
+                style={{ 
+                  opacity: hoveredCard === service.id ? 0.2 : 1
+                }}
+              >
                 <div className="flex items-center">
                   <div className="w-12 h-12 mr-4 rounded-lg bg-gray-100 dark:bg-[#151530] flex items-center justify-center">
                     <Image 
@@ -257,14 +414,46 @@ const Services = () => {
                 </ul>
                 
                 <motion.button
-                  className={`mt-8 px-5 py-2.5 rounded-lg bg-gradient-to-r ${service.color} text-white text-sm font-medium w-full`}
+                  className={`mt-8 px-5 py-2.5 rounded-lg bg-gradient-to-r ${service.color} text-white text-sm font-medium w-full relative z-30`}
                   whileHover={{ scale: 1.03, y: -2 }}
                   whileTap={{ scale: 0.98 }}
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent triggering parent's onClick
+                    console.log(`Learn more about ${service.title}`);
+                  }}
                 >
                   Learn More
                 </motion.button>
               </div>
-            </div>
+              
+              {/* Lottie animation overlay */}
+              {isClient && (
+                <motion.div 
+                  className="absolute inset-0 z-20 flex items-center justify-center overflow-hidden pointer-events-none"
+                  initial="hidden"
+                  animate={hoveredCard === service.id ? "visible" : "hidden"}
+                  variants={lottieWrapperVariants}
+                  style={{ 
+                    background: 'transparent'
+                  }}
+                >
+                  {hoveredCard === service.id && animationData[service.id] && (
+                    <motion.div 
+                      className="w-4/5 h-4/5 mx-auto flex items-center justify-center"
+                      initial="hidden"
+                      animate="visible"
+                      variants={getAnimationVariant(service.id)}
+                    >
+                      <Lottie 
+                        animationData={animationData[service.id]} 
+                        loop={true}
+                        autoplay={true}
+                      />
+                    </motion.div>
+                  )}
+                </motion.div>
+              )}
+            </motion.div>
           ))}
         </div>
         
