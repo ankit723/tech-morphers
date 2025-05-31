@@ -28,7 +28,7 @@ export function ModeToggle() {
     <motion.button
       onClick={toggleTheme}
       className={`
-        relative overflow-hidden rounded-full p-2
+        relative overflow-hidden rounded-full p-1 md:p-2
         bg-gradient-to-br 
         ${isDark 
           ? "from-blue-800 to-purple-900 text-yellow-300" 

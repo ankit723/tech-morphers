@@ -27,7 +27,7 @@ const Numbers = () => {
         offset: ["start start", "end start"]
     })
 
-    const headerScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95])
+    const headerScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.9])
     
     useEffect(() => {
         // Ensure refs are available
@@ -221,12 +221,12 @@ const Numbers = () => {
     };
     
     return (
-        <section ref={sectionRef} className="overflow-hidden flex flex-col gap-28 mt-26 md:-mt-26">
+        <section ref={sectionRef} className="overflow-hidden flex flex-col gap-28 mt-0 md:-mt-14">
             <motion.div 
                 style={{ scale: headerScale }}
-                className="container mx-auto px-4 md:px-8 cursor-default"
+                className="container mx-auto cursor-default"
             >
-                <div ref={firstRowRef} className="flex gap-5 md:gap-10 justify-start">
+                <div ref={firstRowRef} className="container mx-auto flex gap-5 md:gap-10 justify-center xl:justify-start ">
                     <LetterHover 
                         text="TRUST" 
                         initialColor="dark-adaptive" 
@@ -240,7 +240,7 @@ const Numbers = () => {
                         className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold" 
                     />
                 </div>
-                <div ref={secondRowRef} className="flex gap-5 md:gap-10 justify-end mt-3 md:-mt-3">
+                <div ref={secondRowRef} className="flex gap-5 md:gap-10 justify-center xl:justify-end mt-3 md:-mt-3">
                     <LetterHover 
                         text="NOT" 
                         initialColor="blue-700" 
@@ -257,8 +257,8 @@ const Numbers = () => {
             </motion.div>
 
             {/* Stats section - appears as user scrolls */}
-            <div ref={statsRef} className="container mx-auto relative z-10 px-4 md:px-8">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 px-4 md:px-8">
+            <div ref={statsRef} className="container mx-auto relative z-10">
+                <div className="grid grid-cols-2 xl:grid-cols-4 gap-8 md:gap-12 px-4 md:px-8">
                 {[
                     { 
                         value: '52K+', 
@@ -280,7 +280,7 @@ const Numbers = () => {
                     <div 
                         key={index}
                         ref={(el) => setStatItemRef(el, index)}
-                        className="stat-item flex flex-col items-start"
+                        className=" flex flex-col items-start"
                     >
                         <h3 
                             data-value={stat.value}

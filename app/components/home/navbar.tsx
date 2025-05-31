@@ -517,7 +517,7 @@ const Navbar = () => {
       {/* Logo */}
       <div className="flex items-center">
         <motion.div 
-          className="relative w-14 h-14 mr-2"
+          className="relative w-10 h-10 md:w-14 md:h-14 mr-2"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -525,7 +525,7 @@ const Navbar = () => {
         </motion.div>
         <div className="flex items-center font-bold">
           <motion.div 
-            className="relative h-12 w-24 mr-0.5"
+            className="relative h-10 w-16 md:h-12 md:w-24 mr-0.5"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
@@ -533,7 +533,7 @@ const Navbar = () => {
             <span className="absolute inset-0 flex items-center justify-center text-white text-sm tracking-wider">TECH</span>
           </motion.div>
           <motion.div 
-            className="relative h-12 w-32"
+            className="relative h-10 w-24 md:h-12 md:w-32"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
@@ -544,7 +544,7 @@ const Navbar = () => {
       </div>
 
       {/* Dynamic Island Container - Hidden on small screens */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 hidden lg:block">
+      <div className="absolute left-1/2 transform -translate-x-1/2 hidden 2xl:block">
         {/* Dynamic Island */}
         <motion.div 
           className="relative border border-white/10 flex items-center justify-center overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.3)] z-50"
@@ -637,7 +637,7 @@ const Navbar = () => {
       </div>
 
       {/* Right side elements - Hidden on small screens */}
-      <div className="hidden lg:flex items-center space-x-6">
+      <div className="hidden 2xl:flex items-center space-x-6">
         {[
           { label: "Contact", path: "/contact" },
           { label: "Support", path: "/support" },
@@ -645,7 +645,7 @@ const Navbar = () => {
         ].map((item, i) => (
           <motion.div
             key={item.label}
-            className="relative group bg-[#0123FE] rounded-xl px-4 py-3 text-white shadow-md hover:shadow-lg focus:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer outline-none"
+            className="relative group bg-[#0123FE] rounded-2xl px-4 py-3 text-white shadow-md hover:shadow-lg focus:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer outline-none"
             whileHover={{ scale: 1.05 }}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -668,7 +668,7 @@ const Navbar = () => {
       </div>
 
       {/* Hamburger Menu - Visible on small screens */}
-      <div className="lg:hidden flex items-center">
+      <div className="2xl:hidden flex items-center">
         <ModeToggle /> 
         <button
           onClick={toggleSidebar}
@@ -702,7 +702,7 @@ const Navbar = () => {
               className="fixed top-0 right-0 h-full w-72 bg-white dark:bg-gray-900 shadow-lg z-50 p-6 flex flex-col"
             >
               <div className="flex justify-between items-center mb-8">
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Menu</h2>
+                <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">Menu</h2>
                 <button
                   onClick={toggleSidebar}
                   className="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"

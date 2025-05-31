@@ -704,11 +704,11 @@ const OurBrands = () => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-lg"
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-lg overflow-y-auto"
                         onClick={() => setSelectedCompany(null)}
                     >
                         <motion.div 
-                            className="bg-white dark:bg-gray-900 max-w-4xl w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10"
+                            className=" dark:bg-gray-900 max-w-4xl w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10"
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -716,7 +716,7 @@ const OurBrands = () => {
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Modal header with enhanced 3D parallax effect */}
-                            <div className="relative h-72 md:h-96 bg-blue-800 overflow-hidden">
+                            <div className="relative h-40 bg-blue-800 overflow-hidden">
                                 <motion.div
                                     className="absolute inset-0 w-full h-full"
                                     initial={{ scale: 1.1 }}
@@ -728,80 +728,12 @@ const OurBrands = () => {
                                         transition: "transform 0.3s ease-out"
                                     }}
                                 >
-                                    <Image 
-                                        src={selectedCompany.image} 
-                                        alt={selectedCompany.name} 
-                                        width={1200} 
-                                        height={400}
-                                        className="w-full h-full object-cover opacity-70 transition-all duration-700 ease-out scale-105"
-                                    />
                                 </motion.div>
                                 
                                 <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-blue-600/70"></div>
-                                
-                                {/* Enhanced animated particles */}
-                                <div className="absolute inset-0 overflow-hidden">
-                                    {Array.from({ length: 20 }).map((_, i) => (
-                                        <motion.div
-                                            key={i}
-                                            className={`absolute rounded-full ${
-                                                i % 3 === 0 ? 'w-2 h-2 bg-blue-300/30' : 
-                                                i % 3 === 1 ? 'w-1.5 h-1.5 bg-white/30' : 
-                                                'w-1 h-1 bg-blue-100/40'
-                                            }`}
-                                            initial={{ 
-                                                x: Math.random() * 100 + "%", 
-                                                y: Math.random() * 100 + "%",
-                                                opacity: Math.random() * 0.5 + 0.3
-                                            }}
-                                            animate={{ 
-                                                y: [Math.random() * 100 + "%", Math.random() * 100 + "%"],
-                                                x: [Math.random() * 100 + "%", Math.random() * 100 + "%"],
-                                                opacity: [0.2, 0.5, 0.2]
-                                            }}
-                                            transition={{ 
-                                                duration: Math.random() * 10 + 10, 
-                                                repeat: Infinity,
-                                                ease: "linear"
-                                            }}
-                                        />
-                                    ))}
-                                </div>
-                                
-                                {/* Floating geometric shapes */}
-                                <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                                    <motion.div
-                                        className="absolute w-20 h-20 rounded-full border border-white/20 top-[20%] left-[10%]"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ 
-                                            opacity: 0.4,
-                                            rotate: 360
-                                        }}
-                                        transition={{ 
-                                            duration: 20, 
-                                            repeat: Infinity,
-                                            ease: "linear"
-                                        }}
-                                    />
-                                    <motion.div
-                                        className="absolute w-32 h-32 rounded-lg border border-white/10 bottom-[10%] right-[20%] rotate-45"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ 
-                                            opacity: 0.3,
-                                            rotate: 0
-                                        }}
-                                        transition={{ 
-                                            duration: 15, 
-                                            repeat: Infinity,
-                                            repeatType: "reverse",
-                                            ease: "easeInOut"
-                                        }}
-                                    />
-                                </div>
-                                
                                 {/* Enhanced close button */}
                                 <motion.button 
-                                    className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/30 transition-colors border border-white/30"
+                                    className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/30 transition-colors border border-white/30 z-10"
                                     onClick={() => setSelectedCompany(null)}
                                     whileHover={{ scale: 1.1, rotate: 90, boxShadow: "0 0 15px rgba(255, 255, 255, 0.5)" }}
                                     whileTap={{ scale: 0.9 }}

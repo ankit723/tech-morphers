@@ -37,7 +37,7 @@ const LetterHover = ({
   };
   
   return (
-    <h1 className={className}>
+    <h1 className={twMerge("flex", className)}>
       {text.split('').map((char, index) => {
         const isHovered = hoveredIndices.includes(index);
         const colorClasses = isHovered ? getColorClasses(endColor) : getColorClasses(initialColor);
@@ -46,7 +46,7 @@ const LetterHover = ({
           <span
             key={index}
             className={twMerge(
-              'inline-block transition-colors duration-300',
+              'transition-colors duration-300',
               colorClasses
             )}
             onMouseEnter={() => handleMouseEnter(index)}

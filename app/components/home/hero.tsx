@@ -216,7 +216,7 @@ const Hero = () => {
   return (
     <div 
       ref={containerRef}
-      className="relative min-h-screen w-full overflow-hidden mt-20"
+      className="relative min-h-screen w-full overflow-hidden my-20"
       onMouseMove={handleMouseMove}
     >
       {/* Animated background with gradient mesh */}
