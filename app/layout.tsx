@@ -2,8 +2,12 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/themeProvider";
+import localFont from "next/font/local";
 
-
+const gothamBook = localFont({
+  src: "../public/Gotham-font-family/Gotham/Gotham-Book.otf",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Tech Morphers",
@@ -65,7 +69,7 @@ export default function RootLayout({
         <Script id="json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
       <body
-        className={`antialiased bg-gradient-to-b dark:from-[#0A0A1B] dark:to-[#1A1A35] from-white to-white`}
+        className={`antialiased bg-gradient-to-b dark:from-[#0A0A1B] dark:to-[#1A1A35] from-white to-white ${gothamBook.className}`}
       >
         <ThemeProvider
           attribute="class"

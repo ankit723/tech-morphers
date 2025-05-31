@@ -355,8 +355,7 @@ const Services = () => {
             ref={textRef}
             className="text-gray-600 dark:text-gray-300 max-w-3xl mx-auto text-lg"
           >
-            We offer a comprehensive range of technology solutions to help businesses 
-            transform their ideas into digital reality.
+            We don&apos;t just offer services — we craft experiences that resonate.
           </p>
         </div>
 

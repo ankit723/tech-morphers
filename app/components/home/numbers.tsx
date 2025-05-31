@@ -311,14 +311,14 @@ const Numbers = () => {
                     
                     <div className="container mx-auto px-4 md:px-8 relative z-10 flex flex-col md:flex-row justify-between items-center">
                         <h2 className="text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-8 md:mb-0 text-center md:text-left">
-                            Ready to work with us ?
+                            Have a project in mind?
                         </h2>
                         
                         <Link 
                             href="/contact" 
-                            className="cta-button bg-black hover:bg-black/90 text-white font-medium py-3 px-6 sm:py-4 sm:px-8 rounded-full flex items-center justify-center transition-all text-sm sm:text-base"
+                            className="cta-button bg-black hover:bg-black/90 text-white py-3 px-6 sm:py-4 sm:px-8 rounded-full flex items-center justify-center transition-all font-bold text-md"
                         >
-                            Get Started
+                            Get an instant quote!
                             <svg 
                                 className="ml-2 w-6 h-6" 
                                 fill="none" 

@@ -544,7 +544,7 @@ const Navbar = () => {
       </div>
 
       {/* Dynamic Island Container - Hidden on small screens */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 hidden 2xl:block">
+      <div className="absolute left-1/2 transform -translate-x-1/2 hidden xl:block">
         {/* Dynamic Island */}
         <motion.div 
           className="relative border border-white/10 flex items-center justify-center overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.3)] z-50"
