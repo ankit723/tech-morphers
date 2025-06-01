@@ -33,7 +33,7 @@ const Testimonials = () => {
           animate={isInView1 ? 'visible' : 'hiddenLeft'}
           variants={variants}
           transition={{ duration: 0.5 }}
-          className="flex items-center gap-20 justify-center"
+          className="flex items-center gap-20 justify-center md:flex-row flex-col"
         >
           <h1 className='text-7xl font-bold'>Innovate</h1>
           <h1 className='text-6xl font-bold text-green-400'>✦</h1>
