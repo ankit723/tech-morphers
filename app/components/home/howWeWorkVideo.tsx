@@ -6,10 +6,10 @@ const HowWeWorkVideo = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: sectionRef,
-        offset: ["start 50%", "end 50%"]
+        offset: ["start end", "end end"]
     });
 
-    const headerScale = useTransform(scrollYProgress, [0, 0.2], [1, 1.05])
+    const headerScale = useTransform(scrollYProgress, [0, 1], [0.7, 1.1])
 
   return (
     <motion.div ref={sectionRef} className='container mx-auto my-20 relative'

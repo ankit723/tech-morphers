@@ -49,9 +49,9 @@ const Testimonials = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="flex justify-center items-center gap-10 container mx-auto my-10"
         >
-          <hr className='w-1/2 border-black border-2' />
+          <hr className='w-1/2 border-black dark:border-white border-2' />
           <h1 className='text-6xl font-bold text-green-400'>✦</h1>
-          <hr className='w-1/2 border-black border-2' />
+          <hr className='w-1/2 border-black dark:border-white border-2' />
         </motion.div>
 
         <motion.div

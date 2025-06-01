@@ -9,6 +9,8 @@ import HowWeWorkProcess from './components/home/howWeWorkProcess'
 import EstimatorCta from './components/home/estimatorCta'
 import Testimonials from './components/home/testimonials'
 import Footer from './components/home/footer'
+import FAQWithCTA from './components/home/faq'
+import OurProjects from './components/home/ourProjects'
 
 const Page = () => {
   return (
@@ -21,6 +23,8 @@ const Page = () => {
       <HowWeWorkProcess />
       <EstimatorCta />
       <Services />
+      <OurProjects />
+      <FAQWithCTA />
       <Testimonials />
       <div className="relative mt-[65rem]">
         <Footer />

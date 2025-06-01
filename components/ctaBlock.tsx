@@ -13,7 +13,7 @@ export default function CtaBlock() {
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Button size="lg" className="text-lg px-8 py-6 rounded-xl shadow-md cursor-pointer">
-            Get a Free Quote <ArrowRight className="ml-2 w-5 h-5" />
+            Get a Free Estimate <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
           <Button variant="outline" size="lg" className="bg-transparent text-lg px-8 py-6 rounded-xl border-white text-white hover:bg-white hover:text-black cursor-pointer">
             Talk to Us <Phone className="ml-2 w-5 h-5" />

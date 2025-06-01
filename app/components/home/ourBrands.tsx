@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { ExternalLink, X } from "lucide-react"
+import { useTheme } from "next-themes"
 
 const categories = ["All", "Finance", "Tech", "Creative", "Design", "Media", "Health", "Government"]
 
@@ -154,9 +155,15 @@ const OurBrands = () => {
     const sectionRef = useRef<HTMLDivElement>(null)
     const headerRef = useRef<HTMLDivElement>(null)
     const scrollRef = useRef<HTMLDivElement>(null)
+    const { theme } = useTheme()
     const [activeCategory, setActiveCategory] = useState<string>("All")
     const [selectedCompany, setSelectedCompany] = useState<typeof companies[0] | null>(null)
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+    const [isDarkMode, setIsDarkMode] = useState(false)
+
+    useEffect(() => {
+        setIsDarkMode(theme === "dark")
+    }, [theme])
     
     // Scroll-based animations
     const { scrollYProgress } = useScroll({
@@ -347,7 +354,7 @@ const OurBrands = () => {
                 {/* Wave design at bottom similar to reference image */}
                 <div className="absolute bottom-0 left-0 right-0">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full">
-                        <path fill="#ffffff" fillOpacity="1" d="M0,288L60,272C120,256,240,224,360,213.3C480,203,600,213,720,229.3C840,245,960,267,1080,266.7C1200,267,1320,245,1380,234.7L1440,224L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
+                        <path fill={isDarkMode ? "#0A0A1B " : "#ffffff"} fillOpacity="1" d="M0,288L60,272C120,256,240,224,360,213.3C480,203,600,213,720,229.3C840,245,960,267,1080,266.7C1200,267,1320,245,1380,234.7L1440,224L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
                     </svg>
                 </div>
                 
