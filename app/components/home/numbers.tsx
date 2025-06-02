@@ -315,8 +315,8 @@ const Numbers = () => {
                         </h2>
                         
                         <Link 
-                            href="/contact" 
-                            className="cta-button bg-black hover:bg-black/90 text-white py-3 px-6 sm:py-4 sm:px-8 rounded-full flex items-center justify-center transition-all font-bold text-md"
+                            href="/packages" 
+                            className="cta-button bg-white text-black py-3 px-6 sm:py-4 sm:px-8 rounded-full flex items-center justify-center transition-all font-bold text-md"
                         >
                             Get an instant quote!
                             <svg 

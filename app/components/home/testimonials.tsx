@@ -18,9 +18,8 @@ const Testimonials = () => {
 
 
   const variants = {
-    hiddenLeft: { opacity: 0, x: -100 },
-    hiddenRight: { opacity: 0, x: 100 },
-    visible: { opacity: 1, x: 0 },
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
   }
 
   return (
@@ -29,8 +28,8 @@ const Testimonials = () => {
       <div className='mx-auto'>
         <motion.div
           ref={ref1}
-          initial="hiddenLeft"
-          animate={isInView1 ? 'visible' : 'hiddenLeft'}
+          initial="hidden"
+          animate={isInView1 ? 'visible' : 'hidden'}
           variants={variants}
           transition={{ duration: 0.5 }}
           className="flex items-center gap-20 justify-center md:flex-row flex-col"
@@ -43,21 +42,21 @@ const Testimonials = () => {
         </motion.div>
         <motion.div
           ref={ref2}
-          initial="hiddenRight"
-          animate={isInView2 ? 'visible' : 'hiddenRight'}
+          initial="hidden"
+          animate={isInView2 ? 'visible' : 'hidden'}
           variants={variants}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="flex justify-center items-center gap-10 container mx-auto my-10"
         >
-          <hr className='w-1/2 border-black dark:border-white border-2' />
+          <hr className=' border-black dark:border-white border-2 w-1/2' />
           <h1 className='text-6xl font-bold text-green-400'>✦</h1>
-          <hr className='w-1/2 border-black dark:border-white border-2' />
+          <hr className=' border-black dark:border-white border-2 w-1/2' />
         </motion.div>
 
         <motion.div
           ref={ref3}
-          initial="hiddenLeft"
-          animate={isInView3 ? 'visible' : 'hiddenLeft'}
+          initial="hidden"
+          animate={isInView3 ? 'visible' : 'hidden'}
           variants={variants}
           transition={{ duration: 0.5, delay: 0.4 }}
           className="flex justify-center items-center gap-10 container mx-auto my-10"
@@ -69,18 +68,18 @@ const Testimonials = () => {
         </motion.div>
         <motion.div
           ref={ref4}
-          initial="hiddenRight"
-          animate={isInView4 ? 'visible' : 'hiddenRight'}
+          initial="hidden"
+          animate={isInView4 ? 'visible' : 'hidden'}
           variants={variants}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="flex justify-center items-center gap-10 container mx-auto my-10"
+          className="flex justify-center items-center gap-5 md:gap-10 container mx-auto my-10"
         >
-          <Button variant="default" className='rounded-full bg-blue-700 text-white px-10 py-7'>
+          <Button variant="default" className='rounded-full bg-blue-700 text-white px-3 py-5 md:px-10 md:py-7'>
             Start Onboarding Process
           </Button>
 
-          <Button variant="outline" className='rounded-full text-blue-700 border-blue-700 px-10 py-7'>
-            View An Estimate
+          <Button variant="outline" className='rounded-full text-blue-700 border-blue-700 px-3 py-5 md:px-10 md:py-7'>
+            Get An Estimate
           </Button>
         </motion.div>
       </div>

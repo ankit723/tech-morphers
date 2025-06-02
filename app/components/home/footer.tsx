@@ -1,3 +1,4 @@
+'use client'
 import React, { useRef } from 'react';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -39,7 +40,7 @@ const Footer = () => {
 
         <CtaBlock />
         
-        <div className="flex space-x-6 mt-8 mb-8">
+        <div className="flex space-x-6 mb-8">
           <a href="#" aria-label="Facebook" className="hover:text-gray-400 transition-colors">
             <FaFacebookF size={24} />
           </a>

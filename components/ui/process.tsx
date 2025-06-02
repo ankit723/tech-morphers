@@ -36,7 +36,7 @@ const Process = ({id, title, description, lottie: lottiePath}: {id: string, titl
           </div>
         )}
         <h2 className='text-2xl font-bold text-gray-200'>{title}</h2>
-        <p className='text-sm text-gray-200 w-[25rem]'>{description}</p>
+        <p className='text-sm text-gray-200 w-[20rem]'>{description}</p>
     </div>
   )
 }

@@ -14,7 +14,7 @@ import OurProjects from './components/home/ourProjects'
 
 const Page = () => {
   return (
-    <>
+    <div className='overflow-x-hidden'>
       <Navbar />
       <Hero />
       <Numbers />
@@ -29,7 +29,7 @@ const Page = () => {
       <div className="relative mt-[65rem]">
         <Footer />
       </div>
-    </>
+    </div>
   )
 }
 

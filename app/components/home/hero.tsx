@@ -5,6 +5,9 @@ import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-mo
 import dynamic from 'next/dynamic'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import GetStarted from '@/components/forms/getStarted'
+import { Button } from '@/components/ui/button'
 
 // Dynamically import Lottie to prevent server-side rendering issues
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
@@ -195,8 +198,6 @@ const Hero = () => {
     rest: { scale: 1 },
     hover: { 
       scale: 1.05,
-      boxShadow: "0px 10px 30px rgba(1, 35, 254, 0.4)",
-      transition: { duration: 0.3, ease: "easeInOut" }
     },
     tap: { scale: 0.95 }
   }
@@ -301,27 +302,25 @@ const Hero = () => {
           </p>
           
           <div className="hero-text flex flex-wrap gap-4 justify-center lg:justify-start">
-            <motion.button
-              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-[#0123FE] dark:to-[#03A0FF] rounded-xl text-white font-semibold shadow-lg relative overflow-hidden group glow-element"
-              variants={buttonVariants}
-              initial="rest"
-              whileHover="hover"
-              whileTap="tap"
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-            >
-              <span className="relative z-10 flex items-center">
-                Get Started
-                <motion.span 
-                  className="ml-2 inline-block"
-                  animate={{ x: isHovered ? 5 : 0 }}
-                  transition={{ duration: 0.2 }}
+            <Dialog>
+              <DialogTrigger asChild>
+                <motion.button
+                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-[#0123FE] dark:to-[#03A0FF] rounded-xl text-white font-semibold shadow-lg relative overflow-hidden group glow-element"
+                  variants={buttonVariants}
+                  initial="rest"
+                  whileHover="hover"
+                  whileTap="tap"
                 >
-                  →
-                </motion.span>
-              </span>
-              <span className="absolute inset-0 w-full h-full bg-white/20 translate-y-[101%] group-hover:translate-y-0 transition-transform duration-300"></span>
-            </motion.button>
+                  Get Started →
+                </motion.button>
+              </DialogTrigger >
+              <DialogContent className='p-0 max-w-4xl md:max-w-5xl rounded-lg my-8'>
+                <DialogTitle className="text-center text-2xl font-semibold py-6 bg-gray-50 dark:bg-gray-800 rounded-t-lg">
+                  Let's Discuss Your Project
+                </DialogTitle>
+                <GetStarted />
+              </DialogContent>
+            </Dialog>
             
             <motion.button
               className="px-8 py-4 border border-gray-300 dark:border-white/20 bg-gray-100/80 dark:bg-white/5 backdrop-blur-sm rounded-xl text-gray-800 dark:text-white font-semibold hover:bg-gray-200/80 dark:hover:bg-white/10 transition-colors"

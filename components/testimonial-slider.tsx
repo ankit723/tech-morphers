@@ -143,6 +143,10 @@ export default function TestimonialsSlider() {
               modules={[Navigation, Pagination]}
               spaceBetween={30}
               slidesPerView={1}
+              autoplay={{
+                delay: 0,
+                disableOnInteraction: false,
+              }}
               loop={true}
               breakpoints={{
                 640: {

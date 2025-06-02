@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ModeToggle } from "@/components/ui/themeToggle";
+import Link from "next/link";
 
 // Helper for sidebar scroll lock
 const toggleScrollLock = (lock: boolean) => {
@@ -521,9 +522,11 @@ const Navbar = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <Image src="/logo.png" alt="Tech Morphers" fill className="object-contain" />
+          <Link href="/">
+            <Image src="/logo.png" alt="Tech Morphers" fill className="object-contain" />
+          </Link>
         </motion.div>
-        <div className="flex items-center font-bold">
+        <Link href="/" className="flex items-center font-bold">
           <motion.div 
             className="relative h-10 w-16 md:h-12 md:w-24 mr-0.5"
             whileHover={{ scale: 1.05 }}
@@ -540,7 +543,7 @@ const Navbar = () => {
             <Image src="/home/Group2.png" alt="Morphers" fill className="" />
             <span className="absolute inset-0 flex items-center justify-center text-white text-sm tracking-wider">MORPHERS</span>
           </motion.div>
-        </div>
+        </Link>
       </div>
 
       {/* Dynamic Island Container - Hidden on small screens */}
