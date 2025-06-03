@@ -1,6 +1,10 @@
 'use client'
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -49,7 +53,7 @@ const Contact = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="space-y-8"
             >
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+              <div className="bg-white dark:bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                   Contact Information
                 </h2>
@@ -98,71 +102,71 @@ const Contact = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <form onSubmit={handleSubmit} className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+              <form onSubmit={handleSubmit} className="bg-white dark:bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
                 <div className="space-y-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                    <Label htmlFor="name" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
                       Name
-                    </label>
-                    <input
+                    </Label>
+                    <Input
                       type="text"
                       id="name"
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 rounded-lg bg-white/5 "
                       required
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                    <Label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
                       Email
-                    </label>
-                    <input
+                    </Label>
+                    <Input
                       type="email"
                       id="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 rounded-lg "
                       required
                     />
                   </div>
                   <div>
-                    <label htmlFor="subject" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                    <Label htmlFor="subject" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
                       Subject
-                    </label>
-                    <input
+                    </Label>
+                    <Input
                       type="text"
                       id="subject"
                       name="subject"
                       value={formData.subject}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 rounded-lg"
                       required
                     />
                   </div>
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                    <Label htmlFor="message" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
                       Message
-                    </label>
-                    <textarea
+                    </Label>
+                    <Textarea
                       id="message"
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
                       rows={4}
-                      className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 rounded-lg"
                       required
                     />
                   </div>
                   <div>
-                    <button
+                    <Button
                       type="submit"
                       className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors"
                     >
                       Send Message
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </form>

@@ -1,9 +1,15 @@
 'use client'
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 const Support = () => {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const [isDark, setIsDark] = useState(false)
+  const {theme} = useTheme()
+  useEffect(() => {
+    setIsDark(theme === "dark")
+  }, [theme])
 
   const faqs = [
     {
@@ -82,7 +88,7 @@ const Support = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.2 }}
-                className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 text-center"
+                className="bg-white dark:bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 text-center"
               >
                 <div className="text-blue-600 mb-4 flex justify-center">
                   {option.icon}
@@ -102,7 +108,7 @@ const Support = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20"
+            className="bg-white dark:bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20"
           >
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">
               Frequently Asked Questions
@@ -112,7 +118,7 @@ const Support = () => {
                 <motion.div
                   key={index}
                   initial={false}
-                  animate={{ backgroundColor: expandedFaq === index ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.05)" }}
+                  animate={{ backgroundColor: expandedFaq === index ? isDark ? "rgba(0, 0, 0, 0.05)" : "rgba(0, 0, 0, 0.1)" : isDark ? "rgba(0, 0, 0, 0.05)" : "rgba(0, 0, 0, 0.05)" }}
                   className="rounded-lg overflow-hidden"
                 >
                   <button
