@@ -3,6 +3,10 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -60,47 +64,47 @@ const Register = () => {
           className="mt-8 space-y-6"
           onSubmit={handleSubmit}
         >
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+          <div className="bg-white dark:bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
             <div className="space-y-6">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                  <Label htmlFor="firstName" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
                     First name
-                  </label>
-                  <input
+                  </Label>
+                  <Input
                     id="firstName"
                     name="firstName"
                     type="text"
                     required
                     value={formData.firstName}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 rounded-lg"
                     placeholder="Enter your first name"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                  <Label htmlFor="lastName" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
                     Last name
-                  </label>
-                  <input
+                  </Label>
+                  <Input
                     id="lastName"
                     name="lastName"
                     type="text"
                     required
                     value={formData.lastName}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 rounded-lg"
                     placeholder="Enter your last name"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                <Label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
                   Email address
-                </label>
-                <input
+                </Label>
+                <Input
                   id="email"
                   name="email"
                   type="email"
@@ -108,54 +112,53 @@ const Register = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-lg"
                   placeholder="Enter your email"
                 />
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                <Label htmlFor="password" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
                   Password
-                </label>
-                <input
+                </Label>
+                <Input
                   id="password"
                   name="password"
                   type="password"
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-lg"
                   placeholder="Create a password"
                 />
               </div>
 
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                <Label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
                   Confirm password
-                </label>
-                <input
+                </Label>
+                <Input
                   id="confirmPassword"
                   name="confirmPassword"
                   type="password"
                   required
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-lg"
                   placeholder="Confirm your password"
                 />
               </div>
 
               <div className="flex items-center">
-                <input
+                <Checkbox
                   id="agreeToTerms"
                   name="agreeToTerms"
-                  type="checkbox"
                   required
                   checked={formData.agreeToTerms}
-                  onChange={handleChange}
+                  onCheckedChange={(checked) => setFormData({ ...formData, agreeToTerms: checked as boolean })}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
-                <label htmlFor="agreeToTerms" className="ml-2 block text-sm text-gray-900 dark:text-white">
+                <Label htmlFor="agreeToTerms" className="ml-2 block text-sm text-gray-900 dark:text-white">
                   I agree to the{" "}
                   <Link href="/terms" className="text-blue-600 hover:text-blue-500">
                     Terms of Service
@@ -164,7 +167,7 @@ const Register = () => {
                   <Link href="/privacy" className="text-blue-600 hover:text-blue-500">
                     Privacy Policy
                   </Link>
-                </label>
+                </Label>
               </div>
 
               <div>
@@ -226,7 +229,7 @@ const Register = () => {
               <button
                 key={provider.name}
                 type="button"
-                className="w-full inline-flex justify-center py-2 px-4 border border-white/10 rounded-lg shadow-sm bg-white/5 text-sm font-medium text-gray-900 dark:text-white hover:bg-white/10"
+                className="w-full inline-flex justify-center py-2 px-4 border border-white/10 rounded-lg shadow-sm bg-white dark:bg-white/5 text-sm font-medium text-gray-900 dark:text-white hover:bg-white/10"
               >
                 <span className="sr-only">Sign up with {provider.name}</span>
                 {provider.icon}

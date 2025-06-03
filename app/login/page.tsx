@@ -3,6 +3,10 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -54,13 +58,13 @@ const Login = () => {
           className="mt-8 space-y-6"
           onSubmit={handleSubmit}
         >
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+          <div className="bg-white dark:bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
             <div className="space-y-6">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                <Label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
                   Email address
-                </label>
-                <input
+                </Label>
+                <Input
                   id="email"
                   name="email"
                   type="email"
@@ -68,16 +72,16 @@ const Login = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-lg  "
                   placeholder="Enter your email"
                 />
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                <Label htmlFor="password" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
                   Password
-                </label>
-                <input
+                </Label>
+                <Input
                   id="password"
                   name="password"
                   type="password"
@@ -85,24 +89,23 @@ const Login = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-lg"
                   placeholder="Enter your password"
                 />
               </div>
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <input
+                  <Checkbox
                     id="remember-me"
                     name="rememberMe"
-                    type="checkbox"
                     checked={formData.rememberMe}
-                    onChange={handleChange}
+                    onCheckedChange={(checked) => setFormData({ ...formData, rememberMe: checked as boolean })}
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 dark:text-white">
+                  <Label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 dark:text-white">
                     Remember me
-                  </label>
+                  </Label>
                 </div>
 
                 <div className="text-sm">
@@ -113,12 +116,12 @@ const Login = () => {
               </div>
 
               <div>
-                <button
+                <Button
                   type="submit"
                   className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Sign in
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -171,7 +174,7 @@ const Login = () => {
               <button
                 key={provider.name}
                 type="button"
-                className="w-full inline-flex justify-center py-2 px-4 border border-white/10 rounded-lg shadow-sm bg-white/5 text-sm font-medium text-gray-900 dark:text-white hover:bg-white/10"
+                className="w-full inline-flex justify-center py-2 px-4 border border-white/10 rounded-lg shadow-sm bg-white dark:bg-white/5 text-sm font-medium text-gray-900 dark:text-white hover:bg-white/10"
               >
                 <span className="sr-only">Sign in with {provider.name}</span>
                 {provider.icon}
