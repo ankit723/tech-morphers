@@ -171,12 +171,12 @@ const Register = () => {
               </div>
 
               <div>
-                <button
+                <Button
                   type="submit"
                   className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Create account
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -226,14 +226,14 @@ const Register = () => {
                 ),
               },
             ].map((provider) => (
-              <button
+              <Button
                 key={provider.name}
                 type="button"
                 className="w-full inline-flex justify-center py-2 px-4 border border-white/10 rounded-lg shadow-sm bg-white dark:bg-white/5 text-sm font-medium text-gray-900 dark:text-white hover:bg-white/10"
               >
                 <span className="sr-only">Sign up with {provider.name}</span>
                 {provider.icon}
-              </button>
+              </Button>
             ))}
           </div>
         </motion.div>
