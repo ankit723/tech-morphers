@@ -57,7 +57,7 @@ const StepPurposeAudience: React.FC<StepPurposeAudienceProps> = ({ formData, set
           Every project has a soul.
         </h2>
         <p className="text-muted-foreground text-lg">
-          Who are we solving this for, and what's its core purpose?
+          Who are we solving this for, and what&apos;s its core purpose?
         </p>
       </div>
 

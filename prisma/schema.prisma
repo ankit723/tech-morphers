@@ -32,15 +32,15 @@ model Estimator {
     projectType       String?
     projectPurpose    String?
     targetAudience    String?
-    features          Json?
+    features          String[]
     designPreference  String?
     needsCustomBranding Boolean?
     deliveryTimeline  String?
     budgetRange       String?
-    addons            Json?
+    addons            String[]
     customRequests    String?
     fullName          String
-    email             String    @unique
+    email             String
     phone             String?
     companyName       String?
     userRole          String?
@@ -60,3 +60,12 @@ model GetStarted {
     createdAt DateTime @default(now())
 }
 
+model TalkToUs {
+    id String @id @default(uuid())
+    name String
+    email String
+    phone String?
+    companyName String?
+    message String
+    createdAt DateTime @default(now())
+}

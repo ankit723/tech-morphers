@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 import StepProjectType from '@/components/estimator/Step1_ProjectType';
 import StepPurposeAudience from '@/components/estimator/Step2_PurposeAudience';
 import StepFeatures from '@/components/estimator/Step3_Features';
@@ -17,7 +18,9 @@ const finalQuoteStepNumber = 8;
 
 const EstimatorPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<any>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const nextStep = () => {
     if (currentStep < totalSteps) {
@@ -38,12 +41,40 @@ const EstimatorPage = () => {
   };
 
   const updateFormData = (data: any) => {
-    setFormData(prev => ({ ...prev, ...data }));
+    setFormData((prev: any) => ({ ...prev, ...data }));
+    setSubmitError(null);
   };
   
-  const handleSubmitDetails = () => {
-    console.log("Final Form Data:", formData);
-    setCurrentStep(finalQuoteStepNumber);
+  const handleSubmitDetails = async () => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+    console.log("Attempting to save Final Form Data:", formData);
+
+    try {
+      const response = await fetch('/api/estimator/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || errorData.details || 'Failed to save estimator data.');
+      }
+
+      const savedData = await response.json();
+      console.log("Saved Estimator Data:", savedData);
+      updateFormData(savedData);
+      setCurrentStep(finalQuoteStepNumber);
+
+    } catch (error: any) {
+      console.error("Error submitting estimator details:", error);
+      setSubmitError(error.message || "An unexpected error occurred while saving your details.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleStartOver = () => {
@@ -66,7 +97,14 @@ const EstimatorPage = () => {
       case 6:
         return <StepAddonsCustom formData={formData} setFormData={updateFormData} onNext={nextStep} onPrev={prevStep} />;
       case 7:
-        return <StepYourDetails formData={formData} setFormData={updateFormData} onSubmit={handleSubmitDetails} onPrev={prevStep} />;
+        return <StepYourDetails 
+                  formData={formData} 
+                  setFormData={updateFormData} 
+                  onSubmit={handleSubmitDetails} 
+                  onPrev={prevStep} 
+                  isSubmitting={isSubmitting}
+                  submitError={submitError}
+                />;
       case finalQuoteStepNumber:
         return <StepFinalQuote formData={formData} onStartOver={handleStartOver} />;
       default:
@@ -148,9 +186,9 @@ const EstimatorPage = () => {
           <p className="text-sm text-muted-foreground">Helping you shape the future, one estimate at a time.</p>
         </div>
         <div className="flex justify-center space-x-4 mb-4 text-sm text-muted-foreground">
-          <a href="/" className="hover:text-primary transition-colors">Home</a>
-          <a href="/packages" className="hover:text-primary transition-colors">Services</a>
-          <a href="/contact" className="hover:text-primary transition-colors">Contact Us</a>
+          <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+          <Link href="/packages" className="hover:text-primary transition-colors">Services</Link>
+          <Link href="/contact" className="hover:text-primary transition-colors">Contact Us</Link>
           {/* Add more links as needed, e.g., Privacy Policy, Terms */}
         </div>
         <p className="text-xs text-muted-foreground/80 dark:text-slate-500">

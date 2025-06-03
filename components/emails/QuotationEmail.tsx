@@ -137,8 +137,8 @@ export const QuotationEmailTemplate: React.FC<Readonly<QuotationEmailProps>> = (
           <div style={styles.contentBlock}>
             <p style={styles.paragraph}>Dear {fullName},</p>
             <p style={styles.paragraph}>
-              Thank you for your interest in Tech Morphers! We've prepared a preliminary quotation based on the project details you provided. 
-              Your vision is important to us, and this document outlines the initial scope we've derived.
+              Thank you for your interest in Tech Morphers! We&apos;ve prepared a preliminary quotation based on the project details you provided. 
+              Your vision is important to us, and this document outlines the initial scope we&apos;ve derived.
             </p>
           </div>
           <div style={styles.attachmentNote}>
@@ -160,7 +160,7 @@ export const QuotationEmailTemplate: React.FC<Readonly<QuotationEmailProps>> = (
           </div>
           <div style={styles.contentBlock}>
             <p style={styles.paragraph}>
-              If you have any immediate questions, or if you'd like to discuss this quotation, please don't hesitate to contact us. 
+              If you have any immediate questions, or if you&apos;d like to discuss this quotation, please don&apos;t hesitate to contact us. 
               You can reply directly to this email or use the button below.
             </p>
             <a href={`${siteUrl}/contact`} target="_blank" style={styles.ctaButton}>Contact Our Team</a> 

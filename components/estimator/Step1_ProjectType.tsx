@@ -43,7 +43,7 @@ const StepProjectType: React.FC<StepProjectTypeProps> = ({ formData, setFormData
     >
       <div className="text-center">
         <h2 className="text-3xl font-bold text-foreground mb-2">
-          Let's start with the basics.
+          Let&apos;s start with the basics.
         </h2>
         <p className="text-muted-foreground text-lg">
           What type of product are we building together?

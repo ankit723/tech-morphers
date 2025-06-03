@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { plans } from "@/components/packages"; // Import plans to populate the select dropdown
+import { plans } from "@/lib/plansData"; // Import plans to populate the select dropdown
 import { Loader2, AlertTriangle, CheckCircle2 } from 'lucide-react'; // Added icons
 
 interface ContactUsProps {

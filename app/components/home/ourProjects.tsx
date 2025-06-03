@@ -119,7 +119,7 @@ const OurProjects = () => {
     }, [])
     
     return (
-        <div className="relative mb-20 mt-10" ref={sectionRef}>
+        <div className="relative mb-20 -mt-10" ref={sectionRef}>
             <div className="container mx-auto">
                 <div ref={firstRowRef} className="flex gap-10 justify-center">
                     <LetterHover 

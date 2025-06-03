@@ -1,5 +1,6 @@
 "use client"
 
+import React from 'react';
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Navigation, Pagination } from "swiper/modules"
 import { ChevronLeft, ChevronRight } from "lucide-react"
@@ -143,11 +144,6 @@ export default function TestimonialsSlider() {
               modules={[Navigation, Pagination]}
               spaceBetween={30}
               slidesPerView={1}
-              autoplay={{
-                delay: 0,
-                disableOnInteraction: false,
-              }}
-              loop={true}
               breakpoints={{
                 640: {
                   slidesPerView: 1,
@@ -172,9 +168,11 @@ export default function TestimonialsSlider() {
                         {/* Author */}
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center overflow-hidden">
-                                <img
+                                <Image
                                     src={testimonial.avatar || "/placeholder.svg"}
                                     alt={testimonial.name}
+                                    width={48}
+                                    height={48}
                                     className="w-full h-full object-cover"
                                 />
                             </div>

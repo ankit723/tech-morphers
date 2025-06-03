@@ -2,6 +2,8 @@ import TestimonialsSlider from '@/components/testimonial-slider'
 import { Button } from '@/components/ui/button'
 import React, { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
 
 const Testimonials = () => {
   const ref1 = useRef(null)
@@ -74,13 +76,14 @@ const Testimonials = () => {
           transition={{ duration: 0.5, delay: 0.6 }}
           className="flex justify-center items-center gap-5 md:gap-10 container mx-auto my-10"
         >
-          <Button variant="default" className='rounded-full bg-blue-700 text-white px-3 py-5 md:px-10 md:py-7'>
-            Start Onboarding Process
+          <Button variant="default" className='rounded-full bg-blue-700 text-white px-4 py-5 md:px-10 md:py-7'>
+            View Our Packages <ArrowRight className='ml-2 w-5 h-5' />
           </Button>
-
-          <Button variant="outline" className='rounded-full text-blue-700 border-blue-700 px-3 py-5 md:px-10 md:py-7'>
-            Get An Estimate
-          </Button>
+          <Link href="/estimator">
+            <Button variant="outline" className='rounded-full text-blue-700 border-blue-700 px-3 py-5 md:px-10 md:py-7'>
+              Get An Estimate
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </>

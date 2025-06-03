@@ -80,14 +80,14 @@ const GetStartedForm = () => {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="w-full max-w-4xl mx-auto p-8 md:p-12 flex flex-col items-center justify-center text-center bg-card dark:bg-gray-800 rounded-lg shadow-xl"
+        className="w-full max-w-4xl mx-auto p-6 sm:p-8 md:p-10 flex flex-col items-center justify-center text-center bg-card dark:bg-gray-800 rounded-lg shadow-xl"
       >
         <CheckCircle className="w-16 h-16 text-green-500 mb-6" />
         <h2 className="text-3xl font-semibold text-foreground dark:text-white mb-3">
           Thank You!
         </h2>
         <p className="text-lg text-muted-foreground dark:text-gray-300 mb-8">
-          Your project details have been received. We'll be in touch shortly.
+          Your project details have been received. We&apos;ll be in touch shortly.
         </p>
         <Button 
           onClick={() => setSubmitted(false)} 
@@ -104,10 +104,10 @@ const GetStartedForm = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="w-full mx-auto max-w-4xl dark:bg-gray-800 rounded-lg shadow-2xl overflow-hidden border border-border dark:border-gray-700"
+      className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700 max-h-[90vh] overflow-y-auto"
     >
-      <div className="grid md:grid-cols-[1fr,1.5fr]">
-        <div className="bg-gradient-to-br from-primary via-purple-600 to-pink-600 dark:from-blue-800 dark:via-indigo-700 dark:to-purple-700 text-white p-8 md:p-12 flex flex-col justify-center space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 rounded-lg">
+        <div className="bg-gradient-to-br from-primary via-purple-600 to-pink-600 dark:from-blue-700 dark:via-indigo-600 dark:to-purple-600 text-white p-6 sm:p-8 md:p-10 flex flex-col justify-center space-y-1 md:space-y-6 rounded-l-lg">
           <h2 className="text-3xl md:text-4xl font-bold leading-tight">
             Ready to Innovate?
           </h2>
@@ -124,50 +124,50 @@ const GetStartedForm = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-card dark:bg-gray-900/50 p-8 md:p-12 space-y-6 md:space-y-8"
+          className="bg-white dark:bg-gray-800 p-6 sm:p-8 md:p-10 space-y-6 md:space-y-8 rounded-r-lg"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
             <div className="space-y-1.5">
-              <Label htmlFor="gs-name" className="text-sm font-medium text-muted-foreground dark:text-gray-300">Full Name <span className="text-red-500">*</span></Label>
-              <Input id="gs-name" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g., Ada Lovelace" className="bg-background dark:bg-gray-700 border-border dark:border-gray-600 dark:placeholder-gray-500" disabled={loading}/>
+              <Label htmlFor="gs-name" className="block text-sm font-medium text-muted-foreground dark:text-gray-300">Full Name <span className="text-red-500">*</span></Label>
+              <Input id="gs-name" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g., Ada Lovelace" className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500 dark:focus:ring-indigo-400" disabled={loading}/>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="gs-email" className="text-sm font-medium text-muted-foreground dark:text-gray-300">Email Address <span className="text-red-500">*</span></Label>
-              <Input id="gs-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="ada@example.com" className="bg-background dark:bg-gray-700 border-border dark:border-gray-600 dark:placeholder-gray-500" disabled={loading}/>
+              <Label htmlFor="gs-email" className="block text-sm font-medium text-muted-foreground dark:text-gray-300">Email Address <span className="text-red-500">*</span></Label>
+              <Input id="gs-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="ada@example.com" className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500 dark:focus:ring-indigo-400" disabled={loading}/>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
              <div className="space-y-1.5">
-              <Label htmlFor="gs-phone" className="text-sm font-medium text-muted-foreground dark:text-gray-300">Phone Number</Label>
-              <Input id="gs-phone" type="text" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="e.g., +91 9876543210" className="bg-background dark:bg-gray-700 border-border dark:border-gray-600 dark:placeholder-gray-500" disabled={loading}/>
+              <Label htmlFor="gs-phone" className="block text-sm font-medium text-muted-foreground dark:text-gray-300">Phone Number</Label>
+              <Input id="gs-phone" type="text" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="e.g., +91 9876543210" className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500 dark:focus:ring-indigo-400" disabled={loading}/>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="gs-companyName" className="text-sm font-medium text-muted-foreground dark:text-gray-300">Company Name (Optional)</Label>
-              <Input id="gs-companyName" type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder="Your Awesome Corp." className="bg-background dark:bg-gray-700 border-border dark:border-gray-600 dark:placeholder-gray-500" disabled={loading}/>
+              <Label htmlFor="gs-companyName" className="block text-sm font-medium text-muted-foreground dark:text-gray-300">Company Name (Optional)</Label>
+              <Input id="gs-companyName" type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder="Your Awesome Corp." className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500 dark:focus:ring-indigo-400" disabled={loading}/>
             </div>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
             <div className="space-y-1.5">
-              <Label htmlFor="gs-service" className="text-sm font-medium text-muted-foreground dark:text-gray-300">Service of Interest <span className="text-red-500">*</span></Label>
-              <Input id="gs-service" required value={service} onChange={(e) => setService(e.target.value)} placeholder="e.g., AI Product Development" className="bg-background dark:bg-gray-700 border-border dark:border-gray-600 dark:placeholder-gray-500" disabled={loading}/>
+              <Label htmlFor="gs-service" className="block text-sm font-medium text-muted-foreground dark:text-gray-300">Service of Interest <span className="text-red-500">*</span></Label>
+              <Input id="gs-service" required value={service} onChange={(e) => setService(e.target.value)} placeholder="e.g., AI Product Development" className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500 dark:focus:ring-indigo-400" disabled={loading}/>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="gs-budget" className="text-sm font-medium text-muted-foreground dark:text-gray-300">Estimated Budget (Optional)</Label>
-              <Input id="gs-budget" type="text" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="e.g., ₹10L - ₹25L" className="bg-background dark:bg-gray-700 border-border dark:border-gray-600 dark:placeholder-gray-500" disabled={loading}/>
+              <Label htmlFor="gs-budget" className="block text-sm font-medium text-muted-foreground dark:text-gray-300">Estimated Budget (Optional)</Label>
+              <Input id="gs-budget" type="text" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="e.g., ₹10L - ₹25L" className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500 dark:focus:ring-indigo-400" disabled={loading}/>
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="gs-desc" className="text-sm font-medium text-muted-foreground dark:text-gray-300">Project Vision <span className="text-red-500">*</span></Label>
+            <Label htmlFor="gs-desc" className="block text-sm font-medium text-muted-foreground dark:text-gray-300">Project Vision <span className="text-red-500">*</span></Label>
             <Textarea
               id="gs-desc"
               value={projectVision} onChange={(e) => setProjectVision(e.target.value)}
               placeholder="Briefly describe your project, goals, and any specific requirements..."
               rows={5}
               required
-              className="bg-background dark:bg-gray-700 border-border dark:border-gray-600 dark:placeholder-gray-500"
+              className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500 dark:focus:ring-indigo-400"
               disabled={loading}
             />
           </div>
@@ -182,7 +182,7 @@ const GetStartedForm = () => {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 dark:from-blue-500 dark:to-indigo-500 dark:hover:from-blue-600 dark:hover:to-indigo-600 text-white text-base md:text-lg py-3 md:py-3.5 rounded-lg shadow-md hover:shadow-lg font-semibold transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+            className="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 dark:from-blue-500 dark:to-indigo-600 dark:hover:from-blue-600 dark:hover:to-indigo-700 text-white text-base md:text-lg py-3 md:py-3.5 rounded-lg shadow-md hover:shadow-lg font-semibold transition-all duration-300 transform hover:scale-102 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 dark:focus:ring-indigo-400"
           >
             {loading ? (
               <>

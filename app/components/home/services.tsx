@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 
 // Dynamically import Lottie to prevent server-side rendering issues
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
@@ -336,7 +337,7 @@ const Services = () => {
   return (
     <section
       ref={sectionRef}
-      className="py-20 md:py-28 overflow-hidden -mt-20"
+      className="py-20 md:py-28 overflow-hidden -mt-20 pb-0"
     >
       <div className="container mx-auto px-4 md:px-8">
         <div className="text-center mb-20 relative">
@@ -378,6 +379,7 @@ const Services = () => {
               animate={clickedCard === service.id ? "clicked" : "initial"}
               variants={cardClickVariants}
             >
+              <Link href={`/services/${service.id}`} className="absolute inset-0 z-30" tabIndex={-1} aria-label={`Go to ${service.title} details`} />
               <div className={`h-2 w-full bg-gradient-to-r ${service.color}`}></div>
               
               {/* Content container with conditional opacity */}
@@ -412,17 +414,9 @@ const Services = () => {
                   ))}
                 </ul>
                 
-                <motion.button
-                  className={`mt-8 px-5 py-2.5 rounded-lg bg-gradient-to-r ${service.color} text-white text-sm font-medium w-full relative z-30`}
-                  whileHover={{ scale: 1.03, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevent triggering parent's onClick
-                    console.log(`Learn more about ${service.title}`);
-                  }}
-                >
+                <Link href={`/services/${service.id}`} className={`mt-8 px-5 py-2.5 rounded-lg bg-gradient-to-r ${service.color} text-white text-sm font-medium w-full relative z-30 flex items-center justify-center`} tabIndex={0} aria-label={`Learn more about ${service.title}`}>
                   Learn More
-                </motion.button>
+                </Link>
               </div>
               
               {/* Lottie animation overlay */}
@@ -454,19 +448,6 @@ const Services = () => {
               )}
             </motion.div>
           ))}
-        </div>
-        
-        <div className="mt-16 text-center">
-          <motion.button
-            className="main-button px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-[#0123FE] dark:to-[#03A0FF] rounded-xl text-white font-semibold shadow-lg"
-            whileHover={{ 
-              scale: 1.05,
-              boxShadow: "0px 10px 30px rgba(37, 99, 235, 0.4)",
-            }}
-            whileTap={{ scale: 0.98 }}
-          >
-            View All Services
-          </motion.button>
         </div>
       </div>
     </section>

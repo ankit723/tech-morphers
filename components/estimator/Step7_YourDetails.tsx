@@ -11,8 +11,10 @@ import { CheckCircle, AlertTriangle, Loader2 } from 'lucide-react';
 interface StepYourDetailsProps {
   formData: any;
   setFormData: (data: any) => void;
-  onSubmit: () => void;
+  onSubmit: () => Promise<void>;
   onPrev: () => void;
+  isSubmitting: boolean;
+  submitError: string | null;
 }
 
 const userRoles = [
@@ -25,10 +27,15 @@ const userRoles = [
   { id: 'other', label: 'Other' },
 ];
 
-const StepYourDetails: React.FC<StepYourDetailsProps> = ({ formData, setFormData, onSubmit, onPrev }) => {
+const StepYourDetails: React.FC<StepYourDetailsProps> = ({ 
+  formData, 
+  setFormData, 
+  onSubmit, 
+  onPrev, 
+  isSubmitting,
+  submitError
+}) => {
   const [errors, setErrors] = useState<{[key: string]: string}>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [submissionError, setSubmissionError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -36,7 +43,6 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({ formData, setFormData
     if (errors[id]) {
       setErrors(prev => ({...prev, [id]: ''}));
     }
-    if (submissionError) setSubmissionError(null);
   };
 
   const handleRoleChange = (value: string) => {
@@ -44,7 +50,6 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({ formData, setFormData
      if (errors.userRole) {
       setErrors(prev => ({...prev, userRole: ''}));
     }
-    if (submissionError) setSubmissionError(null);
   };
 
   const validateForm = () => {
@@ -64,36 +69,12 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({ formData, setFormData
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleApiSubmit = async () => {
+  const handleLocalSubmit = async () => {
     if (!validateForm()) {
       return;
     }
-    setIsLoading(true);
-    setSubmissionError(null);
-
-    try {
-      const response = await fetch('/api/estimator/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        console.log('Submission successful:', result);
-        onSubmit();
-      } else {
-        setSubmissionError(result.error || 'An unexpected error occurred. Please try again.');
-        console.error('Submission failed:', result);
-      }
-    } catch (error) {
-      console.error('Network or client-side error during submission:', error);
-      setSubmissionError('Failed to connect to the server. Please check your internet connection and try again.');
-    }
-    setIsLoading(false);
+    
+    await onSubmit();
   };
 
   return (
@@ -113,7 +94,7 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({ formData, setFormData
         </p>
       </div>
 
-      <form className="space-y-4 md:space-y-5" onSubmit={(e) => { e.preventDefault(); handleApiSubmit(); }}>
+      <form className="space-y-4 md:space-y-5" onSubmit={(e) => { e.preventDefault(); handleLocalSubmit(); }}>
         <div>
           <Label htmlFor="fullName" className="text-sm font-medium text-muted-foreground dark:text-slate-300">Full Name <span className="text-red-500">*</span></Label>
           <Input 
@@ -126,6 +107,7 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({ formData, setFormData
             className={`mt-1 bg-background dark:bg-slate-700 border-border dark:border-slate-600 placeholder:text-muted-foreground dark:placeholder:text-slate-400 focus:ring-primary ${errors.fullName ? 'border-red-500 dark:border-red-400 focus:ring-red-500' : ''}`}
             aria-invalid={!!errors.fullName}
             aria-describedby={errors.fullName ? "fullName-error" : undefined}
+            disabled={isSubmitting}
           />
           {errors.fullName && <p id="fullName-error" className="text-xs text-red-500 dark:text-red-400 mt-1">{errors.fullName}</p>}
         </div>
@@ -142,6 +124,7 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({ formData, setFormData
             className={`mt-1 bg-background dark:bg-slate-700 border-border dark:border-slate-600 placeholder:text-muted-foreground dark:placeholder:text-slate-400 focus:ring-primary ${errors.email ? 'border-red-500 dark:border-red-400 focus:ring-red-500' : ''}`}
             aria-invalid={!!errors.email}
             aria-describedby={errors.email ? "email-error" : undefined}
+            disabled={isSubmitting}
           />
           {errors.email && <p id="email-error" className="text-xs text-red-500 dark:text-red-400 mt-1">{errors.email}</p>}
         </div>
@@ -158,6 +141,7 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({ formData, setFormData
               className={`mt-1 bg-background dark:bg-slate-700 border-border dark:border-slate-600 placeholder:text-muted-foreground dark:placeholder:text-slate-400 focus:ring-primary ${errors.phone ? 'border-red-500 dark:border-red-400 focus:ring-red-500' : ''}`}
               aria-invalid={!!errors.phone}
               aria-describedby={errors.phone ? "phone-error" : undefined}
+              disabled={isSubmitting}
             />
             {errors.phone && <p id="phone-error" className="text-xs text-red-500 dark:text-red-400 mt-1">{errors.phone}</p>}
           </div>
@@ -170,12 +154,13 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({ formData, setFormData
               onChange={handleChange} 
               placeholder="Your Awesome Corp."
               className="mt-1 bg-background dark:bg-slate-700 border-border dark:border-slate-600 placeholder:text-muted-foreground dark:placeholder:text-slate-400 focus:ring-primary"
+              disabled={isSubmitting}
             />
           </div>
         </div>
         <div>
           <Label htmlFor="userRole" className="text-sm font-medium text-muted-foreground dark:text-slate-300">Your Role <span className="text-red-500">*</span></Label>
-          <Select value={formData.userRole || ''} onValueChange={handleRoleChange}>
+          <Select value={formData.userRole || ''} onValueChange={handleRoleChange} disabled={isSubmitting}>
             <SelectTrigger id="userRole" className={`w-full mt-1 bg-background dark:bg-slate-700 border-border dark:border-slate-600 placeholder:text-muted-foreground dark:placeholder:text-slate-400 focus:ring-primary ${errors.userRole ? 'border-red-500 dark:border-red-400 focus:ring-red-500' : ''}`}>
               <SelectValue placeholder="Select your role..." />
             </SelectTrigger>
@@ -190,20 +175,20 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({ formData, setFormData
           {errors.userRole && <p className="text-xs text-red-500 dark:text-red-400 mt-1">{errors.userRole}</p>}
         </div>
 
-        {submissionError && (
+        {submitError && (
           <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-md flex items-center text-sm text-red-700 dark:text-red-400">
             <AlertTriangle className="w-5 h-5 mr-2 shrink-0" />
-            <p>{submissionError}</p>
+            <p>{submitError}</p>
           </div>
         )}
       </form>
 
       <div className="flex justify-between mt-10">
-        <Button onClick={onPrev} variant="outline" className="border-border hover:bg-muted dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700" disabled={isLoading}>
+        <Button onClick={onPrev} variant="outline" className="border-border hover:bg-muted dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700" disabled={isSubmitting}>
           Previous
         </Button>
-        <Button onClick={handleApiSubmit} size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground" disabled={isLoading}>
-          {isLoading ? (
+        <Button onClick={handleLocalSubmit} size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground" disabled={isSubmitting}>
+          {isSubmitting ? (
             <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Processing...</>
           ) : (
             <>Submit & Get Quote <CheckCircle className="ml-2 h-5 w-5" /></>

@@ -1,28 +1,4 @@
-import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import { Estimator } from '@prisma/client'; // Assuming Estimator type is available
-
-const apiKey = process.env.GEMINI_API_KEY;
-if (!apiKey) {
-  console.warn("GEMINI_API_KEY is not set. AI features will be disabled.");
-}
-
-const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
-
-const modelConfig = {
-  model: "gemini-1.5-flash-latest", // Use a cost-effective model for text generation
-  generationConfig: {
-    temperature: 0.7,
-    topK: 0.95,
-    topP: 1,
-    maxOutputTokens: 2048, // Adjust as needed for quotation length
-  },
-  safetySettings: [
-    { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-    { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-    { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-    { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-  ],
-};
 
 function buildQuotationPrompt(estimateData: Estimator): string {
   // Destructure with defaults for optional fields to ensure they are handled
@@ -42,8 +18,8 @@ function buildQuotationPrompt(estimateData: Estimator): string {
     userRole = 'N/A',
   } = estimateData;
 
-  let prompt = `**Project Quotation Proposal for: ${fullName}${companyName ? ' (from ' + companyName + ')' : ''}**\n\n`;
-  prompt += `Thank you for providing details for your project. Based on the information you submitted, here is a preliminary project outline and estimated scope. This is not a final binding quote but serves as a starting point for our discussion.\n\n`;
+  let prompt = `**Provide a detailed project quotation proposal for: ${fullName}${companyName ? ' (from ' + companyName + ')' : ''}**\n\n`;
+  prompt += `Here are some details about the project, these are not final and will be discussed further. Please provide a detailed quotation proposal based on the following details:\n\n`;
 
   prompt += `**I. Project Overview**\n`;
   prompt += `  - **Project Type:** ${projectType}\n`;
@@ -103,41 +79,4 @@ function buildQuotationPrompt(estimateData: Estimator): string {
   return prompt;
 }
 
-export async function generateQuotationContent(estimateData: Estimator): Promise<string> {
-  if (!genAI) {
-    console.warn("Gemini AI client not initialized. API_KEY might be missing. Returning fallback content.");
-    // Fallback: Generate a simpler text-based quotation if AI is unavailable
-    return buildQuotationPrompt(estimateData); // Use the same prompt structure for non-AI fallback
-  }
-
-  try {
-    const model = genAI.getGenerativeModel({ model: modelConfig.model, safetySettings: modelConfig.safetySettings });
-    const promptText = buildQuotationPrompt(estimateData);
-    
-    console.log("--- Sending Prompt to Gemini ---");
-    // console.log(promptText);
-    console.log("-------------------------------");
-
-    const result = await model.generateContent(promptText);
-    const response = result.response;
-    const text = response.text();
-    
-    console.log("--- Received Response from Gemini ---");
-    // console.log(text);
-    console.log("-----------------------------------");
-    return text;
-
-  } catch (error) {
-    console.error("Error generating quotation with Gemini:", error);
-    // Fallback to simpler generation if AI fails
-    return `Error generating AI quotation. Please contact support. Fallback content:\n\n${buildQuotationPrompt(estimateData)}`;
-  }
-}
-
-// Example of how this might be used with a specific model if needed differently elsewhere
-// export async function generateFlashResponse(prompt: string): Promise<string> {
-//   if (!genAI) return "AI not available.";
-//   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
-//   const result = await model.generateContent(prompt);
-//   return result.response.text();
-// } 
+export { buildQuotationPrompt }; 

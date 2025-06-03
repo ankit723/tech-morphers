@@ -83,6 +83,7 @@ const Navbar = () => {
               {[
                 { 
                   name: "Web Development", 
+                  href: "/services/web",
                   icon: (
                     <motion.div
                       initial={{ rotate: -10 }}
@@ -108,6 +109,7 @@ const Navbar = () => {
                 },
                 { 
                   name: "App Development", 
+                  href: "/services/mobile",
                   icon: (
                     <motion.div
                       animate={{ y: [0, -3, 0] }}
@@ -130,6 +132,7 @@ const Navbar = () => {
                 },
                 { 
                   name: "UI/UX Design", 
+                  href: "/services/design",
                   icon: (
                     <motion.div
                       animate={{ rotate: 360 }}
@@ -151,7 +154,8 @@ const Navbar = () => {
                   )
                 },
                 { 
-                  name: "Consulting", 
+                  name: "Game Development", 
+                  href: "/services/game-development",
                   icon: (
                     <motion.div
                       animate={{ scale: [1, 1.2, 1] }}
@@ -191,10 +195,12 @@ const Navbar = () => {
                     transition: { delay: 0.1 } 
                   }}
                 >
-                  <div className="w-8 h-8 bg-white/10 rounded-md flex items-center justify-center mr-3 backdrop-blur-sm">
-                    {item.icon}
-                  </div>
-                  <span className="text-white text-sm font-medium">{item.name}</span>
+                  <Link href={item.href} className="flex items-center">
+                    <div className="w-8 h-8 bg-white/10 rounded-md flex items-center justify-center mr-3 backdrop-blur-sm">
+                      {item.icon}
+                    </div>
+                    <span className="text-white text-sm font-medium">{item.name}</span>
+                  </Link>
                 </motion.div>
               ))}
             </div>
@@ -584,9 +590,9 @@ const Navbar = () => {
                     color: activeSection === "products" ? "#ffffff" : "rgba(255, 255, 255, 0.8)",
                     backgroundColor: activeSection === "products" ? "rgba(255, 255, 255, 0.05)" : "transparent"
                   }}
-                  onClick={() => toggleExpand("products")}
+                  onClick={() => router.push("/about-us")}
                 >
-                  PRODUCTS
+                  ABOUT US
                   
                 </motion.button>
                 

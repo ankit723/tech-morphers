@@ -50,7 +50,7 @@ const StepTimelineBudget: React.FC<StepTimelineBudgetProps> = ({ formData, setFo
     >
       <div className="text-center">
         <h2 className="text-3xl font-bold text-foreground mb-2">
-          Let's talk time and money, transparently.
+          Let&apos;s talk time and money, transparently.
         </h2>
         <p className="text-muted-foreground text-lg">
           Your timeline and budget help us plan the best approach. 💸
@@ -80,7 +80,7 @@ const StepTimelineBudget: React.FC<StepTimelineBudgetProps> = ({ formData, setFo
               animate={{ opacity: 1, height: 'auto' }}
               className="text-xs text-amber-500 dark:text-amber-400 mt-1.5 p-2 bg-amber-500/10 dark:bg-amber-400/10 rounded"
             >
-              Note: Faster delivery may involve focused sprints and potentially higher costs. We'll optimize for value!
+              Note: Faster delivery may involve focused sprints and potentially higher costs. We&apos;ll optimize for value!
             </motion.p>
           )}
         </div>

@@ -3,11 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { MailCheck, RefreshCw, MessageCircle, User, Info } from 'lucide-react'; 
+import { MailCheck, RefreshCw, MessageCircle, Info } from 'lucide-react';
 import Confetti from 'react-confetti';
 
 interface StepFinalQuoteProps {
   formData: {
+    id?: string;
     fullName?: string;
     email?: string;
     // other fields from formData that might be useful, e.g., estimateId if passed
@@ -18,6 +19,8 @@ interface StepFinalQuoteProps {
 const StepFinalQuote: React.FC<StepFinalQuoteProps> = ({ formData, onStartOver }) => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  // const [isDownloading, setIsDownloading] = useState(false);
+  // const [downloadError, setDownloadError] = useState<string | null>(null);
 
   useEffect(() => {
     setShowConfetti(true);
@@ -39,6 +42,46 @@ const StepFinalQuote: React.FC<StepFinalQuoteProps> = ({ formData, onStartOver }
       }
     };
   }, []);
+
+  // const handleDownloadPDF = async () => {
+  //   if (!formData.id) {
+  //     setDownloadError("Estimator ID is missing. Cannot download PDF.");
+  //     console.error("Estimator ID is missing from formData.");
+  //     return;
+  //   }
+  //   setIsDownloading(true);
+  //   setDownloadError(null);
+  //   try {
+  //     const response = await fetch('/api/generate-quotation-pdf', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ estimatorId: formData.id }),
+  //     });
+
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(errorData.details || `Failed to generate PDF: ${response.statusText}`);
+  //     }
+
+  //     const blob = await response.blob();
+  //     const url = window.URL.createObjectURL(blob);
+  //     const a = document.createElement('a');
+  //     a.href = url;
+  //     a.download = `Quotation-EST-${formData.id.substring(0,8).toUpperCase()}.pdf`;
+  //     document.body.appendChild(a);
+  //     a.click();
+  //     document.body.removeChild(a);
+  //     window.URL.revokeObjectURL(url);
+
+  //   } catch (error: any) {
+  //     console.error("Error downloading PDF:", error);
+  //     setDownloadError(error.message || "An unexpected error occurred while downloading the PDF.");
+  //   } finally {
+  //     setIsDownloading(false);
+  //   }
+  // };
 
   return (
     <motion.div
@@ -67,7 +110,7 @@ const StepFinalQuote: React.FC<StepFinalQuoteProps> = ({ formData, onStartOver }
         </div> 
         <ul className="space-y-2 text-sm text-muted-foreground dark:text-slate-300 list-disc list-outside pl-5">
             <li>Our system generates a detailed project proposal and quotation.</li>
-            <li>This document will be sent to your email as a PDF.</li>
+            <li>This document will be sent to your email as a PDF. You can also download it below.</li>
             <li>A member of our team may reach out to discuss your project further if needed.</li>
             <li>Keep an eye on your inbox (and spam folder, just in case!).</li>
         </ul>
@@ -82,15 +125,23 @@ const StepFinalQuote: React.FC<StepFinalQuoteProps> = ({ formData, onStartOver }
         >
           <RefreshCw className="mr-2 h-5 w-5" /> Start Another Estimate
         </Button>
+        
         <Button 
           size="lg" 
           className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground"
           // onClick={() => { /* Potentially link to contact page or open mail client */ }}
+
         >
           <MessageCircle className="mr-2 h-5 w-5" /> Contact Support
         </Button>
       </div>
       
+      {/* {downloadError && (
+        <p className="text-xs text-red-500 dark:text-red-400 mt-4">
+          Error: {downloadError}
+        </p>
+      )} */}
+
       {/* Optional: Add a small note about typical processing time */}
       <p className="text-xs text-muted-foreground dark:text-slate-500 mt-8">
         Most quotations are delivered within 5-10 minutes. For complex projects, it might take a little longer.

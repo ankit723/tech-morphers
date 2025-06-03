@@ -7,7 +7,6 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import GetStarted from '@/components/forms/getStarted'
-import { Button } from '@/components/ui/button'
 
 // Dynamically import Lottie to prevent server-side rendering issues
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
@@ -19,7 +18,6 @@ const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
   const lottieRef = useRef<any>(null)
-  const [isHovered, setIsHovered] = useState(false)
   const [activeService, setActiveService] = useState<string | null>(null)
   const [animationData, setAnimationData] = useState<any>(null)
   const [isMounted, setIsMounted] = useState(false)
@@ -314,9 +312,9 @@ const Hero = () => {
                   Get Started →
                 </motion.button>
               </DialogTrigger >
-              <DialogContent className='p-0 max-w-4xl md:max-w-5xl rounded-lg my-8'>
-                <DialogTitle className="text-center text-2xl font-semibold py-6 bg-gray-50 dark:bg-gray-800 rounded-t-lg">
-                  Let's Discuss Your Project
+              <DialogContent className='p-0 w-[90vw] max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-5xl rounded-lg my-8'>
+                <DialogTitle className="text-center text-2xl font-semibold hidden">
+                  Let&apos;s Discuss Your Project
                 </DialogTitle>
                 <GetStarted />
               </DialogContent>
