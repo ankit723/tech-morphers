@@ -1,6 +1,5 @@
 'use client'
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { 
   Code2, 
   ShoppingBag, 
@@ -10,24 +9,7 @@ import {
   Cloud, 
   Figma, 
   GitBranch,
-  Boxes,
-  FileCode2,
-  Server,
-  FileType,
-  Database,
-  TableProperties,
-  Binary,
-  Frame,
-  Dock,
-  CloudCog,
-  Cpu,
-  Hexagon,
-  Paintbrush,
-  Layers,
-  CircleSlash2,
-  Flame,
-  Container,
-  Settings2
+
 } from 'lucide-react';
 import { 
   SiReact, 
