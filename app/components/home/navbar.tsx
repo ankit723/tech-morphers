@@ -726,11 +726,12 @@ const Navbar = () => {
               <nav className="flex flex-col space-y-4">
                 {[
                   { label: "Services", section: "services" },
-                  { label: "Products", section: "products" },
+                  { label: "About Us", section: "about-us" },
                   { label: "Resources", section: "resources" },
                 ].map((item) => (
-                  <button
+                  <Link
                     key={item.label}
+                    href={item.section}
                     onClick={() => {
                       // For now, just close sidebar. Later, this could scroll to sections or navigate.
                       // toggleExpand(item.section); // This was for the dynamic island, might need different logic for sidebar
@@ -740,7 +741,7 @@ const Navbar = () => {
                     className="text-left py-2 px-3 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >
                     {item.label}
-                  </button>
+                  </Link>
                 ))}
                 
                 <hr className="my-4 border-gray-200 dark:border-gray-700" />
@@ -750,8 +751,9 @@ const Navbar = () => {
                   { label: "Support", path: "/support" },
                   { label: "Login", path: "/login" }
                 ].map((item) => (
-                  <button
+                  <Link
                     key={item.label}
+                    href={item.path}
                     onClick={() => {
                       router.push(item.path);
                       toggleSidebar();
@@ -759,7 +761,7 @@ const Navbar = () => {
                     className="text-left py-2 px-3 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >
                     {item.label}
-                  </button>
+                  </Link>
                 ))}
                 
                 <div className="mt-auto pt-6">

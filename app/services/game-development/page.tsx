@@ -1,6 +1,14 @@
 'use client'
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { 
+  SiUnity,
+  SiUnrealengine,
+  SiGodotengine,
+  SiBlender,
+  SiAutodesk,
+  SiAdobephotoshop
+} from 'react-icons/si';
 
 const GameDevelopment = () => {
   const features = [
@@ -44,12 +52,30 @@ const GameDevelopment = () => {
   ];
 
   const technologies = [
-    { name: "Unity", icon: "/tech/unity.svg" },
-    { name: "Unreal Engine", icon: "/tech/unreal.svg" },
-    { name: "Godot", icon: "/tech/godot.svg" },
-    { name: "Blender", icon: "/tech/blender.svg" },
-    { name: "Maya", icon: "/tech/maya.svg" },
-    { name: "Photoshop", icon: "/tech/photoshop.svg" },
+    { 
+      name: "Unity",
+      icon: <SiUnity className="w-16 h-16 text-[#000000] dark:text-white" />
+    },
+    { 
+      name: "Unreal Engine",
+      icon: <SiUnrealengine className="w-16 h-16 text-[#000000] dark:text-white" />
+    },
+    { 
+      name: "Godot",
+      icon: <SiGodotengine className="w-16 h-16 text-[#478CBF]" />
+    },
+    { 
+      name: "Blender",
+      icon: <SiBlender className="w-16 h-16 text-[#F5792A]" />
+    },
+    { 
+      name: "Maya",
+      icon: <SiAutodesk className="w-16 h-16 text-[#000000] dark:text-white" />
+    },
+    { 
+      name: "Photoshop",
+      icon: <SiAdobephotoshop className="w-16 h-16 text-[#31A8FF]" />
+    }
   ];
 
   const processSteps = [
@@ -153,17 +179,12 @@ const GameDevelopment = () => {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="flex flex-col items-center"
+                className="flex flex-col items-center group hover:scale-110 transition-transform duration-200"
               >
-                <div className="relative w-16 h-16 mb-4">
-                  <Image
-                    src={tech.icon}
-                    alt={tech.name}
-                    fill
-                    className="object-contain"
-                  />
+                <div className="mb-4">
+                  {tech.icon}
                 </div>
-                <span className="text-gray-900 dark:text-white font-medium">
+                <span className="text-gray-900 dark:text-white font-medium text-center">
                   {tech.name}
                 </span>
               </motion.div>

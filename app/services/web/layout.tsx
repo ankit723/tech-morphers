@@ -1,3 +1,5 @@
+import Footer from '@/app/components/home/footer'
+import Navbar from '@/app/components/home/navbar'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -23,5 +25,13 @@ export const metadata: Metadata = {
 }
 
 export default function WebLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-screen bg-white dark:bg-[#0D0D1F]">{children}</div>
+  return (
+    <div className="min-h-screen bg-white dark:bg-[#0D0D1F]">
+      <Navbar />
+      {children}
+      <div className="relative mt-[50rem]">
+        <Footer />
+      </div>
+    </div>
+  )
 } 

@@ -1,6 +1,13 @@
 'use client'
 import { motion } from "framer-motion";
-import Image from "next/image";
+import { 
+  SiSwift,
+  SiKotlin,
+  SiReact,
+  SiFlutter,
+  SiFirebase,
+  SiAmazon
+} from 'react-icons/si';
 
 const AppDevelopment = () => {
   const features = [
@@ -44,12 +51,30 @@ const AppDevelopment = () => {
   ];
 
   const technologies = [
-    { name: "Swift", icon: "/tech/swift.svg" },
-    { name: "Kotlin", icon: "/tech/kotlin.svg" },
-    { name: "React Native", icon: "/tech/react-native.svg" },
-    { name: "Flutter", icon: "/tech/flutter.svg" },
-    { name: "Firebase", icon: "/tech/firebase.svg" },
-    { name: "AWS", icon: "/tech/aws.svg" },
+    { 
+      name: "Swift",
+      icon: <SiSwift className="w-16 h-16 text-[#F05138]" />
+    },
+    { 
+      name: "Kotlin",
+      icon: <SiKotlin className="w-16 h-16 text-[#7F52FF]" />
+    },
+    { 
+      name: "React Native",
+      icon: <SiReact className="w-16 h-16 text-[#61DAFB]" />
+    },
+    { 
+      name: "Flutter",
+      icon: <SiFlutter className="w-16 h-16 text-[#02569B]" />
+    },
+    { 
+      name: "Firebase",
+      icon: <SiFirebase className="w-16 h-16 text-[#FFCA28]" />
+    },
+    { 
+      name: "AWS",
+      icon: <SiAmazon className="w-16 h-16 text-[#FF9900]" />
+    }
   ];
 
   const processSteps = [
@@ -153,17 +178,12 @@ const AppDevelopment = () => {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="flex flex-col items-center"
+                className="flex flex-col items-center group hover:scale-110 transition-transform duration-200"
               >
-                <div className="relative w-16 h-16 mb-4">
-                  <Image
-                    src={tech.icon}
-                    alt={tech.name}
-                    fill
-                    className="object-contain"
-                  />
+                <div className="mb-4">
+                  {tech.icon}
                 </div>
-                <span className="text-gray-900 dark:text-white font-medium">
+                <span className="text-gray-900 dark:text-white font-medium text-center">
                   {tech.name}
                 </span>
               </motion.div>

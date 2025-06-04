@@ -1,6 +1,13 @@
 'use client'
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { 
+  SiFigma,
+  SiAdobexd,
+  SiSketch,
+  SiInvision,
+  SiFramer
+} from 'react-icons/si';
 
 const UIUXDesign = () => {
   const features = [
@@ -43,12 +50,26 @@ const UIUXDesign = () => {
   ];
 
   const tools = [
-    { name: "Figma", icon: "/tech/figma.svg" },
-    { name: "Adobe XD", icon: "/tech/adobe-xd.svg" },
-    { name: "Sketch", icon: "/tech/sketch.svg" },
-    { name: "InVision", icon: "/tech/invision.svg" },
-    { name: "Principle", icon: "/tech/principle.svg" },
-    { name: "Framer", icon: "/tech/framer.svg" },
+    { 
+      name: "Figma",
+      icon: <SiFigma className="w-16 h-16 text-[#F24E1E]" />
+    },
+    { 
+      name: "Adobe XD",
+      icon: <SiAdobexd className="w-16 h-16 text-[#FF61F6]" />
+    },
+    { 
+      name: "Sketch",
+      icon: <SiSketch className="w-16 h-16 text-[#F7B500]" />
+    },
+    { 
+      name: "InVision",
+      icon: <SiInvision className="w-16 h-16 text-[#FF3366]" />
+    },
+    { 
+      name: "Framer",
+      icon: <SiFramer className="w-16 h-16 text-[#0055FF]" />
+    }
   ];
 
   const processSteps = [
@@ -152,17 +173,12 @@ const UIUXDesign = () => {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="flex flex-col items-center"
+                className="flex flex-col items-center group hover:scale-110 transition-transform duration-200"
               >
-                <div className="relative w-16 h-16 mb-4">
-                  <Image
-                    src={tool.icon}
-                    alt={tool.name}
-                    fill
-                    className="object-contain"
-                  />
+                <div className="mb-4">
+                  {tool.icon}
                 </div>
-                <span className="text-gray-900 dark:text-white font-medium">
+                <span className="text-gray-900 dark:text-white font-medium text-center">
                   {tool.name}
                 </span>
               </motion.div>
