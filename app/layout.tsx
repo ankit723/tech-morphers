@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/themeProvider";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
 
 const gothamBook = localFont({
   src: "../public/Gotham-font-family/Gotham/Gotham-Book.otf",
@@ -79,6 +80,7 @@ export default function RootLayout({
         >
         {children}
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
