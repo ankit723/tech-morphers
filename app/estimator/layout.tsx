@@ -1,4 +1,6 @@
 import { Metadata } from 'next';
+import Footer from '../components/home/footer';
+import Navbar from '../components/home/navbar';
 
 export const metadata: Metadata = {
   title: 'Project Cost Estimator | Tech Morphers',
@@ -33,7 +35,13 @@ export default function EstimatorLayout({
 }) {
   return (
     <div className="min-h-screen bg-background">
-      {children}
+      <Navbar />
+      <main className='mt-20'>
+        {children}
+      </main>
+      <div className='mt-[50rem] relative'>
+        <Footer />
+      </div>
     </div>
   );
 }

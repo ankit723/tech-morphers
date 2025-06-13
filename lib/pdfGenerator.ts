@@ -1,42 +1,65 @@
 import jsPDF from 'jspdf';
 import { Estimator } from '@prisma/client';
-import { plans, Plan } from '@/lib/plansData'; // Updated import
-
-// Helper function to find a matching plan (simplified heuristic)
-const findMatchingPlan = (estimateData: Estimator): Plan | null => {
-  const { budgetRange, projectType, features } = estimateData;
-
-  // Attempt to match by budget first (very simplified)
-  if (budgetRange) {
-    const matchedByBudget = plans.find(plan => {
-      // This is a naive comparison. Real budget matching would be more complex.
-      // E.g., parsing budgetRange like "₹10L - ₹25L" and comparing with plan.price
-      return plan.price.includes(budgetRange.split(' ')[0]); // Example: "₹10L"
-    });
-    if (matchedByBudget) return matchedByBudget;
-  }
-
-  // Attempt to match by project type (keywords in 'bestFor' or 'description')
-  if (projectType) {
-    const projectTypeLower = projectType.toLowerCase();
-    const matchedByType = plans.find(plan => 
-      plan.bestFor.toLowerCase().includes(projectTypeLower) ||
-      plan.description.toLowerCase().includes(projectTypeLower)
-    );
-    if (matchedByType) return matchedByType;
-  }
-  
-  // If many features align with a Pro or Enterprise plan, lean towards that
-  if (features && features.length > 5) {
-    const proPlan = plans.find(p => p.id === 'pro');
-    if (proPlan) return proPlan;
-  }
-
-  return null; // Explicitly return null if no match
-};
+import { generateQuotationWithAI, QuotationContent } from '@/lib/openai'; // Updated import
 
 export const generateQuotationPDF = async (estimateData: Estimator): Promise<Blob> => {
   const doc = new jsPDF();
+
+  // Generate AI-powered quotation content
+  let aiQuotation: QuotationContent;
+  try {
+    aiQuotation = await generateQuotationWithAI(estimateData);
+  } catch (error) {
+    console.error('Failed to generate AI quotation, using fallback:', error);
+    // Fallback quotation structure
+    aiQuotation = {
+      title: `Project Quotation for ${estimateData.fullName}`,
+      introduction: "Thank you for your interest in Tech Morphers. We've reviewed your project requirements and are excited to present this quotation.",
+      projectScope: `Based on your requirements for a ${estimateData.projectType || 'custom project'}, we understand you need a comprehensive solution.`,
+      detailedBreakdown: {
+        phases: [
+          {
+            phase: "Phase 1: Planning & Analysis",
+            duration: "1-2 weeks",
+            deliverables: ["Requirements analysis", "Project planning", "Technical specifications"],
+            cost: "₹20,000"
+          },
+          {
+            phase: "Phase 2: Development",
+            duration: "4-6 weeks",
+            deliverables: ["Core development", "Feature implementation", "Testing"],
+            cost: "₹60,000"
+          }
+        ]
+      },
+      timeline: estimateData.deliveryTimeline || "6-8 weeks",
+      pricing: estimateData.budgetRange || "To be discussed after consultation",
+      quotationSummary: {
+        tableData: [
+          {
+            item: "Planning & Analysis",
+            description: "Requirements gathering and project planning",
+            timeline: "1-2 weeks",
+            cost: "₹20,000"
+          },
+          {
+            item: "Development",
+            description: "Core development and implementation",
+            timeline: "4-6 weeks",
+            cost: "₹60,000"
+          }
+        ],
+        totalCost: "₹80,000",
+        totalTimeline: "6-8 weeks"
+      },
+      nextSteps: [
+        "Review this quotation",
+        "Schedule a consultation call",
+        "Finalize project requirements",
+        "Begin development"
+      ]
+    };
+  }
 
   // --- Document Settings ---
   const pageHeight = doc.internal.pageSize.getHeight();
@@ -120,13 +143,11 @@ export const generateQuotationPDF = async (estimateData: Estimator): Promise<Blo
     });
   };
 
-
   // --- 1. Header ---
-  // Placeholder for Logo - e.g., doc.addImage(logoDataUrl, 'PNG', margin, yPos, 40, 15); yPos += 20;
   doc.setFont(FONT_TITLE, 'bold');
   doc.setFontSize(22);
   doc.setTextColor(COLOR_PRIMARY);
-  addText("Project Quotation", pageWidth / 2, yPos, { align: 'center' });
+  addText(aiQuotation.title, pageWidth / 2, yPos, { align: 'center' });
   yPos += 10;
   doc.setFont(FONT_BODY, 'italic');
   doc.setFontSize(10);
@@ -137,7 +158,7 @@ export const generateQuotationPDF = async (estimateData: Estimator): Promise<Blo
   addLine(margin, yPos, pageWidth - margin, yPos);
   yPos += 10;
 
-  // --- 2. Client & Company Information ---
+  // --- 2. Client Information ---
   addSectionTitle("Client Information");
   addDetailItem("Full Name:", estimateData.fullName);
   if (estimateData.companyName) addDetailItem("Company:", estimateData.companyName);
@@ -146,102 +167,177 @@ export const generateQuotationPDF = async (estimateData: Estimator): Promise<Blo
   if (estimateData.userRole) addDetailItem("Your Role:", estimateData.userRole);
   yPos += 5;
 
-  // --- Try to match a plan ---
-  const matchedPlan = findMatchingPlan(estimateData);
+  // --- 3. Introduction ---
+  addSectionTitle("Introduction");
+  addParagraph(aiQuotation.introduction);
+  yPos += 5;
 
-  // --- 3. Project Scope & Selected Package (if applicable) ---
+  // --- 4. Project Scope ---
   addSectionTitle("Project Scope");
-
-  if (matchedPlan && matchedPlan.id !== 'custom') {
-    addParagraph(`Based on your requirements, the **${matchedPlan.name}** package seems like a good starting point.`);
-    yPos += 2;
-    addDetailItem("Package Price:", matchedPlan.price);
-    addDetailItem("Delivery Time:", matchedPlan.deliveryTime);
-    yPos +=3;
-    
+  addParagraph(aiQuotation.projectScope);
+  
+  // Display recommended package if available
+  if (aiQuotation.recommendedPackage) {
+    yPos += 3;
     doc.setFont(FONT_BODY, 'bold');
-    addParagraph("Core Features Included:", 0);
+    addParagraph(`Recommended Package: ${aiQuotation.recommendedPackage.name}`, 0);
     doc.setFont(FONT_BODY, 'normal');
-    addListItems(matchedPlan.features);
+    addDetailItem("Package Price:", aiQuotation.recommendedPackage.price);
     
-    if (matchedPlan.addOns && matchedPlan.addOns.length > 0) {
-        yPos += 2;
-        doc.setFont(FONT_BODY, 'bold');
-        addParagraph("Available Add-ons for this Package:", 0);
-        doc.setFont(FONT_BODY, 'normal');
-        addListItems(matchedPlan.addOns);
+    if (aiQuotation.recommendedPackage.features && aiQuotation.recommendedPackage.features.length > 0) {
+      yPos += 3;
+      doc.setFont(FONT_BODY, 'bold');
+      addParagraph("Core Features Included:", 0);
+      doc.setFont(FONT_BODY, 'normal');
+      addListItems(aiQuotation.recommendedPackage.features);
     }
-  } else {
-     addParagraph("This is a custom quotation tailored to your specific needs.");
-     yPos += 2;
-     doc.setFont(FONT_BODY, 'bold');
-     addParagraph("Requested Core Features:", 0);
-     doc.setFont(FONT_BODY, 'normal');
-     if (estimateData.features && estimateData.features.length > 0) {
-        addListItems(estimateData.features.map(f => f.charAt(0).toUpperCase() + f.slice(1).replace(/_/g, ' ')));
-     } else {
-        addParagraph("To be discussed and finalized.", 5);
-     }
+    
+    if (aiQuotation.recommendedPackage.addons && aiQuotation.recommendedPackage.addons.length > 0) {
+      yPos += 2;
+      doc.setFont(FONT_BODY, 'bold');
+      addParagraph("Available Add-ons:", 0);
+      doc.setFont(FONT_BODY, 'normal');
+      addListItems(aiQuotation.recommendedPackage.addons);
+    }
   }
-  yPos += 5;
-  
-  // --- 4. Detailed Project Requirements (from Estimator) ---
-  addSectionTitle("Your Project Details");
-  addDetailItem("Project Type:", estimateData.projectType);
-  addDetailItem("Primary Purpose:", estimateData.projectPurpose);
-  addDetailItem("Target Audience:", estimateData.targetAudience);
-  
-  yPos +=3;
-  doc.setFont(FONT_BODY, 'bold');
-  addParagraph("Design Preferences:", 0);
-  doc.setFont(FONT_BODY, 'normal');
-  addParagraph(estimateData.designPreference || "Not specified.", 5);
-  addDetailItem("Custom Branding:", estimateData.needsCustomBranding ? "Yes, required" : "Not explicitly requested, can be added.");
 
-  if (estimateData.addons && estimateData.addons.length > 0 && (!matchedPlan || matchedPlan.id === 'custom')) {
-    yPos +=3;
+  // Display custom features if available
+  if (aiQuotation.customFeatures && aiQuotation.customFeatures.length > 0) {
+    yPos += 3;
     doc.setFont(FONT_BODY, 'bold');
-    addParagraph("Requested Add-ons/Enhancements:", 0);
+    addParagraph("Custom Features & Requirements:", 0);
     doc.setFont(FONT_BODY, 'normal');
-    addListItems(estimateData.addons.map(a => a.charAt(0).toUpperCase() + a.slice(1).replace(/_/g, ' ')));
+    addListItems(aiQuotation.customFeatures);
+  }
+  yPos += 5;
+
+  // --- 5. Timeline & Pricing ---
+  addSectionTitle("Timeline & Pricing");
+  addDetailItem("Estimated Timeline:", aiQuotation.timeline);
+  addParagraph(aiQuotation.pricing);
+  yPos += 5;
+
+  // --- 6. Detailed Project Breakdown ---
+  if (aiQuotation.detailedBreakdown && aiQuotation.detailedBreakdown.phases.length > 0) {
+    addSectionTitle("Detailed Project Breakdown");
+    aiQuotation.detailedBreakdown.phases.forEach((phase, index) => {
+      yPos += 2;
+      doc.setFont(FONT_BODY, 'bold');
+      addParagraph(`${phase.phase}`, 0);
+      doc.setFont(FONT_BODY, 'normal');
+      addDetailItem("Duration:", phase.duration, 5);
+      addDetailItem("Estimated Cost:", phase.cost, 5);
+      
+      if (phase.deliverables && phase.deliverables.length > 0) {
+        doc.setFont(FONT_BODY, 'bold');
+        addParagraph("Key Deliverables:", 5);
+        doc.setFont(FONT_BODY, 'normal');
+        addListItems(phase.deliverables, 10);
+      }
+      
+      if (index < aiQuotation.detailedBreakdown.phases.length - 1) {
+        yPos += 3;
+      }
+    });
+    yPos += 5;
   }
 
-  if (estimateData.customRequests && estimateData.customRequests.trim() !== '' && estimateData.customRequests.trim().toLowerCase() !== 'none') {
-    yPos +=3;
+  // --- 7. Quotation Summary Table ---
+  if (aiQuotation.quotationSummary) {
+    addSectionTitle("Project Summary");
+    
+    // Table setup
+    const colWidths = [40, 80, 30, 30]; // Adjust column widths
+    const tableX = margin;
+    
+    // Check if we need a new page for the table
+    const estimatedTableHeight = (aiQuotation.quotationSummary.tableData.length + 3) * 8; // Rough estimate
+    if (yPos + estimatedTableHeight > pageHeight - margin) {
+      doc.addPage();
+      yPos = margin + 10;
+    }
+    
+    // Draw table header
     doc.setFont(FONT_BODY, 'bold');
-    addParagraph("Specific Requirements & Notes:", 0);
+    doc.setFontSize(9);
+    doc.setFillColor(240, 240, 240); // Light gray background
+    doc.rect(tableX, yPos - 2, colWidths[0], 8, 'F');
+    doc.rect(tableX + colWidths[0], yPos - 2, colWidths[1], 8, 'F');
+    doc.rect(tableX + colWidths[0] + colWidths[1], yPos - 2, colWidths[2], 8, 'F');
+    doc.rect(tableX + colWidths[0] + colWidths[1] + colWidths[2], yPos - 2, colWidths[3], 8, 'F');
+    
+    addText("Item", tableX + 2, yPos + 3);
+    addText("Description", tableX + colWidths[0] + 2, yPos + 3);
+    addText("Timeline", tableX + colWidths[0] + colWidths[1] + 2, yPos + 3);
+    addText("Cost", tableX + colWidths[0] + colWidths[1] + colWidths[2] + 2, yPos + 3);
+    
+    yPos += 8;
+    
+    // Draw table rows
     doc.setFont(FONT_BODY, 'normal');
-    addParagraph(estimateData.customRequests, 5);
+    doc.setFontSize(8);
+    
+    aiQuotation.quotationSummary.tableData.forEach((row) => {
+      const rowHeight = 12; // Minimum row height
+      
+      // Check if we need a new page
+      if (yPos + rowHeight > pageHeight - margin) {
+        doc.addPage();
+        yPos = margin + 10;
+      }
+      
+      // Draw row borders
+      doc.setDrawColor(200, 200, 200);
+      doc.rect(tableX, yPos - 2, colWidths[0], rowHeight);
+      doc.rect(tableX + colWidths[0], yPos - 2, colWidths[1], rowHeight);
+      doc.rect(tableX + colWidths[0] + colWidths[1], yPos - 2, colWidths[2], rowHeight);
+      doc.rect(tableX + colWidths[0] + colWidths[1] + colWidths[2], yPos - 2, colWidths[3], rowHeight);
+      
+      // Add row content
+      addText(row.item, tableX + 2, yPos + 3);
+      
+      // Handle long descriptions by wrapping text
+      const descLines = doc.splitTextToSize(row.description, colWidths[1] - 4);
+      descLines.forEach((line: string, lineIndex: number) => {
+        addText(line, tableX + colWidths[0] + 2, yPos + 3 + (lineIndex * 4));
+      });
+      
+      addText(row.timeline, tableX + colWidths[0] + colWidths[1] + 2, yPos + 3);
+      addText(row.cost, tableX + colWidths[0] + colWidths[1] + colWidths[2] + 2, yPos + 3);
+      
+      yPos += Math.max(rowHeight, descLines.length * 4 + 6);
+    });
+    
+    // Add total row
+    yPos += 2;
+    doc.setFont(FONT_BODY, 'bold');
+    doc.setFillColor(230, 230, 230); // Slightly darker gray for total row
+    doc.rect(tableX, yPos - 2, colWidths[0] + colWidths[1], 8, 'F');
+    doc.rect(tableX + colWidths[0] + colWidths[1], yPos - 2, colWidths[2], 8, 'F');
+    doc.rect(tableX + colWidths[0] + colWidths[1] + colWidths[2], yPos - 2, colWidths[3], 8, 'F');
+    
+    addText("TOTAL", tableX + 2, yPos + 3);
+    addText(aiQuotation.quotationSummary.totalTimeline, tableX + colWidths[0] + colWidths[1] + 2, yPos + 3);
+    addText(aiQuotation.quotationSummary.totalCost, tableX + colWidths[0] + colWidths[1] + colWidths[2] + 2, yPos + 3);
+    
+    yPos += 10;
+    doc.setFont(FONT_BODY, 'normal');
+    doc.setFontSize(10);
   }
-  yPos += 5;
 
-  // --- 5. Timeline & Budget Indication ---
-  addSectionTitle("Timeline & Budget");
-  addDetailItem("Your Anticipated Timeline:", estimateData.deliveryTimeline);
-  if (matchedPlan && matchedPlan.id !== 'custom' && matchedPlan.deliveryTime !== estimateData.deliveryTimeline) {
-      addDetailItem("Standard Plan Delivery:", matchedPlan.deliveryTime);
-  }
-  addDetailItem("Your Indicative Budget Range:", estimateData.budgetRange);
-   if (matchedPlan && matchedPlan.id !== 'custom' && matchedPlan.price !== estimateData.budgetRange) {
-      addDetailItem("Selected Plan Price:", matchedPlan.price);
-  }
-  yPos += 2;
-  doc.setFont(FONT_BODY, 'italic');
-  doc.setFontSize(9);
-  addParagraph("Note: All prices are indicative. Timelines and costs are estimates and will be finalized after a detailed project discovery and requirements analysis. For 'Custom Quote' plans, a detailed proposal will follow.", 0);
-  doc.setFont(FONT_BODY, 'normal');
-  doc.setFontSize(10);
-  yPos += 5;
-
-  // --- 6. Next Steps & Call to Action ---
+  // --- 8. Next Steps ---
   addSectionTitle("Next Steps");
-  addParagraph("1. Review this preliminary quotation. We recommend noting any questions or areas for clarification.");
-  addParagraph("2. Our team will reach out to you within 1-2 business days to schedule a consultation call to discuss your project in more detail.");
-  addParagraph("3. Following the consultation, we will provide a comprehensive proposal and a final, binding quotation if applicable.");
-  addParagraph("We are excited about the potential to partner with you on this project!");
-  yPos += 10;
+  addListItems(aiQuotation.nextSteps, 0);
+  yPos += 5;
 
-  // --- 7. Footer ---
+  // --- 9. Additional Notes ---
+  if (aiQuotation.additionalNotes) {
+    addSectionTitle("Additional Notes");
+    addParagraph(aiQuotation.additionalNotes);
+    yPos += 5;
+  }
+
+  // --- 10. Footer ---
   const footerY = pageHeight - (margin / 2); 
   doc.setLineWidth(0.5);
   addLine(margin, footerY - 7, pageWidth - margin, footerY - 7, COLOR_BORDER);
@@ -250,12 +346,9 @@ export const generateQuotationPDF = async (estimateData: Estimator): Promise<Blo
   doc.setFontSize(9);
   doc.setTextColor(COLOR_TEXT_LIGHT);
   
-  // This needs to be repeated on each page if content spans multiple pages
-  // For simplicity in this initial setup, it's added once.
-  // Proper footers on each page require more complex logic checking page breaks.
   const companyName = "Tech Morphers";
-  const companyWebsite = "www.techmorphers.com"; // Replace with actual
-  const companyEmail = "contact@techmorphers.com"; // Replace with actual
+  const companyWebsite = "www.techmorphers.com";
+  const companyEmail = "contact@techmorphers.com";
   
   addText(companyName, margin, footerY -2);
   addText(companyEmail, pageWidth / 2, footerY -2, { align: 'center' });
