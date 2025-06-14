@@ -1,7 +1,5 @@
 // app/sitemap.ts
 import { MetadataRoute } from 'next';
-import { readdirSync } from 'fs';
-import { join } from 'path';
 
 async function fetchDynamicPages() {
   const dynamicPages = [];
