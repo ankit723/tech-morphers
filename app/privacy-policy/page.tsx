@@ -41,7 +41,7 @@ export default function PrivacyPolicy() {
                 1. Introduction
               </h2>
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                Welcome to Tech Morphers ("we," "our," or "us"). We are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
+                Welcome to Tech Morphers (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;). We are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
               </p>
             </section>
 
@@ -192,7 +192,7 @@ export default function PrivacyPolicy() {
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-                10. Children's Privacy
+                10. Children&apos;s Privacy
               </h2>
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                 Our services are not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that we have collected personal information from a child under 13, we will take steps to delete such information.
@@ -213,7 +213,7 @@ export default function PrivacyPolicy() {
                 12. Changes to This Privacy Policy
               </h2>
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new Privacy Policy on our website and updating the "Last updated" date. We encourage you to review this Privacy Policy periodically.
+                We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new Privacy Policy on our website and updating the &ldquo;Last updated&rdquo; date. We encourage you to review this Privacy Policy periodically.
               </p>
             </section>
 
