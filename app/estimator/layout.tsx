@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     title: 'Project Cost Estimator | Tech Morphers',
     description: 'Get an instant estimate for your tech project. Our AI-powered estimator helps you understand the costs involved in building your digital solution.',
     images: ['https://www.techmorphers.com/og-image.jpg'],
-  },
+  }
 };
 
 export default function EstimatorLayout({

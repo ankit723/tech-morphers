@@ -4,6 +4,12 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/themeProvider";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
+import Hotjar from '@hotjar/browser';
+
+const siteId = 6434945;
+const hotjarVersion = 6;
+
+Hotjar.init(siteId, hotjarVersion);
 
 const gothamBook = localFont({
   src: "../public/Gotham-font-family/Gotham/Gotham-Book.otf",
