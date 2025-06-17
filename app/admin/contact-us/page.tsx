@@ -9,7 +9,6 @@ import {
   Mail,
   Phone,
   Building2,
-  Filter,
   Search,
   Download,
   Eye,

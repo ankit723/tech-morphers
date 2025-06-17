@@ -201,7 +201,7 @@ export default function GetStartedAdmin() {
           >
             <option value="all">All Budgets</option>
             {uniqueBudgets.map(budget => (
-              <option key={budget} value={budget}>{budget}</option>
+              <option key={budget} value={budget ?? ""}>{budget}</option>
             ))}
           </select>
 

@@ -14,7 +14,6 @@ const Contact = () => {
     phone: "",
     message: "",
   });
-  const [isSubmitted, setIsSubmitted] = useState(false)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,15 +24,11 @@ const Contact = () => {
     })
     if (res.ok) {
       console.log("ContactPage form submitted")
-      setIsSubmitted(true)
       setShowSuccessMessage(true)
       setTimeout(() => {
         setShowSuccessMessage(false)
-        setIsSubmitted(false)
       }, 4000)
     }
-    // Handle form submission here
-    console.log(formData);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

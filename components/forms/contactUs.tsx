@@ -34,18 +34,7 @@ const ContactUs: React.FC<ContactUsProps> = ({ defaultPackage, onFormSubmit, hid
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
-  const [submitMessage, setSubmitMessage] = useState<string | null>(null); // For specific messages
-
-  const resetForm = () => {
-    setFullName('');
-    setEmail('');
-    setPhone('');
-    setCompanyName('');
-    setSelectedPackage(initialPackage); // Reset to initial or first plan
-    setMessage('');
-    setSubmitStatus(null);
-    setSubmitMessage(null);
-  }
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -132,7 +121,7 @@ const ContactUs: React.FC<ContactUsProps> = ({ defaultPackage, onFormSubmit, hid
                   <span className="text-xs font-bold text-blue-700 dark:text-blue-300">2</span>
                 </div>
                 <p className="text-sm text-blue-800 dark:text-blue-200">
-                  We'll schedule a <strong>discovery call</strong> to discuss your project in detail
+                  We&apos;ll schedule a <strong>discovery call</strong> to discuss your project in detail
                 </p>
               </div>
               
@@ -141,7 +130,7 @@ const ContactUs: React.FC<ContactUsProps> = ({ defaultPackage, onFormSubmit, hid
                   <span className="text-xs font-bold text-blue-700 dark:text-blue-300">3</span>
                 </div>
                 <p className="text-sm text-blue-800 dark:text-blue-200">
-                  You'll receive a <strong>customized proposal</strong> tailored to your needs
+                  You&apos;ll receive a <strong>customized proposal</strong> tailored to your needs
                 </p>
               </div>
             </div>

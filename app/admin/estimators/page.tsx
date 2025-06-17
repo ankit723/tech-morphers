@@ -18,7 +18,6 @@ import {
   SortDesc,
   Loader2,
   Briefcase,
-  Users,
   Palette,
   CheckCircle
 } from "lucide-react"
@@ -213,7 +212,7 @@ export default function EstimatorsAdmin() {
           >
             <option value="all">All Project Types</option>
             {uniqueProjectTypes.map(type => (
-              <option key={type} value={type}>{type}</option>
+              <option key={type} value={type ?? ""}>{type}</option>
             ))}
           </select>
 
@@ -225,7 +224,7 @@ export default function EstimatorsAdmin() {
           >
             <option value="all">All Budgets</option>
             {uniqueBudgets.map(budget => (
-              <option key={budget} value={budget}>{budget}</option>
+              <option key={budget} value={budget ?? ""}>{budget}</option>
             ))}
           </select>
 
@@ -237,7 +236,7 @@ export default function EstimatorsAdmin() {
           >
             <option value="all">All Timelines</option>
             {uniqueTimelines.map(timeline => (
-              <option key={timeline} value={timeline}>{timeline}</option>
+              <option key={timeline} value={timeline ?? ""}>{timeline}</option>
             ))}
           </select>
 

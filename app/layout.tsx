@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/themeProvider";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
+import Image from "next/image";
 
 const gothamBook = localFont({
   src: "../public/Gotham-font-family/Gotham/Gotham-Book.otf",
@@ -133,7 +134,7 @@ export default function RootLayout({
 
         {/* LinkedIn noscript fallback */}
         <noscript>
-          <img 
+          <Image
             height="1" 
             width="1" 
             style={{ display: 'none' }} 

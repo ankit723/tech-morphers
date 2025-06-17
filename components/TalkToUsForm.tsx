@@ -15,7 +15,6 @@ export default function TalkToUsForm() {
     phone: "",
     message: "",
   });
-  const [isSubmitted, setIsSubmitted] = useState(false)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
   const handleChange = (
@@ -32,16 +31,11 @@ export default function TalkToUsForm() {
     })
     if (res.ok) {
       console.log("TalkToUs form submitted")
-      setIsSubmitted(true)
       setShowSuccessMessage(true)
       setTimeout(() => {
         setShowSuccessMessage(false)
-        setIsSubmitted(false)
       }, 4000)
     }
-    // Handle form submission logic here
-    console.log("Form data submitted:", formData);
-    // You would typically send this data to a backend or an email service
   };
 
   return (

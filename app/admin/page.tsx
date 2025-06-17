@@ -1,19 +1,12 @@
 "use client"
 import { motion } from "framer-motion"
 import { 
-  Users, 
   MessageSquare, 
   Calculator, 
   Phone,
   TrendingUp,
   Clock,
-  CheckCircle,
-  AlertCircle,
   Mail,
-  Building,
-  Package,
-  DollarSign,
-  Calendar,
   Star,
   Loader2,
   Contact

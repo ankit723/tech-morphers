@@ -101,7 +101,7 @@ export default function LetsTalkAdmin() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center">
               <Mail className="w-8 h-8 mr-3 text-cyan-600" />
-              Let's Talk Newsletter
+              Let&apos;s Talk Newsletter
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-2">
               Manage newsletter email subscriptions and subscriber list.

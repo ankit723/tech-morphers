@@ -8,7 +8,6 @@ import Image from "next/image"
 import {
   LayoutDashboard,
   FileText,
-  Users,
   MessageSquare,
   Calculator,
   Settings,
@@ -23,7 +22,6 @@ import {
   Contact
 } from "lucide-react"
 import { ModeToggle } from "@/components/ui/themeToggle"
-import { Button } from "@/components/ui/button"
 
 const navItems = [
   {
