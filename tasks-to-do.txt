@@ -1,0 +1,10 @@
+1: Create Blog Card component
+2: Create Blog Page
+3: Create Blog Creator
+4: Fix the home page design bugs
+5: Fix the unlinked links in both mobile and desktop navbar
+6: In the quotation creator, store the generated pdf in the supabase storage and also add the public link of that in the db
+7: In the generated PDF, intead of ruppee symbol 1 is comming
+8: The Estimated budget in the PDF is okay but we should also see the users inputed budget, and there we can also see the of difference in the user budget and generated budget  is there is any
+9: Create and upload a Full Fletched Blog as well as 
+10: send email to the user after every CTA

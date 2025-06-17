@@ -8,64 +8,79 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-enum Package {
-    STARTER
-    GROWTH
-    PRO
-    ENTERPRISE
-}
-
 model ContactUs {
-    id String @id @default(uuid())
-    name String
-    email String
-    phone String
-    companyName String?
-    selectedPackage Package
-    message String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id              String   @id @default(uuid())
+  name            String
+  email           String
+  phone           String
+  companyName     String?
+  selectedPackage Package
+  message         String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model Estimator {
-    id                String    @id @default(uuid())
-    projectType       String?
-    projectPurpose    String?
-    targetAudience    String?
-    features          String[]
-    designPreference  String?
-    needsCustomBranding Boolean?
-    deliveryTimeline  String?
-    budgetRange       String?
-    addons            String[]
-    customRequests    String?
-    fullName          String
-    email             String
-    phone             String?
-    companyName       String?
-    userRole          String?
-    createdAt         DateTime  @default(now())
-    updatedAt         DateTime  @updatedAt
+  id                  String   @id @default(uuid())
+  projectType         String?
+  projectPurpose      String?
+  targetAudience      String?
+  features            String[]
+  designPreference    String?
+  needsCustomBranding Boolean?
+  deliveryTimeline    String?
+  budgetRange         String?
+  addons              String[]
+  customRequests      String?
+  fullName            String
+  email               String
+  phone               String?
+  companyName         String?
+  userRole            String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
 model GetStarted {
-    id String @id @default(uuid())
-    name String
-    email String
-    phone String?
-    service String
-    budget String?
-    companyName String?
-    projectVision String
-    createdAt DateTime @default(now())
+  id            String   @id @default(uuid())
+  name          String
+  email         String
+  phone         String?
+  service       String
+  budget        String?
+  companyName   String?
+  projectVision String
+  createdAt     DateTime @default(now())
 }
 
 model TalkToUs {
-    id String @id @default(uuid())
-    name String
-    email String
-    phone String?
-    companyName String?
-    message String
-    createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  name        String
+  email       String
+  phone       String?
+  companyName String?
+  message     String
+  createdAt   DateTime @default(now())
+}
+
+model LetsTalk {
+  id          String   @id @default(uuid())
+  email       String
+  createdAt   DateTime @default(now())
+}
+
+model ContactPage {
+  id          String   @id @default(uuid())
+  name        String
+  email       String
+  phone       String
+  message     String
+  createdAt   DateTime @default(now())
+}
+
+enum Package {
+  STARTER
+  GROWTH
+  PRO
+  ENTERPRISE
 }

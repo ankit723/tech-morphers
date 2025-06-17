@@ -1,21 +1,37 @@
 'use client'
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { CheckCircle2 } from "lucide-react";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    subject: "",
+    phone: "",
     message: "",
   });
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const res = await fetch("/api/contact-page", {
+      method: "POST",
+      body: JSON.stringify(formData)
+    })
+    if (res.ok) {
+      console.log("ContactPage form submitted")
+      setIsSubmitted(true)
+      setShowSuccessMessage(true)
+      setTimeout(() => {
+        setShowSuccessMessage(false)
+        setIsSubmitted(false)
+      }, 4000)
+    }
     // Handle form submission here
     console.log(formData);
   };
@@ -28,7 +44,31 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r dark:from-[#0A0A1B] dark:to-[#1A1A35] from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-r dark:from-[#0A0A1B] dark:to-[#1A1A35] from-gray-50 to-gray-100 relative">
+      <AnimatePresence>
+        {showSuccessMessage && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-100"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.8, opacity: 0, y: 20 }}
+              transition={{ duration: 0.3 }}
+              className="bg-white dark:bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20"
+            >
+              <div className="flex items-center space-x-2 mb-4">
+                <CheckCircle2 className="w-6 h-6 text-blue-600" />
+                <span className="font-semibold text-blue-900 dark:text-blue-100 text-lg">What to Expect</span>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="pt-32 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -37,7 +77,7 @@ const Contact = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-blue-700 mb-6">
               Get in Touch
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
@@ -67,7 +107,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Address</h3>
-                      <p className="text-gray-600 dark:text-gray-300">123 Innovation Street, Tech City, TC 12345</p>
+                      <p className="text-gray-600 dark:text-gray-300">BHU, Varanasi, Uttar Pradesh, India, 221001</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
@@ -89,7 +129,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Phone</h3>
-                      <p className="text-gray-600 dark:text-gray-300">+1 (555) 123-4567</p>
+                      <p className="text-gray-600 dark:text-gray-300">+91 9795786303</p>
                     </div>
                   </div>
                 </div>
@@ -113,6 +153,7 @@ const Contact = () => {
                       id="name"
                       name="name"
                       value={formData.name}
+                      placeholder="Enter Your Name"
                       onChange={handleChange}
                       className="w-full px-4 py-3 rounded-lg bg-white/5 "
                       required
@@ -127,20 +168,22 @@ const Contact = () => {
                       id="email"
                       name="email"
                       value={formData.email}
+                      placeholder="Enter Your Email"
                       onChange={handleChange}
                       className="w-full px-4 py-3 rounded-lg "
                       required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="subject" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
-                      Subject
+                    <Label htmlFor="phone" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                      Phone
                     </Label>
                     <Input
                       type="text"
-                      id="subject"
-                      name="subject"
-                      value={formData.subject}
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      placeholder="Enter Your Phone Number"
                       onChange={handleChange}
                       className="w-full px-4 py-3 rounded-lg"
                       required
@@ -154,6 +197,7 @@ const Contact = () => {
                       id="message"
                       name="message"
                       value={formData.message}
+                      placeholder="Enter Your Message"
                       onChange={handleChange}
                       rows={4}
                       className="w-full px-4 py-3 rounded-lg"

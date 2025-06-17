@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const AboutUs = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-r dark:from-[#0A0A1B] dark:to-[#1A1A35] from-gray-50 to-gray-100">
+    <div className="min-h-screen">
       {/* Hero Section */}
       <div className="pt-32 pb-16 px-4 sm:px-6 lg:px-8">
         <motion.div

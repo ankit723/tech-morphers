@@ -142,6 +142,7 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({
               aria-invalid={!!errors.phone}
               aria-describedby={errors.phone ? "phone-error" : undefined}
               disabled={isSubmitting}
+              required
             />
             {errors.phone && <p id="phone-error" className="text-xs text-red-500 dark:text-red-400 mt-1">{errors.phone}</p>}
           </div>

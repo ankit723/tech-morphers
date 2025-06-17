@@ -129,7 +129,7 @@ const GetStartedForm = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
             <div className="space-y-1.5">
               <Label htmlFor="gs-name" className="block text-sm font-medium text-muted-foreground dark:text-gray-300">Full Name <span className="text-red-500">*</span></Label>
-              <Input id="gs-name" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g., Ada Lovelace" className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500 dark:focus:ring-indigo-400" disabled={loading}/>
+              <Input id="gs-name" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g., Ada Lovelace"  className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500 dark:focus:ring-indigo-400" disabled={loading}/>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="gs-email" className="block text-sm font-medium text-muted-foreground dark:text-gray-300">Email Address <span className="text-red-500">*</span></Label>
@@ -140,7 +140,7 @@ const GetStartedForm = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
              <div className="space-y-1.5">
               <Label htmlFor="gs-phone" className="block text-sm font-medium text-muted-foreground dark:text-gray-300">Phone Number</Label>
-              <Input id="gs-phone" type="text" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="e.g., +91 9876543210" className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500 dark:focus:ring-indigo-400" disabled={loading}/>
+              <Input id="gs-phone" type="text" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="e.g., +91 9876543210" className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500 dark:focus:ring-indigo-400" disabled={loading} required/>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="gs-companyName" className="block text-sm font-medium text-muted-foreground dark:text-gray-300">Company Name (Optional)</Label>
@@ -155,7 +155,7 @@ const GetStartedForm = () => {
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="gs-budget" className="block text-sm font-medium text-muted-foreground dark:text-gray-300">Estimated Budget (Optional)</Label>
-              <Input id="gs-budget" type="text" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="e.g., ₹10L - ₹25L" className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500 dark:focus:ring-indigo-400" disabled={loading}/>
+              <Input id="gs-budget" type="text" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="e.g., ₹10L - ₹25L" className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-2 focus:ring-offset-0 focus:ring-indigo-500 dark:focus:ring-indigo-400" disabled={loading} required/>
             </div>
           </div>
 

@@ -89,6 +89,7 @@ const PlanContactDialog: React.FC<PlanContactDialogProps> = ({ plan }) => {
            <ContactUs 
              defaultPackage={plan.id} 
              onFormSubmit={() => {
+              
                setIsContactDialogOpen(false); // Close dialog on successful form submission
              }}
              hideHeader={true}

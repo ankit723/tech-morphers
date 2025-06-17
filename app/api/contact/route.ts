@@ -2,9 +2,16 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { Package } from '@prisma/client'; // Import the enum
 
-// Helper to validate enum, not strictly necessary if form sends valid IDs
-function isValidPackage(pkg: string): pkg is Package {
-  return Object.values(Package).includes(pkg as Package);
+// Helper to validate and map plan IDs to Package enum
+function mapToPackageEnum(planId: string): Package | null {
+  const packageMapping: Record<string, Package> = {
+    'starter': Package.STARTER,
+    'growth': Package.GROWTH,
+    'pro': Package.PRO,
+    'custom': Package.ENTERPRISE, // Map 'custom' plan to ENTERPRISE enum
+  };
+  
+  return packageMapping[planId.toLowerCase()] || null;
 }
 
 export async function POST(request: Request) {
@@ -18,8 +25,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
     }
 
-    if (!isValidPackage(selectedPackage)) {
-        return NextResponse.json({ error: 'Invalid package selected.' }, { status: 400 });
+    // Map the plan ID to the correct enum value
+    const mappedPackage = mapToPackageEnum(selectedPackage);
+    if (!mappedPackage) {
+      return NextResponse.json({ error: 'Invalid package selected.' }, { status: 400 });
     }
 
     const contactSubmission = await prisma.contactUs.create({
@@ -28,7 +37,7 @@ export async function POST(request: Request) {
         email,
         phone,
         companyName: companyName || null, // Handle optional field
-        selectedPackage: selectedPackage as Package, // Cast to enum type
+        selectedPackage: mappedPackage, // Use the mapped enum value
         message,
       },
     });
