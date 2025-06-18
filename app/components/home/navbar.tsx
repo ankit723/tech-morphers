@@ -590,9 +590,10 @@ const Navbar = () => {
                     color: activeSection === "products" ? "#ffffff" : "rgba(255, 255, 255, 0.8)",
                     backgroundColor: activeSection === "products" ? "rgba(255, 255, 255, 0.05)" : "transparent"
                   }}
-                  onClick={() => router.push("/about-us")}
                 >
-                  ABOUT US
+                  <Link href="/about-us">
+                    ABOUT US
+                  </Link>
                   
                 </motion.button>
                 
@@ -603,9 +604,10 @@ const Navbar = () => {
                     color: activeSection === "resources" ? "#ffffff" : "rgba(255, 255, 255, 0.8)",
                     backgroundColor: activeSection === "resources" ? "rgba(255, 255, 255, 0.05)" : "transparent"
                   }}
-                  onClick={() => toggleExpand("resources")}
                 >
-                  RESOURCES
+                  <Link href="/blog">
+                    RESOURCES
+                  </Link>
                 </motion.button>
               </div>
               
