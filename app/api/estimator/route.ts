@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
       phone: body.phone || null,
       companyName: body.companyName || null,
       userRole: body.userRole || null,
+      pdfUrl: body.pdfUrl || null,
     };
 
     const savedEstimator = await prisma.estimator.create({

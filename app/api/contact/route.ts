@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { Package } from '@prisma/client'; // Import the enum
+import { sendContactUsNotification } from '@/lib/emailNotifications';
 
 // Helper to validate and map plan IDs to Package enum
 function mapToPackageEnum(planId: string): Package | null {
@@ -28,7 +29,7 @@ export async function POST(request: Request) {
     // Map the plan ID to the correct enum value
     const mappedPackage = mapToPackageEnum(selectedPackage);
     if (!mappedPackage) {
-      return NextResponse.json({ error: 'Invalid package selected.' }, { status: 400 });
+        return NextResponse.json({ error: 'Invalid package selected.' }, { status: 400 });
     }
 
     const contactSubmission = await prisma.contactUs.create({
@@ -43,6 +44,30 @@ export async function POST(request: Request) {
     });
 
     console.log('New contact form submission saved:', contactSubmission);
+
+    // Send email notification to user
+    try {
+      const emailResult = await sendContactUsNotification({
+        name: fullName,
+        email,
+        phone,
+        companyName: companyName || undefined,
+        selectedPackage: mappedPackage,
+        message,
+        submissionId: contactSubmission.id,
+      });
+
+      if (emailResult.error) {
+        console.error('Failed to send email notification:', emailResult.error);
+        // Don't fail the API call if email fails
+      } else {
+        console.log('Email notification sent successfully to:', email);
+      }
+    } catch (emailError) {
+      console.error('Error sending email notification:', emailError);
+      // Don't fail the API call if email fails
+    }
+
     return NextResponse.json({ 
       message: 'Contact form submitted successfully!', 
       submissionId: contactSubmission.id 

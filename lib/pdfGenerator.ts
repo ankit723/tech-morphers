@@ -22,13 +22,13 @@ export const generateQuotationPDF = async (estimateData: Estimator): Promise<Blo
             phase: "Phase 1: Planning & Analysis",
             duration: "1-2 weeks",
             deliverables: ["Requirements analysis", "Project planning", "Technical specifications"],
-            cost: "₹20,000"
+            cost: "Rs.20,000"
           },
           {
             phase: "Phase 2: Development",
             duration: "4-6 weeks",
             deliverables: ["Core development", "Feature implementation", "Testing"],
-            cost: "₹60,000"
+            cost: "Rs.60,000"
           }
         ]
       },
@@ -40,16 +40,16 @@ export const generateQuotationPDF = async (estimateData: Estimator): Promise<Blo
             item: "Planning & Analysis",
             description: "Requirements gathering and project planning",
             timeline: "1-2 weeks",
-            cost: "₹20,000"
+            cost: "Rs.20,000"
           },
           {
             item: "Development",
             description: "Core development and implementation",
             timeline: "4-6 weeks",
-            cost: "₹60,000"
+            cost: "Rs.60,000"
           }
         ],
-        totalCost: "₹80,000",
+        totalCost: "Rs.80,000",
         totalTimeline: "6-8 weeks"
       },
       nextSteps: [
@@ -57,7 +57,8 @@ export const generateQuotationPDF = async (estimateData: Estimator): Promise<Blo
         "Schedule a consultation call",
         "Finalize project requirements",
         "Begin development"
-      ]
+      ],
+      additionalNotes: "Important: These are preliminary estimates and initial outlines based on the provided requirements. All pricing and timelines are negotiable upon detailed consultation. Tech Morphers provides 2 months of complimentary DevOps hosting and maintenance support post-delivery. Extended maintenance services are available at Rs.7,000-10,000 per month after the free period."
     };
   }
 
@@ -182,7 +183,6 @@ export const generateQuotationPDF = async (estimateData: Estimator): Promise<Blo
     doc.setFont(FONT_BODY, 'bold');
     addParagraph(`Recommended Package: ${aiQuotation.recommendedPackage.name}`, 0);
     doc.setFont(FONT_BODY, 'normal');
-    addDetailItem("Package Price:", aiQuotation.recommendedPackage.price);
     
     if (aiQuotation.recommendedPackage.features && aiQuotation.recommendedPackage.features.length > 0) {
       yPos += 3;
@@ -216,6 +216,64 @@ export const generateQuotationPDF = async (estimateData: Estimator): Promise<Blo
   addDetailItem("Estimated Timeline:", aiQuotation.timeline);
   addParagraph(aiQuotation.pricing);
   yPos += 5;
+
+  // --- 5.1. Budget Comparison Section ---
+  if (estimateData.budgetRange) {
+    addSectionTitle("Budget Analysis");
+    
+    // Extract user budget and convert to number for comparison
+    const userBudgetStr = estimateData.budgetRange;
+    addDetailItem("Your Expected Budget:", userBudgetStr);
+    
+    // Extract total cost from quotation summary and convert for comparison
+    if (aiQuotation.quotationSummary?.totalCost) {
+      const generatedEstimateStr = aiQuotation.quotationSummary.totalCost;
+      addDetailItem("Our Recommended Estimate:", generatedEstimateStr);
+      
+      // Try to extract numeric values for comparison
+      const extractBudgetNumber = (budgetStr: string): number | null => {
+        // Remove Rs, ₹, commas, and other non-numeric characters except numbers
+        const cleanStr = budgetStr.replace(/[Rs₹,\s]/g, '');
+        const match = cleanStr.match(/\d+/);
+        return match ? parseInt(match[0]) : null;
+      };
+      
+      const userBudgetNum = extractBudgetNumber(userBudgetStr);
+      const estimatedBudgetNum = extractBudgetNumber(generatedEstimateStr);
+      
+      if (userBudgetNum && estimatedBudgetNum) {
+        const difference = estimatedBudgetNum - userBudgetNum;
+        const percentageDiff = ((Math.abs(difference) / userBudgetNum) * 100).toFixed(1);
+        
+        if (difference > 0) {
+          addDetailItem("Budget Variance:", `Rs.${difference.toLocaleString()} above your expected budget (+${percentageDiff}%)`);
+          yPos += 2;
+          doc.setFont(FONT_BODY, 'italic');
+          doc.setTextColor('#d97706'); // Orange color for notice
+          addParagraph("Note: The higher estimate reflects the comprehensive scope and quality standards. We can discuss phased implementation to fit your budget.", 5);
+          doc.setFont(FONT_BODY, 'normal');
+          doc.setTextColor(COLOR_TEXT_DARK);
+        } else if (difference < 0) {
+          addDetailItem("Budget Variance:", `Rs.${Math.abs(difference).toLocaleString()} under your expected budget (-${percentageDiff}%)`);
+          yPos += 2;
+          doc.setFont(FONT_BODY, 'italic');
+          doc.setTextColor('#059669'); // Green color for positive note
+          addParagraph("Great news! Our estimate comes in under your expected budget, allowing room for additional features or enhancements.", 5);
+          doc.setFont(FONT_BODY, 'normal');
+          doc.setTextColor(COLOR_TEXT_DARK);
+        } else {
+          addDetailItem("Budget Variance:", "Perfect match with your expected budget!");
+          yPos += 2;
+          doc.setFont(FONT_BODY, 'italic');
+          doc.setTextColor('#059669'); // Green color
+          addParagraph("Excellent alignment! Our estimate matches your budget expectations perfectly.", 5);
+          doc.setFont(FONT_BODY, 'normal');
+          doc.setTextColor(COLOR_TEXT_DARK);
+        }
+      }
+    }
+    yPos += 5;
+  }
 
   // --- 6. Detailed Project Breakdown ---
   if (aiQuotation.detailedBreakdown && aiQuotation.detailedBreakdown.phases.length > 0) {
@@ -325,19 +383,49 @@ export const generateQuotationPDF = async (estimateData: Estimator): Promise<Blo
     doc.setFontSize(10);
   }
 
-  // --- 8. Next Steps ---
+  // --- 8. Support & Maintenance ---
+  addSectionTitle("Support & Maintenance");
+  
+  doc.setFont(FONT_BODY, 'bold');
+  addParagraph("Included Complimentary Services:", 0);
+  doc.setFont(FONT_BODY, 'normal');
+  
+  const includedServices = [
+    "2 months free DevOps hosting and server management",
+    "2 months maintenance and technical support post-delivery",
+    "Bug fixes and minor updates during the support period",
+    "Performance monitoring and optimization",
+    "Basic security updates and patches"
+  ];
+  addListItems(includedServices, 5);
+  
+  yPos += 3;
+  doc.setFont(FONT_BODY, 'bold');
+  addParagraph("Extended Maintenance (Optional):", 0);
+  doc.setFont(FONT_BODY, 'normal');
+  addParagraph("After the complimentary 2-month support period, ongoing maintenance and support services are available at Rs.7,000 - Rs.10,000 per month, depending on the complexity and requirements of your project.", 5);
+  
+  yPos += 2;
+  doc.setFont(FONT_BODY, 'italic');
+  doc.setTextColor('#6b7280'); // Gray color for note
+  addParagraph("Note: Extended maintenance includes regular updates, security patches, performance optimization, and technical support to ensure your project continues to run smoothly.", 5);
+  doc.setFont(FONT_BODY, 'normal');
+  doc.setTextColor(COLOR_TEXT_DARK);
+  yPos += 5;
+
+  // --- 9. Next Steps ---
   addSectionTitle("Next Steps");
   addListItems(aiQuotation.nextSteps, 0);
   yPos += 5;
 
-  // --- 9. Additional Notes ---
+  // --- 10. Additional Notes ---
   if (aiQuotation.additionalNotes) {
     addSectionTitle("Additional Notes");
     addParagraph(aiQuotation.additionalNotes);
     yPos += 5;
   }
 
-  // --- 10. Footer ---
+  // --- 11. Footer ---
   const footerY = pageHeight - (margin / 2); 
   doc.setLineWidth(0.5);
   addLine(margin, footerY - 7, pageWidth - margin, footerY - 7, COLOR_BORDER);

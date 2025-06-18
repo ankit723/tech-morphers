@@ -7,7 +7,29 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: '/private/',
+        disallow: [
+          '/admin/',
+          '/api/',
+          '/_next/',
+          '/private/',
+          '/temp/',
+          '/*.json$',
+          '/*.xml$',
+          '/login',
+          '/register',
+        ],
+      },
+      {
+        userAgent: 'GPTBot',
+        disallow: '/',
+      },
+      {
+        userAgent: 'Google-Extended',
+        disallow: '/',
+      },
+      {
+        userAgent: 'CCBot',
+        disallow: '/',
       },
     ],
     sitemap: 'https://www.techmorphers.com/sitemap.xml',

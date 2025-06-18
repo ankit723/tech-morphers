@@ -37,6 +37,7 @@ model Estimator {
   phone               String?
   companyName         String?
   userRole            String?
+  pdfUrl              String?
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 }
@@ -76,6 +77,77 @@ model ContactPage {
   phone       String
   message     String
   createdAt   DateTime @default(now())
+}
+
+// Blog Models
+model BlogPost {
+  id                String         @id @default(uuid())
+  title             String
+  slug              String         @unique
+  excerpt           String
+  content           Json           // Rich content with different blocks
+  featuredImage     String?
+  bannerImage       String?        // Banner image for header and cards
+  author            String
+  authorImage       String?
+  authorBio         String?
+  status            BlogStatus     @default(DRAFT)
+  publishedAt       DateTime?
+  readTime          Int            // in minutes
+  views             Int            @default(0)
+  likes             Int            @default(0)
+  
+  // SEO Fields
+  metaTitle         String?
+  metaDescription   String?
+  metaKeywords      String[]
+  canonicalUrl      String?
+  ogImage           String?
+  ogDescription     String?
+  
+  // Organization
+  categories        BlogCategory[]
+  tags              BlogTag[]
+  
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  
+  @@index([slug])
+  @@index([status, publishedAt])
+  @@index([publishedAt])
+}
+
+model BlogCategory {
+  id          String     @id @default(uuid())
+  name        String     @unique
+  slug        String     @unique
+  description String?
+  color       String?    // Hex color for UI
+  icon        String?    // Icon name or emoji
+  posts       BlogPost[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  @@index([slug])
+}
+
+model BlogTag {
+  id          String     @id @default(uuid())
+  name        String     @unique
+  slug        String     @unique
+  color       String?    // Hex color for UI
+  posts       BlogPost[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  @@index([slug])
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
+  ARCHIVED
 }
 
 enum Package {

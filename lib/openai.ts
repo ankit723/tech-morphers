@@ -67,9 +67,9 @@ Project Details:
 - Custom Requirements: ${estimateData.customRequests || 'None'}
 
 Available Service Packages:
-1. Starter (₹29,999) - 7-10 Days - Basic website/app with 5 pages, branding, hosting
-2. Growth (₹79,999) - 2-3 Weeks - Advanced website/app with 8-12 pages, admin dashboard, API integrations
-3. Pro/SaaS MVP (₹99,999) - 4-5 Weeks - Full-stack MVP with authentication, payments, database
+1. Starter (Rs.29,999) - 7-10 Days - Basic website/app with 5 pages, branding, hosting
+2. Growth (Rs.79,999) - 2-3 Weeks - Advanced website/app with 8-12 pages, admin dashboard, API integrations
+3. Pro/SaaS MVP (Rs.99,999) - 4-5 Weeks - Full-stack MVP with authentication, payments, database
 4. Custom Enterprise (Custom Quote) - 6-10 Weeks - Enterprise solution with dedicated team
 
 IMPORTANT INSTRUCTIONS:
@@ -79,6 +79,11 @@ IMPORTANT INSTRUCTIONS:
 4. Create a comprehensive table summarizing all deliverables, timelines, and costs
 5. Consider the complexity of requested features when estimating time and cost
 6. If the client's timeline is aggressive, mention potential risks and suggest realistic alternatives
+7. IMPORTANT: Always use "Rs." for currency instead of the rupee symbol to ensure proper PDF rendering
+8. Do NOT include package prices in the recommended package section - only mention features
+9. Always include a note that prices are preliminary estimates and negotiable upon discussion
+10. Mention that Tech Morphers provides 2 months free DevOps hosting and maintenance support post-delivery
+11. Include information about optional extended maintenance at Rs.7,000-10,000 per month after the free period
 
 Generate a professional quotation response in JSON format with the following structure:
 {
@@ -87,7 +92,6 @@ Generate a professional quotation response in JSON format with the following str
   "projectScope": "Detailed description of the project scope based on requirements, including technical complexity analysis",
   "recommendedPackage": {
     "name": "Package name if applicable",
-    "price": "Package price with justification",
     "features": ["List of core features with detail"],
     "addons": ["List of additional services if applicable"]
   },
@@ -98,53 +102,53 @@ Generate a professional quotation response in JSON format with the following str
         "phase": "Phase 1: Discovery & Planning",
         "duration": "X weeks",
         "deliverables": ["Specific deliverable 1", "Specific deliverable 2"],
-        "cost": "₹X,XXX"
+        "cost": "Rs.X,XXX"
       },
       {
         "phase": "Phase 2: Design & Development",
         "duration": "X weeks", 
         "deliverables": ["Specific deliverable 1", "Specific deliverable 2"],
-        "cost": "₹X,XXX"
+        "cost": "Rs.X,XXX"
       }
     ]
   },
   "timeline": "Realistic timeline assessment based on project complexity and client expectations",
-  "pricing": "Detailed pricing breakdown and justification, addressing client's budget range",
+  "pricing": "Detailed pricing breakdown and justification, addressing client's budget range (use Rs. format)",
   "quotationSummary": {
     "tableData": [
       {
         "item": "Discovery & Planning",
         "description": "Requirements analysis, wireframing, project setup",
         "timeline": "1-2 weeks",
-        "cost": "₹X,XXX"
+        "cost": "Rs.X,XXX"
       },
       {
         "item": "Design & UI/UX",
         "description": "User interface design, user experience optimization",
         "timeline": "2-3 weeks", 
-        "cost": "₹X,XXX"
+        "cost": "Rs.X,XXX"
       },
       {
         "item": "Development",
         "description": "Core development, feature implementation",
         "timeline": "X weeks",
-        "cost": "₹X,XXX"
+        "cost": "Rs.X,XXX"
       },
       {
         "item": "Testing & Deployment",
         "description": "Quality assurance, deployment, launch support",
         "timeline": "1 week",
-        "cost": "₹X,XXX"
+        "cost": "Rs.X,XXX"
       }
     ],
-    "totalCost": "₹X,XXX (breakdown of total)",
+    "totalCost": "Rs.X,XXX (breakdown of total)",
     "totalTimeline": "X-Y weeks (realistic estimate)"
   },
   "nextSteps": ["Detailed step 1", "Detailed step 2", "Detailed step 3", "Detailed step 4"],
-  "additionalNotes": "Important considerations, assumptions, terms, or recommendations"
+  "additionalNotes": "Include important disclaimers: (1) These are preliminary estimates subject to change based on detailed discussions (2) All pricing is negotiable upon consultation (3) Includes 2 months free DevOps hosting and maintenance support (4) Extended maintenance available at Rs.7,000-10,000/month after free period (5) Any other important considerations, assumptions, or terms"
 }
 
-Make the response highly detailed and professional. Ensure all costs are realistic for the Indian market and align with the client's stated budget range. If their budget is insufficient, provide alternative solutions or phased approaches.
+Make the response highly detailed and professional. Ensure all costs are realistic for the Indian market and align with the client's stated budget range. Use "Rs." format for all currency values to ensure proper PDF rendering. If their budget is insufficient, provide alternative solutions or phased approaches.
 `;
 
   try {
@@ -194,40 +198,40 @@ Make the response highly detailed and professional. Ensure all costs are realist
             phase: "Phase 1: Discovery & Planning",
             duration: "1-2 weeks",
             deliverables: ["Requirements analysis", "Technical architecture", "Project roadmap"],
-            cost: "₹15,000"
+            cost: "Rs.15,000"
           },
           {
             phase: "Phase 2: Development & Implementation", 
             duration: "4-6 weeks",
             deliverables: ["Core development", "Feature implementation", "Integration testing"],
-            cost: estimateData.budgetRange || "₹70,000"
+            cost: estimateData.budgetRange || "Rs.70,000"
           }
         ]
       },
       timeline: estimateData.deliveryTimeline || "6-8 weeks",
-      pricing: `Total project cost: ${estimateData.budgetRange || "₹85,000"} (includes all phases and deliverables)`,
+      pricing: `Total project cost: ${estimateData.budgetRange || "Rs.85,000"} (includes all phases and deliverables)`,
       quotationSummary: {
         tableData: [
           {
             item: "Discovery & Planning",
             description: "Requirements analysis, technical planning, project setup",
             timeline: "1-2 weeks",
-            cost: "₹15,000"
+            cost: "Rs.15,000"
           },
           {
             item: "Development",
             description: "Core development and feature implementation",
             timeline: "4-6 weeks", 
-            cost: "₹60,000"
+            cost: "Rs.60,000"
           },
           {
             item: "Testing & Deployment",
             description: "Quality assurance, deployment, launch support",
             timeline: "1 week",
-            cost: "₹10,000"
+            cost: "Rs.10,000"
           }
         ],
-        totalCost: estimateData.budgetRange || "₹85,000",
+        totalCost: estimateData.budgetRange || "Rs.85,000",
         totalTimeline: "6-8 weeks"
       },
       nextSteps: [
@@ -235,7 +239,8 @@ Make the response highly detailed and professional. Ensure all costs are realist
         "Schedule a consultation call to discuss requirements",
         "Finalize project scope and timeline",
         "Sign agreement and begin development"
-      ]
+      ],
+      additionalNotes: "Important: These are preliminary estimates and initial outlines based on the provided requirements. All pricing and timelines are negotiable upon detailed consultation. Tech Morphers provides 2 months of complimentary DevOps hosting and maintenance support post-delivery. Extended maintenance services are available at Rs.7,000-10,000 per month after the free period, ensuring your project continues to operate smoothly with regular updates and technical support."
     };
   }
 }; 

@@ -19,7 +19,8 @@ import {
   Loader2,
   Briefcase,
   Palette,
-  CheckCircle
+  CheckCircle,
+  FileText
 } from "lucide-react"
 import { getEstimatorEntries } from "@/lib/actions"
 import { Button } from "@/components/ui/button"
@@ -41,6 +42,7 @@ type EstimatorEntry = {
   phone: string | null
   companyName: string | null
   userRole: string | null
+  pdfUrl: string | null
   createdAt: Date
   updatedAt: Date
 }
@@ -381,10 +383,23 @@ export default function EstimatorsAdmin() {
                       <button
                         onClick={() => setSelectedEntry(entry)}
                         className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300"
+                        title="View Details"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
-                      <button className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                      {entry.pdfUrl && (
+                        <button
+                          onClick={() => window.open(entry.pdfUrl!, '_blank')}
+                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                          title="View PDF"
+                        >
+                          <FileText className="w-4 h-4" />
+                        </button>
+                      )}
+                      <button 
+                        className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                        title="Delete"
+                      >
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
@@ -564,6 +579,29 @@ export default function EstimatorsAdmin() {
                   <p className="text-gray-900 dark:text-white p-3 bg-gray-50 dark:bg-gray-700 rounded-lg whitespace-pre-wrap">
                     {selectedEntry.customRequests}
                   </p>
+                </div>
+              )}
+
+              {/* PDF Document */}
+              {selectedEntry.pdfUrl && (
+                <div className="lg:col-span-2 space-y-4">
+                  <h4 className="text-lg font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-600 pb-2">
+                    PDF Document
+                  </h4>
+                  <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div className="flex items-center">
+                      <FileText className="w-5 h-5 text-blue-600 mr-2" />
+                      <span className="text-gray-900 dark:text-white">Project Estimate Document</span>
+                    </div>
+                    <Button
+                      onClick={() => window.open(selectedEntry.pdfUrl!, '_blank')}
+                      size="sm"
+                      className="flex items-center space-x-2"
+                    >
+                      <FileText className="w-4 h-4" />
+                      <span>View PDF</span>
+                    </Button>
+                  </div>
                 </div>
               )}
 

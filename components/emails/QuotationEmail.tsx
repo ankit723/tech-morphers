@@ -122,7 +122,7 @@ const styles = {
 export const QuotationEmailTemplate: React.FC<Readonly<QuotationEmailProps>> = ({ 
   fullName, 
   estimateId, 
-  siteUrl = 'https://techmorphers.com', // Default, can be passed from .env
+  siteUrl = 'https://www.techmorphers.com', // Default, can be passed from .env
   supportEmail = 'support@techmorphers.com' // Default
 }) => (
   <div style={styles.body}>

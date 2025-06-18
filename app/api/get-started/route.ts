@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { sendGetStartedNotification } from '@/lib/emailNotifications';
 
 export async function POST(request: Request) {
   try {
@@ -27,6 +28,31 @@ export async function POST(request: Request) {
     });
 
     console.log('New Get Started submission saved:', getStartedSubmission);
+
+    // Send email notification to user
+    try {
+      const emailResult = await sendGetStartedNotification({
+        name,
+        email,
+        phone: phone || undefined,
+        service,
+        budget: budget || undefined,
+        companyName: companyName || undefined,
+        projectVision,
+        submissionId: getStartedSubmission.id,
+      });
+
+      if (emailResult.error) {
+        console.error('Failed to send email notification:', emailResult.error);
+        // Don't fail the API call if email fails
+      } else {
+        console.log('Email notification sent successfully to:', email);
+      }
+    } catch (emailError) {
+      console.error('Error sending email notification:', emailError);
+      // Don't fail the API call if email fails
+    }
+
     return NextResponse.json({ 
       message: 'Get Started form submitted successfully!', 
       submissionId: getStartedSubmission.id 

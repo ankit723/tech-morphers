@@ -12,6 +12,7 @@ const gothamBook = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.techmorphers.com'),
   title: "Tech Morphers",
   description: "Tech Morphers is a software development company that builds custom software solutions for businesses.",
   keywords: ["software development", "custom software", "software solutions", "business software", "software company", "Technology Solutions", "Software Development Company", "Custom Software Development", "Software Solutions for Businesses", "Technology Company"],

@@ -1,155 +1,189 @@
 // app/sitemap.ts
-import { MetadataRoute } from 'next';
+import { MetadataRoute } from 'next'
+import { getBlogPosts, getBlogCategories, getBlogTags } from '@/lib/blog-actions'
 
-async function fetchDynamicPages() {
-  const dynamicPages = [];
-  
-  const fallbackBlogs = [
-    { slug: 'blog/blog-1', updatedAt: new Date(), priority: 0.7, changeFrequency: 'weekly' as const },
-    { slug: 'blog/blog-2', updatedAt: new Date(), priority: 0.7, changeFrequency: 'weekly' as const },
-    { slug: 'blog/blog-3', updatedAt: new Date(), priority: 0.7, changeFrequency: 'weekly' as const }
-  ];
-  const fallbackCaseStudies = [
-    { slug: 'case-study/case-study-1', updatedAt: new Date(), priority: 0.8, changeFrequency: 'monthly' as const },
-    { slug: 'case-study/case-study-2', updatedAt: new Date(), priority: 0.8, changeFrequency: 'monthly' as const },
-    { slug: 'case-study/case-study-3', updatedAt: new Date(), priority: 0.8, changeFrequency: 'monthly' as const }
-  ];
-  dynamicPages.push(...fallbackBlogs, ...fallbackCaseStudies);
+const BASE_URL = 'https://www.techmorphers.com'
 
-  return dynamicPages;
+async function fetchDynamicBlogData() {
+  try {
+    // Fetch all published blog posts (we'll get all by setting a high limit)
+    const blogData = await getBlogPosts(1, 1000) // Get up to 1000 posts
+    const categories = await getBlogCategories()
+    const tags = await getBlogTags()
+
+    return {
+      posts: blogData.posts,
+      categories: categories.filter(cat => cat._count.posts > 0), // Only categories with posts
+      tags: tags.filter(tag => tag._count.posts > 0) // Only tags with posts
+    }
+  } catch (error) {
+    console.error('Error fetching dynamic blog data for sitemap:', error)
+    return {
+      posts: [],
+      categories: [],
+      tags: []
+    }
+  }
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const dynamicPages = await fetchDynamicPages();
+  const { posts, categories, tags } = await fetchDynamicBlogData()
 
-  const dynamicRoutes = dynamicPages.map((page) => ({
-    url: `https://www.techmorphers.com/${page.slug}`,
-    lastModified: new Date(page.updatedAt),
-    changeFrequency: page.changeFrequency,
-    priority: page.priority,
-  }));
-
-  const staticRoutes = [
+  // Static routes with proper priorities and frequencies
+  const staticRoutes: MetadataRoute.Sitemap = [
     // Homepage - Highest priority
     {
-      url: 'https://www.techmorphers.com',
+      url: `${BASE_URL}`,
       lastModified: new Date(),
-      changeFrequency: 'daily' as const,
+      changeFrequency: 'daily',
       priority: 1.0,
     },
     
     // Main service pages - High priority
     {
-      url: 'https://www.techmorphers.com/services',
+      url: `${BASE_URL}/services`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: 'https://www.techmorphers.com/services/web',
+      url: `${BASE_URL}/services/web`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.9,
     },
     {
-      url: 'https://www.techmorphers.com/services/mobile',
+      url: `${BASE_URL}/services/mobile`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.9,
     },
     {
-      url: 'https://www.techmorphers.com/services/design',
+      url: `${BASE_URL}/services/design`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.9,
     },
     {
-      url: 'https://www.techmorphers.com/services/game-development',
+      url: `${BASE_URL}/services/game-development`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.9,
     },
 
     // Important business pages
     {
-      url: 'https://www.techmorphers.com/about',
+      url: `${BASE_URL}/about`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: 'https://www.techmorphers.com/about-us',
+      url: `${BASE_URL}/about-us`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: 'https://www.techmorphers.com/packages',
+      url: `${BASE_URL}/packages`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'weekly',
       priority: 0.8,
     },
     {
-      url: 'https://www.techmorphers.com/contact',
+      url: `${BASE_URL}/contact`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: 'https://www.techmorphers.com/estimator',
+      url: `${BASE_URL}/estimator`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.8,
     },
 
     // Content pages
     {
-      url: 'https://www.techmorphers.com/blog',
+      url: `${BASE_URL}/blog`,
       lastModified: new Date(),
-      changeFrequency: 'daily' as const,
+      changeFrequency: 'daily',
       priority: 0.7,
     },
     {
-      url: 'https://www.techmorphers.com/case-study',
+      url: `${BASE_URL}/case-study`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'weekly',
       priority: 0.7,
     },
     {
-      url: 'https://www.techmorphers.com/content',
+      url: `${BASE_URL}/content`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'weekly',
       priority: 0.6,
     },
 
     // Support and utility pages
     {
-      url: 'https://www.techmorphers.com/support',
+      url: `${BASE_URL}/support`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
-      url: 'https://www.techmorphers.com/privacy-policy',
+      url: `${BASE_URL}/privacy-policy`,
       lastModified: new Date(),
-      changeFrequency: 'yearly' as const,
+      changeFrequency: 'yearly',
       priority: 0.5,
     },
 
     // User account pages - Lower priority
     {
-      url: 'https://www.techmorphers.com/login',
+      url: `${BASE_URL}/login`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.4,
     },
     {
-      url: 'https://www.techmorphers.com/register',
+      url: `${BASE_URL}/register`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.4,
     },
-  ];
+  ]
 
-  return [...staticRoutes, ...dynamicRoutes] as MetadataRoute.Sitemap;
+  // Dynamic blog post routes
+  const blogPostRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: post.updatedAt,
+    changeFrequency: 'weekly' as const,
+    priority: 0.8, // High priority for individual blog posts
+  }))
+
+  // Dynamic blog category routes
+  const categoryRoutes: MetadataRoute.Sitemap = categories.map((category) => ({
+    url: `${BASE_URL}/blog/category/${category.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.6, // Medium priority for category pages
+  }))
+
+  // Dynamic blog tag routes
+  const tagRoutes: MetadataRoute.Sitemap = tags.map((tag) => ({
+    url: `${BASE_URL}/blog/tag/${tag.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.5, // Lower priority for tag pages
+  }))
+
+  // Combine all routes
+  const allRoutes = [
+    ...staticRoutes,
+    ...blogPostRoutes,
+    ...categoryRoutes,
+    ...tagRoutes,
+  ]
+
+  // Sort by priority (descending) for better SEO
+  return allRoutes.sort((a, b) => (b.priority || 0) - (a.priority || 0))
 }

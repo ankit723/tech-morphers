@@ -143,3 +143,252 @@
     font-family: 'Gotham', sans-serif;
   } 
 }
+
+/* TipTap Editor Styles */
+.prose-editor {
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.prose-editor .ProseMirror {
+  outline: none;
+  padding: 1.5rem;
+  min-height: 400px;
+  color: inherit;
+}
+
+.prose-editor .ProseMirror:focus {
+  outline: none;
+}
+
+/* Typography */
+.prose-editor h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.prose-editor h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.prose-editor h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.prose-editor p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.prose-editor p:last-child {
+  margin-bottom: 0;
+}
+
+/* Lists */
+.prose-editor ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose-editor ol {
+  list-style-type: decimal;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose-editor li {
+  margin-bottom: 0.25rem;
+  line-height: 1.6;
+}
+
+.prose-editor li p {
+  margin-bottom: 0.5rem;
+}
+
+/* Blockquotes */
+.prose-editor blockquote {
+  border-left: 4px solid #3b82f6;
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  background: rgba(59, 130, 246, 0.05);
+  padding: 1rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.dark .prose-editor blockquote {
+  background: rgba(59, 130, 246, 0.1);
+  border-left-color: #60a5fa;
+}
+
+/* Code */
+.prose-editor code {
+  background: #f3f4f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+}
+
+.dark .prose-editor code {
+  background: #374151;
+}
+
+.prose-editor pre {
+  background: #f3f4f6;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.dark .prose-editor pre {
+  background: #1f2937;
+}
+
+.prose-editor pre code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* Links */
+.prose-editor a {
+  color: #3b82f6;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-editor a:hover {
+  color: #1d4ed8;
+}
+
+.dark .prose-editor a {
+  color: #60a5fa;
+}
+
+.dark .prose-editor a:hover {
+  color: #93c5fd;
+}
+
+/* Images */
+.prose-editor img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1.5rem auto;
+  display: block;
+}
+
+/* Text formatting */
+.prose-editor strong {
+  font-weight: 700;
+}
+
+.prose-editor em {
+  font-style: italic;
+}
+
+.prose-editor u {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-editor s {
+  text-decoration: line-through;
+}
+
+/* Text alignment */
+.prose-editor [style*="text-align: center"] {
+  text-align: center;
+}
+
+.prose-editor [style*="text-align: right"] {
+  text-align: right;
+}
+
+.prose-editor [style*="text-align: left"] {
+  text-align: left;
+}
+
+/* Placeholder */
+.prose-editor .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #9ca3af;
+  pointer-events: none;
+  height: 0;
+}
+
+.dark .prose-editor .ProseMirror p.is-editor-empty:first-child::before {
+  color: #6b7280;
+}
+
+/* Selection */
+.prose-editor .ProseMirror ::selection {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.prose-editor .ProseMirror-selectednode {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Focus states */
+.prose-editor .ProseMirror-focused {
+  outline: none;
+}
+
+/* Horizontal rule */
+.prose-editor hr {
+  border: none;
+  border-top: 2px solid #e5e7eb;
+  margin: 2rem 0;
+}
+
+.dark .prose-editor hr {
+  border-top-color: #374151;
+}
+
+/* Table support (if needed) */
+.prose-editor table {
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  width: 100%;
+}
+
+.prose-editor th,
+.prose-editor td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 1rem;
+  text-align: left;
+}
+
+.dark .prose-editor th,
+.dark .prose-editor td {
+  border-color: #374151;
+}
+
+.prose-editor th {
+  background: #f9fafb;
+  font-weight: 600;
+}
+
+.dark .prose-editor th {
+  background: #1f2937;
+}

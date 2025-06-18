@@ -6,6 +6,7 @@ interface QuotationPdfEmailProps {
   estimateId: string; // Short ID, e.g., TM-862654c3
   companyName?: string; // Company name from form, or defaults to "Tech Morphers"
   pdfFileName?: string; // e.g., Quotation-TM-862654c3.pdf
+  pdfUrl?: string; // URL to access PDF online
   contactUrl?: string; // URL for the "Contact Our Team" button
   siteUrl?: string;
 }
@@ -67,6 +68,14 @@ const attachmentInfoBox = {
   borderRadius: '4px',
 };
 
+const onlineAccessBox = {
+  backgroundColor: '#f0f9ff', // Very light blue background
+  borderLeft: '4px solid #10b981', // Green left border
+  padding: '15px 20px',
+  margin: '20px 0',
+  borderRadius: '4px',
+};
+
 const attachmentText = {
   ...paragraph,
   fontSize: '15px',
@@ -94,6 +103,21 @@ const button = {
   marginBottom: '15px',
 };
 
+const pdfButton = {
+  backgroundColor: '#10b981', // Green button for PDF access
+  borderRadius: '5px',
+  color: '#fff',
+  fontSize: '16px',
+  fontWeight: 'bold',
+  textDecoration: 'none',
+  textAlign: 'center' as const,
+  display: 'inline-block',
+  padding: '12px 25px',
+  marginTop: '10px',
+  marginBottom: '15px',
+  marginRight: '10px',
+};
+
 const footerText = {
   ...paragraph,
   fontSize: '14px',
@@ -103,15 +127,16 @@ const footerText = {
   marginBottom: '0px',
 };
 
-const defaultSiteUrl = 'https://techmorphers.com'; // Fallback site URL
+const defaultSiteUrl = 'https://www.techmorphers.com'; // Fallback site URL
 
-const defaultContactUrl = 'https://techmorphers.com/contact';
+const defaultContactUrl = 'https://www.techmorphers.com/contact';
 
 export const QuotationPdfEmail = ({
   fullName,
   estimateId,
   companyName = "Tech Morphers",
   pdfFileName = `Quotation-TM-${estimateId}.pdf`,
+  pdfUrl,
   contactUrl = defaultContactUrl,
   siteUrl = defaultSiteUrl,
 }: QuotationPdfEmailProps) => (
@@ -134,7 +159,7 @@ export const QuotationPdfEmail = ({
           </Text>
 
           <Section style={attachmentInfoBox}>
-            <Heading as="h3" style={{ ...nextStepsTitle, marginTop: '0', marginBottom: '10px' }}>Quotation Document Attached</Heading>
+            <Heading as="h3" style={{ ...nextStepsTitle, marginTop: '0', marginBottom: '10px' }}>📎 Quotation Document Attached</Heading>
             <Text style={attachmentText}>
               Please find your personalized quotation (<strong>{pdfFileName}</strong>) attached to this email.
             </Text>
@@ -142,6 +167,23 @@ export const QuotationPdfEmail = ({
               This PDF document details the potential scope, features, and considerations for your project. 
             </Text>
           </Section>
+
+          {pdfUrl && (
+            <Section style={onlineAccessBox}>
+              <Heading as="h3" style={{ ...nextStepsTitle, marginTop: '0', marginBottom: '10px' }}>🌐 Online Access Available</Heading>
+              <Text style={attachmentText}>
+                You can also access your quotation online at any time using the link below:
+              </Text>
+              <div style={{ textAlign: 'center', marginTop: '15px' }}>
+                <Button style={pdfButton} href={pdfUrl}>
+                  View Quotation Online
+                </Button>
+              </div>
+              <Text style={{...attachmentText, fontSize: '13px', marginTop: '10px'}}>
+                This link will remain active and can be shared with your team or stakeholders.
+              </Text>
+            </Section>
+          )}
 
           <Heading as="h3" style={nextStepsTitle}>Next Steps:</Heading>
           <Text style={paragraph}>
