@@ -109,12 +109,121 @@ model BlogPost {
   categories        BlogCategory[]
   tags              BlogTag[]
   
+  // Comments
+  comments          BlogComment[]
+  commentsEnabled   Boolean        @default(true)
+  commentsCount     Int            @default(0)
+  
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
   
   @@index([slug])
   @@index([status, publishedAt])
   @@index([publishedAt])
+}
+
+model BlogComment {
+  id          String            @id @default(uuid())
+  content     String
+  authorName  String
+  authorEmail String
+  authorUrl   String?
+  authorIp    String?           // For spam protection
+  userAgent   String?           // For spam protection
+  
+  // Nested structure
+  parentId    String?
+  parent      BlogComment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies     BlogComment[]     @relation("CommentReplies")
+  depth       Int               @default(0) // For efficient querying
+  
+  // Post relationship
+  postId      String
+  post        BlogPost          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  // Voting system
+  upvotes     Int               @default(0)
+  downvotes   Int               @default(0)
+  score       Int               @default(0) // upvotes - downvotes
+  votes       CommentVote[]
+  
+  // Moderation
+  status      CommentStatus     @default(PENDING)
+  isSpam      Boolean           @default(false)
+  isPinned    Boolean           @default(false)
+  reports     CommentReport[]
+  moderationLogs CommentModerationLog[]
+  
+  // Metadata
+  editedAt    DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  
+  @@index([postId, status, createdAt])
+  @@index([parentId])
+  @@index([score])
+  @@index([status])
+}
+
+model CommentVote {
+  id        String      @id @default(uuid())
+  type      VoteType
+  
+  // User identification (using email + IP for anonymous users)
+  voterEmail String?
+  voterIp    String
+  
+  // Comment relationship
+  commentId String
+  comment   BlogComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime    @default(now())
+  
+  @@unique([commentId, voterEmail, voterIp])
+  @@index([commentId])
+}
+
+model CommentReport {
+  id        String         @id @default(uuid())
+  reason    ReportReason
+  details   String?
+  
+  // Reporter identification
+  reporterEmail String?
+  reporterIp    String
+  
+  // Comment relationship
+  commentId String
+  comment   BlogComment    @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  
+  // Moderation
+  status    ReportStatus   @default(PENDING)
+  reviewedBy String?
+  reviewedAt DateTime?
+  
+  createdAt DateTime       @default(now())
+  
+  @@index([commentId])
+  @@index([status])
+}
+
+model CommentModerationLog {
+  id          String              @id @default(uuid())
+  action      ModerationAction
+  reason      String?
+  moderator   String              // Admin/moderator identifier
+  
+  // Comment relationship
+  commentId   String
+  comment     BlogComment         @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  
+  // Previous state (for undo functionality)
+  previousStatus CommentStatus?
+  
+  createdAt   DateTime            @default(now())
+  
+  @@index([commentId])
+  @@index([moderator])
 }
 
 model BlogCategory {
@@ -155,4 +264,45 @@ enum Package {
   GROWTH
   PRO
   ENTERPRISE
+}
+
+enum CommentStatus {
+  PENDING     // Awaiting moderation
+  APPROVED    // Visible to public
+  REJECTED    // Hidden from public
+  SPAM        // Marked as spam
+  DELETED     // Soft deleted
+}
+
+enum VoteType {
+  UPVOTE
+  DOWNVOTE
+}
+
+enum ReportReason {
+  SPAM
+  HARASSMENT
+  HATE_SPEECH
+  INAPPROPRIATE_CONTENT
+  OFF_TOPIC
+  COPYRIGHT
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  DISMISSED
+  ACTIONED
+}
+
+enum ModerationAction {
+  APPROVE
+  REJECT
+  MARK_SPAM
+  DELETE
+  PIN
+  UNPIN
+  EDIT
+  BAN_USER
 }

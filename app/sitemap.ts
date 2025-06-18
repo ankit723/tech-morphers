@@ -160,6 +160,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8, // High priority for individual blog posts
   }))
 
+  // Dynamic blog comments routes
+  const blogCommentsRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}/comments`,
+    lastModified: post.updatedAt,
+    changeFrequency: 'weekly' as const,
+    priority: 0.7, // Good priority for comments pages
+  }))
+
   // Dynamic blog category routes
   const categoryRoutes: MetadataRoute.Sitemap = categories.map((category) => ({
     url: `${BASE_URL}/blog/category/${category.slug}`,
@@ -180,6 +188,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const allRoutes = [
     ...staticRoutes,
     ...blogPostRoutes,
+    ...blogCommentsRoutes,
     ...categoryRoutes,
     ...tagRoutes,
   ]

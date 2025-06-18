@@ -38,6 +38,8 @@ export type BlogPostWithRelations = {
   readTime: number
   views: number
   likes: number
+  commentsCount: number
+  commentsEnabled: boolean
   metaTitle: string | null
   metaDescription: string | null
   metaKeywords: string[]
@@ -124,7 +126,32 @@ export async function getBlogPosts(
   const [posts, totalPosts] = await Promise.all([
     prisma.blogPost.findMany({
       where,
-      include: {
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        content: true,
+        featuredImage: true,
+        bannerImage: true,
+        author: true,
+        authorImage: true,
+        authorBio: true,
+        status: true,
+        publishedAt: true,
+        readTime: true,
+        views: true,
+        likes: true,
+        commentsCount: true,
+        commentsEnabled: true,
+        metaTitle: true,
+        metaDescription: true,
+        metaKeywords: true,
+        canonicalUrl: true,
+        ogImage: true,
+        ogDescription: true,
+        createdAt: true,
+        updatedAt: true,
         categories: {
           select: {
             id: true,
@@ -167,7 +194,32 @@ export async function getBlogPost(slug: string, trackView: boolean = true): Prom
       slug,
       status: "PUBLISHED"
     },
-    include: {
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      content: true,
+      featuredImage: true,
+      bannerImage: true,
+      author: true,
+      authorImage: true,
+      authorBio: true,
+      status: true,
+      publishedAt: true,
+      readTime: true,
+      views: true,
+      likes: true,
+      commentsCount: true,
+      commentsEnabled: true,
+      metaTitle: true,
+      metaDescription: true,
+      metaKeywords: true,
+      canonicalUrl: true,
+      ogImage: true,
+      ogDescription: true,
+      createdAt: true,
+      updatedAt: true,
       categories: {
         select: {
           id: true,

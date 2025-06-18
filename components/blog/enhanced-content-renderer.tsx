@@ -42,16 +42,40 @@ export function EnhancedContentRenderer({
   className
 }: EnhancedContentRendererProps) {
   const [searchQuery, setSearchQuery] = useState("")
+  
+  // Generate unique component ID to prevent key conflicts
+  const componentId = useMemo(() => `renderer-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, [])
 
   // Parse content and extract code blocks
   const { processedContent, codeBlocks } = useMemo(() => {
     const blocks: ParsedCodeBlock[] = []
     let blockCounter = 0
 
+    // First, add IDs to headings to ensure consistency between server and client
+    let headingIdCounter = 0
+    const contentWithHeadingIds = content.replace(
+      /<(h[1-6])([^>]*?)>(.*?)<\/h[1-6]>/gi,
+      (match, tag, attributes, innerText) => {
+        // Clean attributes to check for existing ID
+        const cleanAttributes = attributes.trim()
+        
+        // Don't add ID if one already exists (more robust check)
+        if (/\bid\s*=\s*["'][^"']*["']/i.test(cleanAttributes)) {
+          return match
+        }
+        
+        const headingId = `content-heading-${headingIdCounter++}`
+        
+        // Ensure proper spacing for attributes
+        const finalAttributes = cleanAttributes ? ` ${cleanAttributes}` : ''
+        return `<${tag}${finalAttributes} id="${headingId}">${innerText}</${tag}>`
+      }
+    )
+
     // Pattern to match code blocks
     const codeBlockPattern = /<pre><code(?:\s+class="language-(\w+)")?[^>]*>([\s\S]*?)<\/code><\/pre>/g
     
-    const processed = content.replace(codeBlockPattern, (match, language, code) => {
+    const processed = contentWithHeadingIds.replace(codeBlockPattern, (match, language, code) => {
       // Decode HTML entities
       const decodedCode = code
         .replace(/&lt;/g, '<')
@@ -152,7 +176,7 @@ export function EnhancedContentRenderer({
             if (codeBlock) {
               return (
                 <motion.div
-                  key={`code-${index}`}
+                  key={`${componentId}-code-${index}`}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -180,7 +204,7 @@ export function EnhancedContentRenderer({
           if (part.trim()) {
             return (
               <motion.div
-                key={`content-${index}`}
+                key={`${componentId}-content-${index}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}

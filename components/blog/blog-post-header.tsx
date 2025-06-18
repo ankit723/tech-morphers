@@ -1,11 +1,12 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Calendar, Clock, Eye, Heart, Share2, User, Tag, Folder } from "lucide-react"
+import { Calendar, Clock, Eye, Heart, User, Tag, Folder, MessageSquare } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { BlogPostWithRelations } from "@/lib/blog-actions"
 import { Button } from "@/components/ui/button"
+import { ShareButton } from "@/components/blog/share-button"
 
 interface BlogPostHeaderProps {
   post: BlogPostWithRelations
@@ -18,18 +19,6 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
       month: "long",
       day: "numeric"
     }).format(new Date(date))
-  }
-
-  const handleShare = () => {
-    if (typeof window !== 'undefined' && navigator.share) {
-      navigator.share({
-        title: post.title,
-        text: post.excerpt,
-        url: window.location.href
-      })
-    } else if (typeof window !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href)
-    }
   }
 
   return (
@@ -136,6 +125,12 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
                     <Heart className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span className="whitespace-nowrap">{post.likes.toLocaleString()}</span>
                   </div>
+
+                  {/* Comments */}
+                  <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                    <MessageSquare className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="whitespace-nowrap">{post.commentsCount || 0}</span>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -178,16 +173,33 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
               )}
             </div>
 
-            {/* Share Button */}
-            <Button
-              onClick={handleShare}
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-2 w-full sm:w-auto order-1 sm:order-2"
-            >
-              <Share2 className="w-4 h-4" />
-              Share
-            </Button>
+            {/* Action Buttons */}
+            <div className="flex items-center gap-2 w-full sm:w-auto order-1 sm:order-2">
+              {/* Comments Button */}
+              <Link href={`/blog/${post.slug}/comments`}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2 flex-1 sm:flex-none"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span className="hidden sm:inline">Comments</span>
+                  <span className="sm:hidden">
+                    {post.commentsCount === 0 ? "Comment" : `${post.commentsCount}`}
+                  </span>
+                  {post.commentsCount > 0 && (
+                    <span className="hidden sm:inline">({post.commentsCount})</span>
+                  )}
+                </Button>
+              </Link>
+
+              {/* Share Button */}
+              <ShareButton
+                title={post.title}
+                excerpt={post.excerpt}
+                className="flex-1 sm:flex-none"
+              />
+            </div>
           </div>
         </div>
       </div>

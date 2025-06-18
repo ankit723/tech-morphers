@@ -3,3 +3,4 @@
 3: Create Blog Creator
 4: Fix the home page, about page, contact page designs bugs
 5: Fix the unlinked links in both mobile and desktop navbar
+6: adding blog page detail in home page and footer

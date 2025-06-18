@@ -340,6 +340,65 @@ export async function testBlogNotificationRateLimit(
   }
 }
 
+// Send comment notifications to all emails
+export async function sendCommentNotificationsToAllEmails(
+  postId: string,
+  commentId: string
+): Promise<{
+  totalEmails: number
+  successCount: number
+  failureCount: number
+  errors: string[]
+}> {
+  console.log(`🗨️ New comment notification for comment: ${commentId}`)
+  
+  try {
+    // Get the blog post
+    const post = await prisma.blogPost.findUnique({
+      where: { id: postId },
+      include: {
+        categories: true,
+        tags: true,
+      }
+    })
+
+    if (!post) {
+      return { totalEmails: 0, successCount: 0, failureCount: 0, errors: ["Post not found"] }
+    }
+
+    // Transform to BlogPostWithRelations
+    const blogPost: BlogPostWithRelations = {
+      ...post,
+      tags: post.tags || [],
+      categories: post.categories || [],
+    } as BlogPostWithRelations
+
+    // Use existing email system with catchy subject
+    const catchySubjects = [
+      `💬 Hot Discussion: "${post.title}" just got a new comment!`,
+      `🔥 Trending Now: New comment on "${post.title}"`,
+      `⚡ Breaking: Someone just shared their thoughts on "${post.title}"`,
+      `🗨️ Join the conversation: New comment on "${post.title}"`,
+      `💭 Community Buzz: "${post.title}" sparked a new comment!`
+    ]
+    
+    // Temporarily modify the title to include catchy subject
+    const originalTitle = blogPost.title
+    blogPost.title = catchySubjects[Math.floor(Math.random() * catchySubjects.length)]
+
+    const result = await sendBlogNotificationsToAllEmails(blogPost)
+
+    // Restore original title
+    blogPost.title = originalTitle
+
+    return result
+
+  } catch (error) {
+    console.error("Error sending comment notifications:", error)
+    return { totalEmails: 0, successCount: 0, failureCount: 0, errors: [error instanceof Error ? error.message : 'Unknown error'] }
+  }
+}
+
 // Get email notification stats
 export async function getBlogNotificationStats(): Promise<{
   totalUniqueEmails: number
@@ -411,4 +470,4 @@ export async function getBlogNotificationStats(): Promise<{
       }
     }
   }
-} 
+}

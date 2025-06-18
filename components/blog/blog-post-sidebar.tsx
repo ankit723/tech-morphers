@@ -51,8 +51,13 @@ export function BlogPostSidebar({ post }: BlogPostSidebarProps) {
     const toc: TOCItem[] = []
 
     headings.forEach((heading, index) => {
-      const id = `heading-${index}`
-      heading.id = id
+      // Only use headings that already have IDs - don't modify DOM after hydration
+      let id = heading.id
+      if (!id) {
+        // If no ID exists, create a unique identifier for React key purposes only
+        // But don't assign it to the DOM element to avoid hydration issues
+        id = `fallback-${index}-${heading.textContent?.slice(0, 20).replace(/\s+/g, '-').toLowerCase() || 'heading'}`
+      }
       
       toc.push({
         id,
@@ -105,12 +110,28 @@ export function BlogPostSidebar({ post }: BlogPostSidebarProps) {
   }
 
   const scrollToSection = (id: string) => {
+    // Only scroll if the element actually has this ID in the DOM
     const element = document.getElementById(id)
     if (element) {
       element.scrollIntoView({ 
         behavior: 'smooth',
         block: 'start'
       })
+    } else {
+      // Fallback: find heading by text content if ID doesn't exist
+      const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+      const targetItem = tableOfContents.find(item => item.id === id)
+      if (targetItem) {
+        const matchingHeading = Array.from(headings).find(h => 
+          h.textContent?.trim() === targetItem.text.trim()
+        )
+        if (matchingHeading) {
+          matchingHeading.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          })
+        }
+      }
     }
   }
 
@@ -224,9 +245,9 @@ export function BlogPostSidebar({ post }: BlogPostSidebarProps) {
             Table of Contents
           </h3>
           <nav className="space-y-2">
-            {tableOfContents.map((item) => (
+            {tableOfContents.map((item, index) => (
               <button
-                key={item.id}
+                key={`toc-${item.id}-${index}`}
                 onClick={() => scrollToSection(item.id)}
                 className={cn(
                   "w-full text-left text-sm transition-colors hover:text-blue-600 dark:hover:text-blue-400",
