@@ -4,14 +4,11 @@ import React, { useState, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { 
   Upload, 
-  X, 
-  Image as ImageIcon, 
   Loader2, 
   CheckCircle, 
   AlertCircle,
   Trash2,
   Eye,
-  Download
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"

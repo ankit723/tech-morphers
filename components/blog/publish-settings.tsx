@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Calendar, Clock, User, Tag, Folder, Plus, X, Upload } from "lucide-react"
+import { Clock, User, Tag, Folder, Plus, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ImageUpload } from "@/components/ui/image-upload"
-import Image from "next/image"
 
 interface BlogPost {
   title: string

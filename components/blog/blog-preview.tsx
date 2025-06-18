@@ -1,10 +1,9 @@
 "use client"
 
-import React from "react"
+import React, { useEffect } from "react"
 import { motion } from "framer-motion"
 import { Calendar, Clock, Eye, Heart, User, Tag, Folder } from "lucide-react"
 import Image from "next/image"
-import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { EnhancedContentRenderer } from "./enhanced-content-renderer"
 
@@ -36,6 +35,10 @@ interface BlogPreviewProps {
 
 export function BlogPreview({ blogPost }: BlogPreviewProps) {
   const [searchQuery, setSearchQuery] = useState("")
+
+  useEffect(() => {
+    console.log(searchQuery)
+  }, [searchQuery])
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("en-US", {

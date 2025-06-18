@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Search, AlertCircle, CheckCircle, Twitter, Facebook, Globe, Image as ImageIcon, Link as LinkIcon, Tag } from "lucide-react"
+import { Search, AlertCircle, CheckCircle, Twitter, Facebook, Globe, Tag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ImageUpload } from "@/components/ui/image-upload"
 import Image from "next/image"
@@ -45,8 +45,6 @@ interface SEOAnalysis {
 export function SEOSettings({ blogPost, setBlogPost }: SEOSettingsProps) {
   const [keywordInput, setKeywordInput] = useState("")
   const [seoAnalysis, setSeoAnalysis] = useState<SEOAnalysis>({ score: 0, issues: [] })
-
-  const baseUrl = "https://www.techmorphers.com"
 
   useEffect(() => {
     analyzeSEO()

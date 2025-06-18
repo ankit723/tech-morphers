@@ -2,7 +2,6 @@
 
 import React, { useState, useMemo } from "react"
 import { motion } from "framer-motion"
-import { Search } from "lucide-react"
 import { CodeBlock } from "@/components/ui/code-block"
 import { VanishInput } from "@/components/ui/vanish-input"
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect"

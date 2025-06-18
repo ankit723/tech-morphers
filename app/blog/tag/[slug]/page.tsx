@@ -8,17 +8,18 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
 interface TagPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
-  searchParams: {
+  }>
+  searchParams: Promise<{
     page?: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: TagPageProps): Promise<Metadata> {
+  const resolvedParams = await params
   const tags = await getBlogTags()
-  const tag = tags.find(t => t.slug === params.slug)
+  const tag = tags.find(t => t.slug === resolvedParams.slug)
   
   if (!tag) {
     return {
@@ -58,6 +59,7 @@ export async function generateMetadata({ params }: TagPageProps): Promise<Metada
 }
 
 export default async function TagPage({ params, searchParams }: TagPageProps) {
+  const resolvedParams = await params
   const resolvedSearchParams = await searchParams
   const page = parseInt(resolvedSearchParams.page || "1")
   
@@ -67,13 +69,13 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
       getBlogCategories()
     ])
 
-    const tag = tags.find(t => t.slug === params.slug)
+    const tag = tags.find(t => t.slug === resolvedParams.slug)
     
     if (!tag) {
       notFound()
     }
 
-    const blogData = await getBlogPosts(page, 12, undefined, params.slug)
+    const blogData = await getBlogPosts(page, 12, undefined, resolvedParams.slug)
     const { posts, totalPosts, totalPages, currentPage } = blogData
 
     return (
@@ -179,7 +181,7 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
                   totalPages={totalPages}
                   currentPage={currentPage}
                   initialFilters={{
-                    tag: params.slug
+                    tag: resolvedParams.slug
                   }}
                 />
               </Suspense>

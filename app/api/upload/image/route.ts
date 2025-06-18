@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     const finalFilename = filename || `${Date.now()}_${Math.random().toString(36).substring(2)}_${file.name}`
     
     // Create file path with organized structure
-    const fileExtension = file.name.split('.').pop()
+
     const date = new Date()
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Handle OPTIONS request for CORS
-export async function OPTIONS(request: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {

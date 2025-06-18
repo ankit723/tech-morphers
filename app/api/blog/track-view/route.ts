@@ -12,18 +12,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get client IP for basic rate limiting
-    const clientIP = request.headers.get('x-forwarded-for') || 
-                    request.headers.get('x-real-ip') || 
-                    'unknown'
-
-    // Simple rate limiting: Check if same IP viewed this post in last hour
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000)
-    
-    // Note: In a real app, you'd store view logs in a separate table
-    // For now, we'll just increment the view count
-    
-    // Verify the blog post exists and is published
     const post = await prisma.blogPost.findUnique({
       where: { 
         id: blogId,

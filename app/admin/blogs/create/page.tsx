@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Save, Eye, Upload, Code, Image as ImageIcon, Type, List, Quote, AlertCircle, ArrowLeft } from "lucide-react"
+import { Save, Eye, Type, AlertCircle, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { BlogEditor } from "@/components/blog/blog-editor"
@@ -10,7 +10,6 @@ import { BlogPreview } from "@/components/blog/blog-preview"
 import { SEOSettings } from "@/components/blog/seo-settings"
 import { PublishSettings } from "@/components/blog/publish-settings"
 import { createBlogPost } from "@/lib/blog-actions"
-import { calculateReadTime } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 
 interface BlogPost {

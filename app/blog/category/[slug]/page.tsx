@@ -8,17 +8,18 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
 interface CategoryPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
-  searchParams: {
+  }>
+  searchParams: Promise<{
     page?: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
+  const resolvedParams = await params
   const categories = await getBlogCategories()
-  const category = categories.find(c => c.slug === params.slug)
+  const category = categories.find(c => c.slug === resolvedParams.slug)
   
   if (!category) {
     return {
@@ -58,6 +59,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 }
 
 export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
+  const resolvedParams = await params
   const resolvedSearchParams = await searchParams
   const page = parseInt(resolvedSearchParams.page || "1")
   
@@ -67,13 +69,13 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
       getBlogTags()
     ])
 
-    const category = categories.find(c => c.slug === params.slug)
+    const category = categories.find(c => c.slug === resolvedParams.slug)
     
     if (!category) {
       notFound()
     }
 
-    const blogData = await getBlogPosts(page, 12, params.slug)
+    const blogData = await getBlogPosts(page, 12, resolvedParams.slug)
     const { posts, totalPosts, totalPages, currentPage } = blogData
 
     // Get category icon - if it's an emoji, use it directly, otherwise use Folder icon
@@ -199,7 +201,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                   totalPages={totalPages}
                   currentPage={currentPage}
                   initialFilters={{
-                    category: params.slug
+                    category: resolvedParams.slug
                   }}
                 />
               </Suspense>

@@ -1,16 +1,11 @@
 "use client"
 
-import React from "react"
+import React, { useEffect } from "react"
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Copy, Check, ExternalLink, Heart, Share2 } from "lucide-react"
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
-import { oneDark, oneLight } from "react-syntax-highlighter/dist/esm/styles/prism"
-import { useTheme } from "next-themes"
-import Image from "next/image"
+import { Heart, Share2 } from "lucide-react"
 import { BlogPostWithRelations, likeBlogPost } from "@/lib/blog-actions"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
 import { EnhancedContentRenderer } from "./enhanced-content-renderer"
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect"
 
@@ -18,31 +13,14 @@ interface BlogPostContentProps {
   post: BlogPostWithRelations
 }
 
-interface ContentBlock {
-  type: string
-  children?: any[]
-  text?: string
-  code?: string
-  language?: string
-  src?: string
-  alt?: string
-  url?: string
-  title?: string
-  level?: number
-}
-
 export function BlogPostContent({ post }: BlogPostContentProps) {
-  const { theme } = useTheme()
-  const [copiedCode, setCopiedCode] = useState<string | null>(null)
   const [isLiking, setIsLiking] = useState(false)
   const [currentLikes, setCurrentLikes] = useState(post.likes)
   const [searchQuery, setSearchQuery] = useState("")
 
-  const handleCopyCode = async (code: string, blockId: string) => {
-    await navigator.clipboard.writeText(code)
-    setCopiedCode(blockId)
-    setTimeout(() => setCopiedCode(null), 2000)
-  }
+  useEffect(() => {
+    console.log(searchQuery)
+  }, [searchQuery])
 
   const handleLike = async () => {
     if (isLiking) return
@@ -99,228 +77,6 @@ export function BlogPostContent({ post }: BlogPostContentProps) {
         }
       }
     }
-  }
-
-  const renderContent = (content: any): React.ReactElement[] => {
-    if (!Array.isArray(content)) {
-      return [<p key="content" className="prose-p">Invalid content format</p>]
-    }
-
-    return content.map((block: ContentBlock, index: number) => {
-      const blockId = `block-${index}`
-
-      switch (block.type) {
-        case 'paragraph':
-          return (
-            <motion.p
-              key={blockId}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="prose-p mb-6 text-gray-700 dark:text-gray-300 leading-relaxed"
-            >
-              {block.children?.map((child: any, childIndex: number) => (
-                <span key={childIndex}>
-                  {child.text}
-                </span>
-              ))}
-            </motion.p>
-          )
-
-        case 'heading':
-          const HeadingTag = `h${block.level || 2}` as React.ElementType
-          const headingClasses = {
-            1: "text-4xl font-bold mt-12 mb-6",
-            2: "text-3xl font-bold mt-10 mb-5",
-            3: "text-2xl font-semibold mt-8 mb-4",
-            4: "text-xl font-semibold mt-6 mb-3",
-            5: "text-lg font-semibold mt-4 mb-2",
-            6: "text-base font-semibold mt-4 mb-2"
-          }
-          
-          return (
-            <motion.div
-              key={blockId}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <HeadingTag className={cn(
-                headingClasses[block.level as keyof typeof headingClasses] || headingClasses[2],
-                "text-gray-900 dark:text-white scroll-mt-24"
-              )}>
-                {block.children?.map((child: any) => child.text).join('')}
-              </HeadingTag>
-            </motion.div>
-          )
-
-        case 'code':
-          return (
-            <motion.div
-              key={blockId}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="my-8"
-            >
-              <div className="relative group">
-                <div className="flex items-center justify-between px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-t-lg border-b border-gray-200 dark:border-gray-700">
-                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    {block.language || 'code'}
-                  </span>
-                  <button
-                    onClick={() => handleCopyCode(block.code || '', blockId)}
-                    className="flex items-center gap-2 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
-                  >
-                    {copiedCode === blockId ? (
-                      <>
-                        <Check className="w-4 h-4" />
-                        Copied!
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-4 h-4" />
-                        Copy
-                      </>
-                    )}
-                  </button>
-                </div>
-                <div className="overflow-x-auto">
-                  <SyntaxHighlighter
-                    language={block.language || 'text'}
-                    style={theme === 'dark' ? oneDark : oneLight}
-                    customStyle={{
-                      margin: 0,
-                      borderTopLeftRadius: 0,
-                      borderTopRightRadius: 0,
-                      fontSize: '0.9rem',
-                      lineHeight: '1.5'
-                    }}
-                    showLineNumbers
-                  >
-                    {block.code || ''}
-                  </SyntaxHighlighter>
-                </div>
-              </div>
-            </motion.div>
-          )
-
-        case 'image':
-          return (
-            <motion.figure
-              key={blockId}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.1 }}
-              className="my-8"
-            >
-              <div className="relative overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
-                <Image
-                  src={block.src || ''}
-                  alt={block.alt || ''}
-                  width={800}
-                  height={400}
-                  className="w-full h-auto"
-                />
-              </div>
-              {block.alt && (
-                <figcaption className="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
-                  {block.alt}
-                </figcaption>
-              )}
-            </motion.figure>
-          )
-
-        case 'link':
-          return (
-            <motion.a
-              key={blockId}
-              href={block.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: index * 0.1 }}
-              className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline"
-            >
-              {block.title || block.url}
-              <ExternalLink className="w-3 h-3" />
-            </motion.a>
-          )
-
-        case 'list':
-        case 'ordered-list':
-          const ListTag = block.type === 'ordered-list' ? 'ol' : 'ul'
-          return (
-            <motion.div
-              key={blockId}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="my-6"
-            >
-              <ListTag className={cn(
-                "ml-6 space-y-2",
-                block.type === 'ordered-list' ? "list-decimal" : "list-disc"
-              )}>
-                {block.children?.map((item: any, itemIndex: number) => (
-                  <li key={itemIndex} className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                    {item.children?.map((child: any) => child.text).join('')}
-                  </li>
-                ))}
-              </ListTag>
-            </motion.div>
-          )
-
-        case 'blockquote':
-          return (
-            <motion.blockquote
-              key={blockId}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="my-8 pl-6 border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-r-lg"
-            >
-              <p className="text-gray-800 dark:text-gray-200 italic text-lg leading-relaxed">
-                {block.children?.map((child: any) => child.text).join('')}
-              </p>
-            </motion.blockquote>
-          )
-
-        case 'callout':
-          return (
-            <motion.div
-              key={blockId}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="my-8 p-6 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg"
-            >
-              <p className="text-yellow-800 dark:text-yellow-200 font-medium">
-                💡 {block.children?.map((child: any) => child.text).join('')}
-              </p>
-            </motion.div>
-          )
-
-        default:
-          return (
-            <motion.div
-              key={blockId}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: index * 0.1 }}
-              className="my-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg"
-            >
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
-                Unsupported content type: {block.type}
-              </p>
-              <pre className="mt-2 text-xs overflow-auto">
-                {JSON.stringify(block, null, 2)}
-              </pre>
-            </motion.div>
-          )
-      }
-    })
   }
 
   // Convert legacy content format to HTML if needed

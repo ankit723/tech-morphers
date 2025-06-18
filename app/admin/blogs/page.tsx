@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { FileText, Plus, Search, Filter, MoreHorizontal, Edit, Trash2, Eye, Calendar, User, ChevronLeft, ChevronRight, Loader2, Mail } from "lucide-react"
+import { FileText, Plus, Search, Edit, Trash2, Eye, Calendar, User, ChevronLeft, ChevronRight, Loader2, Mail } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"

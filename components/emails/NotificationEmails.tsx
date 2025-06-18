@@ -114,7 +114,7 @@ export const ContactUsEmail = ({
           <Heading style={heading}>Thank You for Your Inquiry!</Heading>
           <Text style={paragraph}>Dear {name},</Text>
           <Text style={paragraph}>
-            Thank you for your interest in our <strong>{selectedPackage}</strong> package. We've received your inquiry and are excited to help bring your project to life.
+            Thank you for your interest in our <strong>{selectedPackage}</strong> package. We&apos;ve received your inquiry and are excited to help bring your project to life.
           </Text>
           
           <Section style={infoBox}>
@@ -125,10 +125,10 @@ export const ContactUsEmail = ({
               <strong>1.</strong> Our team will review your requirements within 24 hours
             </Text>
             <Text style={{...paragraph, marginBottom: '8px'}}>
-              <strong>2.</strong> We'll schedule a discovery call to discuss your project in detail
+              <strong>2.</strong> We&apos;ll schedule a discovery call to discuss your project in detail
             </Text>
             <Text style={{...paragraph, marginBottom: '0'}}>
-              <strong>3.</strong> You'll receive a customized proposal tailored to your needs
+              <strong>3.</strong> You&apos;ll receive a customized proposal tailored to your needs
             </Text>
           </Section>
 
@@ -139,6 +139,11 @@ export const ContactUsEmail = ({
             Email: {email}<br/>
             Phone: {phone}<br/>
             Reference ID: {submissionId.substring(0, 8).toUpperCase()}
+          </Text>
+
+          <Text style={paragraph}>
+            <strong>Your Message:</strong><br/>
+            &quot;{message}&quot;
           </Text>
 
           <div style={{ textAlign: 'center' }}>
@@ -188,17 +193,17 @@ export const GetStartedEmail = ({
 }: GetStartedEmailProps) => (
   <Html>
     <Head />
-    <Preview>Welcome to Tech Morphers - Let's get started on your {service} project!</Preview>
+    <Preview>Welcome to Tech Morphers - Let&apos;s get started on your {service} project!</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={headerSection}>
           <Text style={headerText}>Tech Morphers</Text>
         </Section>
         <Section style={box}>
-          <Heading style={heading}>Welcome! Let's Get Started 🚀</Heading>
+          <Heading style={heading}>Welcome! Let&apos;s Get Started 🚀</Heading>
           <Text style={paragraph}>Dear {name},</Text>
           <Text style={paragraph}>
-            Thank you for choosing Tech Morphers for your <strong>{service}</strong> project. We're thrilled to help transform your vision into reality.
+            Thank you for choosing Tech Morphers for your <strong>{service}</strong> project. We&apos;re thrilled to help transform your vision into reality.
           </Text>
           
           <Section style={infoBox}>
@@ -221,7 +226,14 @@ export const GetStartedEmail = ({
             Service: {service}<br/>
             {budget && <>Budget Range: {budget}<br/></>}
             {companyName && <>Company: {companyName}<br/></>}
+            {email && <>Email: {email}<br/></>}
+            {phone && <>Phone: {phone}<br/></>}
             Reference ID: {submissionId.substring(0, 8).toUpperCase()}
+          </Text>
+
+          <Text style={paragraph}>
+            <strong>Your Project Vision:</strong><br/>
+            &quot;{projectVision}&quot;
           </Text>
 
           <div style={{ textAlign: 'center' }}>
@@ -231,7 +243,7 @@ export const GetStartedEmail = ({
           </div>
 
           <Text style={paragraph}>
-            We're excited to work with you and bring your project vision to life!
+            We&apos;re excited to work with you and bring your project vision to life!
           </Text>
 
           <Hr style={{ borderColor: '#e6ebf1', margin: '20px 0' }} />
@@ -267,7 +279,7 @@ export const TalkToUsEmail = ({
 }: TalkToUsEmailProps) => (
   <Html>
     <Head />
-    <Preview>Thank you for reaching out to Tech Morphers - We'll be in touch soon!</Preview>
+    <Preview>Thank you for reaching out to Tech Morphers - We&apos;ll be in touch soon!</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={headerSection}>
@@ -277,12 +289,12 @@ export const TalkToUsEmail = ({
           <Heading style={heading}>Thanks for Reaching Out!</Heading>
           <Text style={paragraph}>Dear {name},</Text>
           <Text style={paragraph}>
-            Thank you for contacting Tech Morphers. We've received your message and appreciate you taking the time to reach out to us.
+            Thank you for contacting Tech Morphers. We&apos;ve received your message and appreciate you taking the time to reach out to us.
           </Text>
           
           <Section style={infoBox}>
             <Heading as="h3" style={{ ...heading, fontSize: '18px', marginTop: '0', marginBottom: '10px' }}>
-              We'll get back to you soon
+              We&apos;ll get back to you soon
             </Heading>
             <Text style={{...paragraph, marginBottom: '8px'}}>
               <strong>Response time:</strong> Within 24 hours
@@ -297,7 +309,15 @@ export const TalkToUsEmail = ({
 
           <Text style={paragraph}>
             <strong>Your Message:</strong><br/>
-            "{message}"
+            &quot;{message}&quot;
+          </Text>
+
+          <Text style={paragraph}>
+            <strong>Your Contact Details:</strong><br/>
+            Email: {email}<br/>
+            {phone && <>Phone: {phone}<br/></>}
+            {companyName && <>Company: {companyName}<br/></>}
+            Reference ID: {submissionId.substring(0, 8).toUpperCase()}
           </Text>
 
           <div style={{ textAlign: 'center' }}>
@@ -344,7 +364,7 @@ export const NewsletterEmail = ({
         <Section style={box}>
           <Heading style={heading}>Welcome to Our Newsletter! 📬</Heading>
           <Text style={paragraph}>
-            Thank you for subscribing to the Tech Morphers newsletter! You're now part of our community.
+            Thank you for subscribing to the Tech Morphers newsletter! You&apos;re now part of our community.
           </Text>
           
           <Section style={infoBox}>
@@ -372,7 +392,13 @@ export const NewsletterEmail = ({
           </div>
 
           <Text style={paragraph}>
-            Have a project in mind? Don't hesitate to reach out - we'd love to help bring your ideas to life!
+            Have a project in mind? Don&apos;t hesitate to reach out - we&apos;d love to help bring your ideas to life!
+          </Text>
+
+          <Text style={{ ...paragraph, fontSize: '14px', color: '#8898aa' }}>
+            <strong>📧 Subscription Details:</strong><br/>
+            Email: {email}<br/>
+            Subscription ID: {subscriptionId.substring(0, 8).toUpperCase()}
           </Text>
 
           <Hr style={{ borderColor: '#e6ebf1', margin: '20px 0' }} />
@@ -409,7 +435,7 @@ export const ContactPageEmail = ({
 }: ContactPageEmailProps) => (
   <Html>
     <Head />
-    <Preview>Thank you for contacting Tech Morphers - We'll be in touch soon!</Preview>
+    <Preview>Thank you for contacting Tech Morphers - We&apos;ll be in touch soon!</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={headerSection}>
@@ -419,7 +445,7 @@ export const ContactPageEmail = ({
           <Heading style={heading}>Thank You for Contacting Us!</Heading>
           <Text style={paragraph}>Dear {name},</Text>
           <Text style={paragraph}>
-            Thank you for reaching out to Tech Morphers. We've received your message and will get back to you as soon as possible.
+            Thank you for reaching out to Tech Morphers. We&apos;ve received your message and will get back to you as soon as possible.
           </Text>
           
           <Section style={infoBox}>
@@ -436,6 +462,11 @@ export const ContactPageEmail = ({
             Email: {email}<br/>
             Phone: {phone}<br/>
             Reference ID: {submissionId.substring(0, 8).toUpperCase()}
+          </Text>
+
+          <Text style={paragraph}>
+            <strong>Your Message:</strong><br/>
+            &quot;{message}&quot;
           </Text>
 
           <div style={{ textAlign: 'center' }}>
@@ -549,7 +580,7 @@ export const BlogNotificationEmail = ({
           
           <Text style={{ ...paragraph, fontSize: '14px', color: '#8898aa' }}>
             <strong>💡 Why am I receiving this?</strong><br/>
-            You're receiving this because your email ({subscriberEmail}) is in our database from a previous interaction with Tech Morphers. We thought you'd be interested in our latest content.
+            You&apos;re receiving this because your email ({subscriberEmail}) is in our database from a previous interaction with Tech Morphers. We thought you&apos;d be interested in our latest content.
           </Text>
 
           <Text style={{ ...paragraph, fontSize: '14px', color: '#8898aa' }}>
@@ -557,7 +588,7 @@ export const BlogNotificationEmail = ({
               Unsubscribe from blog notifications
             </Link> | 
             <Link href="https://www.techmorphers.com/blog" style={{ color: '#8898aa', textDecoration: 'underline' }}>
-              {' '}View all blog posts
+              View all blog posts
             </Link>
           </Text>
 

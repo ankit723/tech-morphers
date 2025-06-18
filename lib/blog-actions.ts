@@ -6,6 +6,22 @@ import { revalidatePath } from "next/cache"
 import { generateSlug } from "@/lib/utils"
 import { sendBlogNotificationsToAllEmails } from "@/lib/blog-email-notifications"
 
+export type BlogCategory = {
+  id: string
+  name: string
+  slug: string
+  color: string | null
+  icon: string | null
+  description: string | null
+}
+
+export type BlogTag = {
+  id: string
+  name: string
+  slug: string
+  color: string | null
+}
+
 export type BlogPostWithRelations = {
   id: string
   title: string

@@ -10,13 +10,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { 
   Loader2, 
   Search, 
-  TrendingUp, 
   Clock, 
-  Eye, 
   BookOpen, 
-  Users, 
   Star,
-  ArrowRight,
   Calendar,
   Tag,
   Filter
@@ -63,12 +59,12 @@ export const metadata: Metadata = {
 }
 
 interface BlogPageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string
     category?: string
     tag?: string
     search?: string
-  }
+  }>
 }
 
 // Skeleton Components
@@ -191,7 +187,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 </div>
                 <div className="hidden md:flex items-center">
                   <Star className="w-6 h-6 text-yellow-500 mr-2" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Editor's Choice</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Editor&apos;s Choice</span>
                 </div>
               </div>
               

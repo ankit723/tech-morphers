@@ -1,6 +1,5 @@
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 export const PlaceholderIllustration = () => {
@@ -28,12 +27,11 @@ export const PlaceholderDemo = ({
   className?: string;
   children?: React.ReactNode;
 }) => {
-  const [loading, setLoading] = useState(false);
 
   return (
     <div className={cn("relative group", className)}>
       <AnimatePresence>
-        {loading && (
+        {(
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

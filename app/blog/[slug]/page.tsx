@@ -10,13 +10,14 @@ import { BlogStructuredData } from "@/components/blog/blog-structured-data"
 import { Loader2 } from "lucide-react"
 
 interface BlogPostPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const post = await getBlogPost(params.slug)
+  const resolvedParams = await params
+  const post = await getBlogPost(resolvedParams.slug)
   
   if (!post) {
     return {
@@ -72,7 +73,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = await getBlogPost(params.slug)
+  const resolvedParams = await params
+  const post = await getBlogPost(resolvedParams.slug)
   
   if (!post) {
     notFound()
