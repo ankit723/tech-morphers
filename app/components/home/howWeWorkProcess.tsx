@@ -1,3 +1,4 @@
+'use client'
 import Process from '@/components/ui/process'
 import React from 'react'
 import SmallStar from '@/public/icons/smallStar.svg'

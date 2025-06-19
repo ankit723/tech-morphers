@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 export default function AboutUsLayout({ children }: { children: React.ReactNode }) {
   return <>
     <Navbar />
-    <div className="container mx-auto relative my-20 bg-background">
+    <div className="relative my-20 bg-background">
       {children}
     </div>
     <div className="relative mt-[60rem]">

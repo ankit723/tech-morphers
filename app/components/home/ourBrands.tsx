@@ -13,120 +13,113 @@ const categories = ["All", "Finance", "Tech", "Creative", "Design", "Media", "He
 const companies = [
     {
         name: "Arthalab",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/arthalab.png",
+        logo: "/company-logo/arthalab.png",
         category: "Finance",
         description: "Financial analysis platform for businesses"
     },
     {
         name: "Mudslide Creations",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/mudslide.png",
+        logo: "/company-logo/mudslide.png",
         category: "Creative",
         description: "Creative agency for digital content"
     },
     {
         name: "Arbre Creations",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/arbre.jpeg",
+        logo: "/company-logo/arbre.jpeg",
         category: "Design",
         description: "Professional design services"
     },
     {
         name: "FinAnalyz Technologies",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/finanalyz.png",
+        logo: "/company-logo/finanalyz.png",
         category: "Finance",
         description: "AI-powered financial solutions"
     },
     {
         name: "Reflense",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/reflense.png",
+        logo: "/company-logo/reflense.png",
         category: "Tech",
         description: "Software development and consulting"
     },
     {
         name: "Creova",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/creova.svg",
+        logo: "/company-logo/creova.svg",
         category: "Creative",
         description: "Digital branding and marketing"
     },
     {
         name: "Pixel's and Grid's",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/pixel-and-grids.jpeg",
+        logo: "/company-logo/pixel-and-grids.jpeg",
         category: "Design",
         description: "UI/UX design for web and mobile"
     },
     {
         name: "Iotron",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/iotron.png",
+        logo: "/company-logo/iotron.png",
         category: "Tech",
         description: "IoT solutions for smart businesses"
     },
     {
         name: "Salzelift",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/salzelift.jpeg",
+        logo: "/company-logo/salzelift.jpeg",
         category: "Health",
         description: "Digital health and wellness platform"
     },
     {
         name: "Confetti Media",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/confetti.png",
+        logo: "/company-logo/confetti.png",
         category: "Media",
         description: "Social media management and strategy"
     },
     {
         name: 'Bharat Care',
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/bharat-care.png",
+        logo: "/company-logo/bharat-care.png",
         category: "Health",
         description: "Digital health and wellness platform"
     },
     {
         name: "Odisha Police",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/odisha-police.png",
+        logo: "/company-logo/odisha-police.png",
         category: "Government",
         description: "Digital transformation for law enforcement"
     },
     {
         name: "HS Webtech",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/hs-webtech.webp",
+        logo: "/company-logo/hs-webtech.webp",
         category: "Tech",
         description: "Web development and consulting"
     },
     {
         name: "Hireasy",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
-        category: "Tech",
-        description: "Web development and consulting"
-    },
-    {
-        name: "Dilute IT",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/hireasy.png",
+        logo: "/company-logo/hireasy.png",
         category: "Tech",
         description: "Web development and consulting"
     },
     {
         name: "Atomic House",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/atomichouse.jpeg",
+        logo: "/company-logo/atomichouse.jpeg",
         category: "Tech",
         description: "Web development and consulting"
     },
     {
         name: "Symbiont",
-        image: "/home/ourBrands.png",
-        logo: "/home/ourBrands.png",
+        image: "/company-logo/symbiont.jpeg",
+        logo: "/company-logo/symbiont.jpeg",
         category: "Tech",
         description: "Web development and consulting"
     },
@@ -270,60 +263,60 @@ const OurBrands = () => {
                 }}
             >
                 <div className="container mx-auto">
-                    <div ref={firstRowRef} className="flex gap-10 justify-center">
+                    <div ref={firstRowRef} className="flex gap-5 md:gap-20 justify-center">
                         <LetterHover 
                             text="WE" 
                             initialColor="blue-700" 
                             endColor="dark-adaptive" 
-                            className="text-[2.3rem] md:text-[8rem] font-semibold" 
+                            className="text-[2rem] md:text-[8rem] font-semibold" 
                         />
                         <LetterHover 
                             text="CREATE" 
                             initialColor="blue-700" 
                             endColor="dark-adaptive" 
-                            className="text-[2.3rem] md:text-[8rem] font-semibold" 
+                            className="text-[2rem] md:text-[8rem] font-semibold" 
                         />
                         <LetterHover 
                             text="BRANDS" 
                             initialColor="blue-700" 
                             endColor="dark-adaptive" 
-                            className="text-[2.3rem] md:text-[8rem] font-semibold" 
+                            className="text-[2rem] md:text-[8rem] font-semibold" 
                         />
                     </div>
 
-                    <div ref={secondRowRef} className="flex gap-10 md:gap-20 justify-center md:-mt-10">
+                    <div ref={secondRowRef} className="flex gap-5 md:gap-20 justify-center md:-mt-10">
                         <LetterHover 
                             text="THAT" 
                             initialColor="dark-adaptive" 
                             endColor="blue-700" 
-                            className="text-[2.4rem] md:text-[8rem] font-semibold" 
+                            className="text-[2rem] md:text-[8rem] font-semibold" 
                         />
                         <LetterHover 
                             text="PEOPLE" 
                             initialColor="dark-adaptive" 
                             endColor="blue-700" 
-                            className="text-[2.4rem] md:text-[8rem] font-semibold" 
+                            className="text-[2rem] md:text-[8rem] font-semibold" 
                         />
                         <LetterHover 
                             text="LOVE" 
                             initialColor="dark-adaptive" 
                             endColor="blue-700" 
-                            className="text-[2.4rem] md:text-[8rem] font-semibold" 
+                            className="text-[2rem] md:text-[8rem] font-semibold" 
                         />
                     </div>
 
-                    <div ref={thirdRowRef} className="flex gap-10 md:gap-20 justify-center  md:-mt-10">
+                    <div ref={thirdRowRef} className="flex gap-5 md:gap-20 justify-center  md:-mt-10">
                         <LetterHover 
                             text="TALKING" 
                             initialColor="dark-adaptive" 
                             endColor="blue-700" 
-                            className="text-[2.4rem] md:text-[8rem] font-semibold" 
+                            className="text-[2rem] md:text-[8rem] font-semibold" 
                         />
                         <LetterHover 
                             text="ABOUT" 
                             initialColor="dark-adaptive" 
                             endColor="blue-700" 
-                            className="text-[2.4rem] md:text-[8rem] font-semibold" 
+                            className="text-[2rem] md:text-[8rem] font-semibold" 
                         />
                     </div>
                 </div>
@@ -466,28 +459,27 @@ const OurBrands = () => {
                                                     <motion.div
                                                         key={company.name}
                                                         ref={addToRefs}
-                                                        className="w-28 h-14 sm:w-32 sm:h-16 md:w-40 md:h-16 bg-cream-100 rounded-full flex items-center justify-center px-4 cursor-pointer relative overflow-hidden"
-                                                        style={{ backgroundColor: "rgb(248, 240, 227)" }}
-                                                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                                                        whileInView={{ 
-                                                            opacity: 1, 
-                                                            scale: 1, 
-                                                            y: 0,
-                                                            transition: { 
-                                                                duration: 0.5,
-                                                                delay: index * 0.05 + (rowIndex * 0.15),
-                                                                type: "spring",
-                                                                stiffness: 120,
-                                                                damping: 18,
-                                                                bounce: 0.3
+                                                        className="w-32 h-16 sm:w-36 sm:h-18 md:w-44 md:h-20 bg-white/95 backdrop-blur-sm rounded-2xl flex items-center justify-center p-3 cursor-pointer relative overflow-hidden shadow-lg border border-white/20"
+                                                        variants={{
+                                                            hidden: { opacity: 0, scale: 0.85, y: 40 },
+                                                            show: { 
+                                                                opacity: 1, 
+                                                                scale: 1, 
+                                                                y: 0,
+                                                                transition: {
+                                                                    type: "spring",
+                                                                    stiffness: 110,
+                                                                    damping: 18,
+                                                                    duration: 0.5
+                                                                }
                                                             }
                                                         }}
-                                                        viewport={{ once: true, margin: "-40px" }}
                                                         onClick={() => setSelectedCompany(company)}
                                                         whileHover={{ 
                                                             scale: 1.06,
-                                                            boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
-                                                            y: -3
+                                                            boxShadow: "0 12px 25px rgba(0,0,0,0.15)",
+                                                            y: -4,
+                                                            backgroundColor: "rgba(255,255,255,1)"
                                                         }}
                                                         whileTap={{ scale: 0.96 }}
                                                         transition={{
@@ -498,13 +490,24 @@ const OurBrands = () => {
                                                     >
                                                         {/* Company logo */}
                                                         <motion.div
-                                                            className="relative h-10 w-full flex items-center justify-center text-center font-bold text-gray-800"
+                                                            className="relative h-10 w-full flex items-center justify-center text-center"
                                                             whileHover={{ 
-                                                                color: "#3B82F6",
+                                                                scale: 1.05,
                                                                 transition: { duration: 0.15 }
                                                             }}
                                                         >
-                                                            {company.name}
+                                                            <Image 
+                                                                src={company.logo} 
+                                                                alt={`${company.name} logo`} 
+                                                                width={['Creova', 'Salzelift', 'Hireasy', 'Atomic House', 'Symbiont'].includes(company.name) ? 180 : 150} 
+                                                                height={['Creova', 'Salzelift', 'Hireasy', 'Atomic House', 'Symbiont'].includes(company.name) ? 180 : 150}
+                                                                className="max-w-full max-h-full object-contain filter contrast-125 brightness-90"
+                                                                style={{ 
+                                                                    objectFit: 'contain',
+                                                                    maxWidth: '100%',
+                                                                    maxHeight: '100%'
+                                                                }}
+                                                            />
                                                         </motion.div>
                                                         
                                                         {/* Enhanced hover info with reveal animation */}
@@ -516,14 +519,15 @@ const OurBrands = () => {
                                                             }}
                                                             initial={false}
                                                         >
-                                                            <motion.span 
-                                                                className="text-white text-xs font-medium"
+                                                            <motion.div 
+                                                                className="text-white text-xs font-medium text-center px-2"
                                                                 initial={{ y: 8, opacity: 0 }}
                                                                 animate={ { y: 0, opacity: 1 } }
                                                                 transition={{ duration: 0.2, delay: 0.05 }}
                                                             >
-                                                                {company.category}
-                                                            </motion.span>
+                                                                <div className="font-semibold">{company.name}</div>
+                                                                <div className="text-blue-100 text-xs mt-1">{company.category}</div>
+                                                            </motion.div>
                                                         </motion.div>
                                                     </motion.div>
                                                 ))}
@@ -547,12 +551,11 @@ const OurBrands = () => {
                                         initial="hidden"
                                         animate="show"
                                     >
-                                        {filteredCompanies.map((company) => (
+                                        {filteredCompanies.map((company, index) => (
                                             <motion.div
                                                 key={company.name}
                                                 ref={addToRefs}
-                                                className="w-28 h-14 sm:w-32 sm:h-16 md:w-40 md:h-16 bg-cream-100 rounded-full flex items-center justify-center px-4 cursor-pointer relative overflow-hidden"
-                                                style={{ backgroundColor: "rgb(248, 240, 227)" }}
+                                                className="w-32 h-16 sm:w-36 sm:h-18 md:w-44 md:h-20 bg-white/95 backdrop-blur-sm rounded-2xl flex items-center justify-center p-3 cursor-pointer relative overflow-hidden shadow-lg border border-white/20"
                                                 variants={{
                                                     hidden: { opacity: 0, scale: 0.85, y: 40 },
                                                     show: { 
@@ -570,8 +573,9 @@ const OurBrands = () => {
                                                 onClick={() => setSelectedCompany(company)}
                                                 whileHover={{ 
                                                     scale: 1.06,
-                                                    boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
-                                                    y: -3
+                                                    boxShadow: "0 12px 25px rgba(0,0,0,0.15)",
+                                                    y: -4,
+                                                    backgroundColor: "rgba(255,255,255,1)"
                                                 }}
                                                 whileTap={{ scale: 0.96 }}
                                                 transition={{
@@ -582,13 +586,24 @@ const OurBrands = () => {
                                             >
                                                 {/* Company logo */}
                                                 <motion.div
-                                                    className="relative h-10 w-full flex items-center justify-center text-center font-medium text-gray-800"
+                                                    className="relative h-10 w-full flex items-center justify-center text-center"
                                                     whileHover={{ 
-                                                        color: "#3B82F6",
+                                                        scale: 1.05,
                                                         transition: { duration: 0.15 }
                                                     }}
                                                 >
-                                                    {company.name}
+                                                    <Image 
+                                                        src={company.logo} 
+                                                        alt={`${company.name} logo`} 
+                                                        width={['Creova', 'Salzelift', 'Hireasy', 'Atomic House', 'Symbiont'].includes(company.name) ? 180 : 150} 
+                                                        height={['Creova', 'Salzelift', 'Hireasy', 'Atomic House', 'Symbiont'].includes(company.name) ? 180 : 150}
+                                                        className="max-w-full max-h-full object-contain filter contrast-125 brightness-90"
+                                                        style={{ 
+                                                            objectFit: 'contain',
+                                                            maxWidth: '100%',
+                                                            maxHeight: '100%'
+                                                        }}
+                                                    />
                                                 </motion.div>
                                                 
                                                 {/* Enhanced hover info with reveal animation */}
@@ -600,14 +615,15 @@ const OurBrands = () => {
                                                     }}
                                                     initial={false}
                                                 >
-                                                    <motion.span 
-                                                        className="text-white text-xs font-medium"
+                                                    <motion.div 
+                                                        className="text-white text-xs font-medium text-center px-2"
                                                         initial={{ y: 8, opacity: 0 }}
                                                         animate={ { y: 0, opacity: 1 } }
                                                         transition={{ duration: 0.2, delay: 0.05 }}
                                                     >
-                                                        {company.category}
-                                                    </motion.span>
+                                                        <div className="font-semibold">{company.name}</div>
+                                                        <div className="text-blue-100 text-xs mt-1">{company.category}</div>
+                                                    </motion.div>
                                                 </motion.div>
                                             </motion.div>
                                         ))}
@@ -752,7 +768,7 @@ const OurBrands = () => {
                                 <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 backdrop-blur-sm bg-gradient-to-t from-blue-900/80 to-transparent">
                                     <div className="flex items-center gap-4 sm:gap-6">
                                         <motion.div 
-                                            className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-white/90 p-2 sm:p-3 shadow-lg border-2 border-white/70"
+                                            className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-white/95 p-4 sm:p-5 shadow-lg border-2 border-white/70 backdrop-blur-sm"
                                             initial={{ y: 20, opacity: 0 }}
                                             animate={{ y: 0, opacity: 1 }}
                                             transition={{ delay: 0.3, type: "spring" }}
@@ -761,9 +777,9 @@ const OurBrands = () => {
                                             <Image 
                                                 src={selectedCompany.logo} 
                                                 alt={`${selectedCompany.name} logo`} 
-                                                width={80} 
-                                                height={80}
-                                                className="w-full h-full object-cover rounded-lg"
+                                                width={['Creova', 'Salzelift', 'Hireasy', 'Atomic House', 'Symbiont'].includes(selectedCompany.name) ? 120 : 100} 
+                                                height={['Creova', 'Salzelift', 'Hireasy', 'Atomic House', 'Symbiont'].includes(selectedCompany.name) ? 120 : 100}
+                                                className="w-full h-full object-contain"
                                             />
                                         </motion.div>
                                         <div>
@@ -888,46 +904,44 @@ const OurBrands = () => {
                                 
                                 {/* Enhanced project gallery with hover effects */}
                                 <motion.div 
-                                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-10"
+                                    className="mb-10"
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.9 }}
                                 >
-                                    {[1, 2, 3].map((_, index) => (
+                                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Company Logo</h4>
+                                    <motion.div 
+                                        className="relative w-full h-40 bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden group flex items-center justify-center"
+                                        whileHover={{ 
+                                            scale: 1.02,
+                                            boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.2)"
+                                        }}
+                                    >
+                                        <Image 
+                                            src={selectedCompany.image} 
+                                            alt={`${selectedCompany.name} logo`}
+                                            width={['Creova', 'Salzelift', 'Hireasy', 'Atomic House', 'Symbiont'].includes(selectedCompany.name) ? 250 : 200}
+                                            height={['Creova', 'Salzelift', 'Hireasy', 'Atomic House', 'Symbiont'].includes(selectedCompany.name) ? 125 : 100}
+                                            className="max-w-[80%] max-h-[80%] object-contain transition-transform duration-700 group-hover:scale-110"
+                                        />
+                                        {/* Overlay on hover */}
                                         <motion.div 
-                                            key={index}
-                                            className="relative aspect-video bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden group"
-                                            whileHover={{ 
-                                                scale: 1.05,
-                                                boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.2)"
-                                            }}
+                                            className="absolute inset-0 bg-blue-600/0 flex items-center justify-center group-hover:bg-blue-600/10 transition-colors duration-300 backdrop-blur-[1px] opacity-0 group-hover:opacity-100"
+                                            initial={{ opacity: 0 }}
+                                            whileHover={{ opacity: 1 }}
                                         >
-                                            <Image 
-                                                src={selectedCompany.image} 
-                                                alt={`${selectedCompany.name} project image ${index + 1}`}
-                                                width={300}
-                                                height={200}
-                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                            />
-                                            {/* Overlay on hover */}
-                                            <motion.div 
-                                                className="absolute inset-0 bg-blue-600/0 flex items-center justify-center group-hover:bg-blue-600/30 transition-colors duration-300 backdrop-blur-[2px] opacity-0 group-hover:opacity-100"
-                                                initial={{ opacity: 0 }}
-                                                whileHover={{ opacity: 1 }}
+                                            <motion.div
+                                                whileHover={{ scale: 1.1 }}
+                                                className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-lg"
                                             >
-                                                <motion.div
-                                                    whileHover={{ scale: 1.1 }}
-                                                    className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center"
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600">
-                                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                                        <polyline points="15 3 21 3 21 9"></polyline>
-                                                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                                                    </svg>
-                                                </motion.div>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600">
+                                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                                </svg>
                                             </motion.div>
                                         </motion.div>
-                                    ))}
+                                    </motion.div>
                                 </motion.div>
                                 
                                 {/* Enhanced action buttons */}

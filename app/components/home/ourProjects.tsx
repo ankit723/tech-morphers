@@ -1,3 +1,4 @@
+'use client'
 import Project from '@/components/project'
 import 'swiper/css';
 import 'swiper/css/autoplay';

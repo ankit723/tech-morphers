@@ -85,7 +85,7 @@ const Services = () => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: "top 80%",
+        start: "top 30%",
         end: "bottom 20%",
         toggleActions: "play none none reverse"
       }
@@ -337,7 +337,7 @@ const Services = () => {
   return (
     <section
       ref={sectionRef}
-      className="py-20 md:py-28 overflow-hidden -mt-20 pb-0"
+      className="py-20 md:py-28 overflow-hidden mt-0 md:-mt-14 pb-0"
     >
       <div className="container mx-auto px-4 md:px-8">
         <div className="text-center mb-20 relative">

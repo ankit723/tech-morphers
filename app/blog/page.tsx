@@ -15,7 +15,26 @@ import {
   Star,
   Calendar,
   Tag,
-  Filter
+  Filter,
+  TrendingUp,
+  Users,
+  Eye,
+  Heart,
+  ArrowRight,
+  Bookmark,
+  Share2,
+  MessageCircle,
+  Award,
+  Zap,
+  Globe,
+  PenTool,
+  Code,
+  Lightbulb,
+  Target,
+  Rss,
+  Bell,
+  ChevronRight,
+  Shield
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -101,99 +120,181 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     const recentPosts = posts.slice(0, 5)
     const popularTags = tags.slice(0, 10)
 
+    const blogStats = [
+      { number: totalPosts.toString(), label: "Published Articles", icon: <BookOpen className="w-6 h-6" />, color: "text-indigo-600" },
+      { number: categories.length.toString(), label: "Categories", icon: <Filter className="w-6 h-6" />, color: "text-violet-600" },
+      { number: tags.length.toString(), label: "Topics Covered", icon: <Tag className="w-6 h-6" />, color: "text-purple-600" },
+      { number: "50K+", label: "Monthly Readers", icon: <Users className="w-6 h-6" />, color: "text-blue-600" }
+    ]
+
+    const contentTypes = [
+      {
+        title: "Tutorials & Guides",
+        description: "Step-by-step tutorials and comprehensive guides",
+        icon: <PenTool className="w-8 h-8 text-indigo-600" />,
+        count: "45+",
+        color: "indigo"
+      },
+      {
+        title: "Industry Insights",
+        description: "Latest trends and analysis in tech industry",
+        icon: <TrendingUp className="w-8 h-8 text-violet-600" />,
+        count: "30+",
+        color: "violet"
+      },
+      {
+        title: "Code Examples",
+        description: "Practical code snippets and best practices",
+        icon: <Code className="w-8 h-8 text-purple-600" />,
+        count: "60+",
+        color: "purple"
+      },
+      {
+        title: "Case Studies",
+        description: "Real-world project breakdowns and lessons",
+        icon: <Target className="w-8 h-8 text-blue-600" />,
+        count: "20+",
+        color: "blue"
+      }
+    ]
+
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-violet-50 to-purple-50 dark:from-[#0F0A1B] dark:via-[#1A0F2A] dark:to-[#0F0A1B]">
         {/* Enhanced Hero Section */}
-        <section className="relative py-24 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5" />
+        <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+          {/* Background Effects */}
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-100/50 via-violet-100/50 to-purple-100/50 dark:from-indigo-900/20 dark:via-violet-900/20 dark:to-purple-900/20"></div>
+          <div className="absolute top-20 left-20 w-32 h-32 bg-indigo-300/30 rounded-full blur-2xl"></div>
+          <div className="absolute bottom-20 right-20 w-40 h-40 bg-violet-300/30 rounded-full blur-2xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-300/20 rounded-full blur-3xl"></div>
           
-          {/* Floating Elements */}
-          <div className="absolute top-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
-          
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="text-center max-w-5xl mx-auto">
-              <div className="mb-8">
-                <TextGenerateEffect
-                  words="Insights, Tutorials & Industry News"
-                  className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
-                />
-                <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto">
-                  Stay ahead of the curve with our expert insights, comprehensive tutorials, 
-                  and the latest industry trends in technology and software development.
-                </p>
+          <div className="max-w-7xl mx-auto relative">
+            <div className="text-center animate-fade-in-up">
+              <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-medium mb-8 shadow-lg animate-scale-in">
+                <Globe className="w-4 h-4 mr-2" />
+                Knowledge Hub for Developers & Tech Enthusiasts
               </div>
+              
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-8 leading-tight">
+                Tech Insights &
+                <span className="block bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 bg-clip-text text-transparent">
+                  Developer Stories
+                </span>
+              </h1>
+              
+              <p className="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
+                Dive deep into the world of technology with expert insights, practical tutorials, 
+                and real-world case studies from our development team and industry experts.
+              </p>
 
               {/* Enhanced Search Bar */}
-              <div className="max-w-2xl mx-auto mb-12">
+              <div className="max-w-2xl mx-auto mb-12 animate-fade-in-up animation-delay-300">
                 <div className="relative">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Search className="h-6 w-6 text-gray-400" />
+                  </div>
                   <Input
                     type="text"
-                    placeholder="Search articles, tutorials, and insights..."
-                    className="pl-12 pr-4 py-4 text-lg border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-blue-500 dark:focus:border-blue-400 shadow-lg"
+                    placeholder="Search articles, tutorials, technologies, or topics..."
+                    className="w-full pl-12 pr-4 py-4 text-lg border-2 border-indigo-200 dark:border-indigo-800 rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-lg"
                     defaultValue={searchQuery}
                   />
-                  <Button className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-lg">
+                  <Button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 rounded-xl">
                     <Search className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
-              
-              {/* Enhanced Stats - Using only real data */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-                <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-0 shadow-lg">
-                  <CardContent className="p-6 text-center">
-                    <BookOpen className="w-8 h-8 text-blue-500 mx-auto mb-2" />
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white">{totalPosts}</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">Articles</div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-0 shadow-lg">
-                  <CardContent className="p-6 text-center">
-                    <Filter className="w-8 h-8 text-green-500 mx-auto mb-2" />
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white">{categories.length}</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">Categories</div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-0 shadow-lg">
-                  <CardContent className="p-6 text-center">
-                    <Tag className="w-8 h-8 text-purple-500 mx-auto mb-2" />
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white">{tags.length}</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">Tags</div>
-                  </CardContent>
-                </Card>
+
+              {/* Blog Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+                {blogStats.map((stat, index) => (
+                  <div
+                    key={stat.label}
+                    className="text-center bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-6 border border-indigo-200/50 dark:border-indigo-800/50 hover:shadow-lg transition-shadow duration-300 animate-fade-in-up"
+                    style={{ animationDelay: `${400 + index * 100}ms` }}
+                  >
+                    <div className={`flex justify-center mb-3 ${stat.color}`}>
+                      {stat.icon}
+                    </div>
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+                      {stat.number}
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Content Types Section */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16 animate-fade-in-up">
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
+                What You'll Find Here
+              </h2>
+              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                Comprehensive content designed to help developers and tech enthusiasts grow
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {contentTypes.map((type, index) => (
+                <div
+                  key={type.title}
+                  className="text-center bg-white dark:bg-gray-800 rounded-3xl p-8 border border-indigo-200 dark:border-indigo-800 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group animate-fade-in-up"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="mb-6 p-4 bg-gradient-to-br from-indigo-100 to-violet-100 dark:from-indigo-900/30 dark:to-violet-900/30 rounded-2xl w-fit mx-auto group-hover:scale-110 transition-transform duration-300">
+                    {type.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                    {type.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4">
+                    {type.description}
+                  </p>
+                  <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                    {type.count}
+                  </div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Articles
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Featured Posts */}
         {featuredPosts.length > 0 && !categorySlug && !tagSlug && !searchQuery && page === 1 && (
-          <section className="py-20 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-900/50">
-            <div className="container mx-auto px-4">
-              <div className="flex items-center justify-between mb-12">
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex items-center justify-between mb-16 animate-fade-in-up">
                 <div>
-                  <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                  <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
                     Featured Articles
                   </h2>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-xl text-gray-600 dark:text-gray-300">
                     Hand-picked stories from our editorial team
                   </p>
                 </div>
-                <div className="hidden md:flex items-center">
-                  <Star className="w-6 h-6 text-yellow-500 mr-2" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Editor&apos;s Choice</span>
+                <div className="hidden md:flex items-center bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-3 rounded-full shadow-lg">
+                  <Award className="w-6 h-6 mr-2" />
+                  <span className="font-semibold">Editor's Choice</span>
                 </div>
               </div>
               
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {featuredPosts.map((post, index) => (
-                  <div key={post.id}>
+                  <div
+                    key={post.id}
+                    className="animate-fade-in-up"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
                     <BlogCard
                       post={post}
                       variant={index === 0 ? "featured" : "default"}
@@ -205,12 +306,90 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           </section>
         )}
 
-        {/* Main Content with Sidebar Layout */}
-        <section className="py-20 bg-gray-50 dark:bg-gray-800/30">
-          <div className="container mx-auto px-4">
+        {/* Categories Showcase */}
+        {categories.length > 0 && !categorySlug && !tagSlug && !searchQuery && page === 1 && (
+          <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-16 animate-fade-in-up">
+                <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
+                  Explore by Category
+                </h2>
+                <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                  Discover content tailored to your interests and expertise level
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {categories.slice(0, 6).map((category, index) => (
+                  <div
+                    key={category.id}
+                    className="animate-fade-in-up hover:scale-105 transition-transform"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <Link
+                      href={`/blog?category=${category.slug}`}
+                      className="block bg-white dark:bg-gray-800 rounded-2xl p-6 border border-indigo-200 dark:border-indigo-800 hover:shadow-xl transition-all duration-300 group"
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center">
+                          {category.icon && (
+                            <span className="text-2xl mr-3">{category.icon}</span>
+                          )}
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                            {category.name}
+                          </h3>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transform group-hover:translate-x-1 transition-all duration-300" />
+                      </div>
+                      {category.description && (
+                        <p className="text-gray-600 dark:text-gray-300 text-sm mb-3">
+                          {category.description}
+                        </p>
+                      )}
+                      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                        <BookOpen className="w-4 h-4 mr-1" />
+                        <span>{category._count?.posts || 0} articles</span>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+
+              {categories.length > 6 && (
+                <div className="text-center mt-12">
+                  <Button
+                    asChild
+                    className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    <Link href="/blog/categories">
+                      View All Categories
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </Link>
+                  </Button>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Main Content with Enhanced Sidebar Layout */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
               {/* Main Content */}
               <div className="lg:col-span-3">
+                <div className="mb-8">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                    {searchQuery ? `Search Results for "${searchQuery}"` :
+                     categorySlug ? `Category: ${categories.find(c => c.slug === categorySlug)?.name || categorySlug}` :
+                     tagSlug ? `Tag: ${tags.find(t => t.slug === tagSlug)?.name || tagSlug}` :
+                     'Latest Articles'}
+                  </h2>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    {totalPosts} {totalPosts === 1 ? 'article' : 'articles'} found
+                  </p>
+                </div>
+
                 <Suspense fallback={
                   <div className="space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
@@ -236,15 +415,40 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 </Suspense>
               </div>
 
-              {/* Sidebar */}
+              {/* Enhanced Sidebar */}
               <div className="lg:col-span-1 space-y-8">
+                {/* Newsletter Signup */}
+                <Card className="bg-gradient-to-br from-indigo-600 to-violet-600 text-white border-0 shadow-xl">
+                  <CardContent className="p-6">
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Bell className="w-6 h-6" />
+                      </div>
+                      <h3 className="text-lg font-bold mb-2">Stay Updated</h3>
+                      <p className="text-indigo-100 text-sm mb-4">
+                        Get the latest articles delivered to your inbox
+                      </p>
+                      <div className="space-y-3">
+                        <Input
+                          type="email"
+                          placeholder="Enter your email"
+                          className="bg-white/20 border-white/30 text-white placeholder:text-white/70 focus:bg-white/30"
+                        />
+                        <Button className="w-full bg-white text-indigo-600 hover:bg-gray-100 font-semibold">
+                          Subscribe
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
                 {/* Popular Tags */}
                 {popularTags.length > 0 && (
-                  <Card className="overflow-hidden">
+                  <Card className="overflow-hidden border-indigo-200 dark:border-indigo-800">
                     <CardHeader>
                       <CardTitle className="flex items-center">
-                        <Tag className="w-5 h-5 mr-2 text-purple-600" />
-                        Popular Tags
+                        <Tag className="w-5 h-5 mr-2 text-indigo-600" />
+                        Trending Topics
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -255,8 +459,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                             href={`/blog?tag=${tag.slug}`}
                             className="inline-block"
                           >
-                            <span className="inline-block bg-purple-100 text-purple-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full">
-                              {tag.name}
+                            <span className="inline-block bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-300 text-sm font-medium px-3 py-1 rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-900/50 transition-colors">
+                              #{tag.name}
                             </span>
                           </Link>
                         ))}
@@ -267,25 +471,30 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
                 {/* Categories */}
                 {categories.length > 0 && (
-                  <Card className="overflow-hidden">
+                  <Card className="overflow-hidden border-indigo-200 dark:border-indigo-800">
                     <CardHeader>
                       <CardTitle className="flex items-center">
-                        <Filter className="w-5 h-5 mr-2 text-blue-600" />
+                        <Filter className="w-5 h-5 mr-2 text-violet-600" />
                         Categories
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-3">
-                        {categories.map((category) => (
+                      <div className="space-y-2">
+                        {categories.slice(0, 8).map((category) => (
                           <Link
                             key={category.id}
                             href={`/blog?category=${category.slug}`}
-                            className="flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group"
+                            className="flex items-center justify-between p-3 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors group"
                           >
                             <div className="flex items-center">
-                              {category.icon && <span className="mr-2">{category.icon}</span>}
-                              <span className="font-medium group-hover:text-blue-600">{category.name}</span>
+                              {category.icon && <span className="mr-2 text-lg">{category.icon}</span>}
+                              <span className="font-medium group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                                {category.name}
+                              </span>
                             </div>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                              {category._count?.posts || 0}
+                            </span>
                           </Link>
                         ))}
                       </div>
@@ -295,10 +504,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
                 {/* Recent Posts */}
                 {recentPosts.length > 0 && (
-                  <Card className="overflow-hidden">
+                  <Card className="overflow-hidden border-indigo-200 dark:border-indigo-800">
                     <CardHeader>
                       <CardTitle className="flex items-center">
-                        <Calendar className="w-5 h-5 mr-2 text-green-600" />
+                        <Clock className="w-5 h-5 mr-2 text-purple-600" />
                         Recent Posts
                       </CardTitle>
                     </CardHeader>
@@ -323,12 +532,18 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                                 </div>
                               )}
                               <div className="flex-1 min-w-0">
-                                <h4 className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors line-clamp-2">
+                                <h4 className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
                                   {post.title}
                                 </h4>
                                 <div className="flex items-center mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                  <Calendar className="w-3 h-3 mr-1" />
+                                  {new Intl.DateTimeFormat("en-US", {
+                                    month: "short",
+                                    day: "numeric"
+                                  }).format(new Date(post.publishedAt!))}
+                                  <span className="mx-2">•</span>
                                   <Clock className="w-3 h-3 mr-1" />
-                                  {post.readTime} min read
+                                  {post.readTime} min
                                 </div>
                               </div>
                             </div>
@@ -338,27 +553,56 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                     </CardContent>
                   </Card>
                 )}
+
+                {/* RSS Feed */}
+                <Card className="overflow-hidden border-indigo-200 dark:border-indigo-800">
+                  <CardContent className="p-6 text-center">
+                    <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Rss className="w-6 h-6 text-orange-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                      RSS Feed
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                      Subscribe to our RSS feed for updates
+                    </p>
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className="border-orange-200 text-orange-600 hover:bg-orange-50"
+                    >
+                      <Link href="/blog/rss.xml">
+                        Subscribe to RSS
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </div>
         </section>
 
         {/* Enhanced Newsletter CTA */}
-        <section className="py-20 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 relative overflow-hidden">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 relative overflow-hidden">
           <div className="absolute inset-0 bg-black/20" />
           <div className="absolute top-0 left-0 w-full h-full">
             <div className="absolute top-20 left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
             <div className="absolute bottom-20 right-20 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
           </div>
           
-          <div className="container mx-auto px-4 text-center relative z-10">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                Never Miss an Update
+          <div className="max-w-4xl mx-auto text-center relative z-10">
+            <div className="animate-fade-in-up">
+              <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Lightbulb className="w-10 h-10 text-white" />
+              </div>
+              
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Never Miss an Insight
               </h2>
-              <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                Get the latest insights, tutorials, and industry news delivered straight to your inbox. 
-                Join our community of developers and tech enthusiasts.
+              <p className="text-xl text-indigo-100 mb-12 max-w-3xl mx-auto leading-relaxed">
+                Join 10,000+ developers and tech enthusiasts who get our latest articles, 
+                tutorials, and industry insights delivered straight to their inbox every week.
               </p>
               
               <div className="max-w-md mx-auto">
@@ -367,18 +611,34 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                     <div className="flex flex-col sm:flex-row gap-4">
                       <Input
                         type="email"
-                        placeholder="Enter your email"
+                        placeholder="Enter your email address"
                         className="flex-1 bg-white/20 border-white/30 text-white placeholder:text-white/70 focus:bg-white/30"
                       />
-                      <Button className="bg-white text-blue-600 hover:bg-gray-100 font-semibold whitespace-nowrap">
+                      <Button className="bg-white text-indigo-600 hover:bg-gray-100 font-semibold whitespace-nowrap px-8">
                         Subscribe Now
                       </Button>
                     </div>
-                    <p className="text-xs text-blue-100 mt-3 text-center">
-                      No spam, unsubscribe at any time.
-                    </p>
+                    <div className="flex items-center justify-center mt-4 text-xs text-indigo-100">
+                      <Shield className="w-4 h-4 mr-1" />
+                      <span>No spam, unsubscribe anytime. 100% free.</span>
+                    </div>
                   </CardContent>
                 </Card>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+                <div className="flex items-center text-white/80 hover:scale-105 transition-transform">
+                  <Users className="w-5 h-5 mr-2" />
+                  <span>10,000+ subscribers</span>
+                </div>
+                <div className="flex items-center text-white/80 hover:scale-105 transition-transform">
+                  <Star className="w-5 h-5 mr-2" />
+                  <span>Weekly insights</span>
+                </div>
+                <div className="flex items-center text-white/80 hover:scale-105 transition-transform">
+                  <Zap className="w-5 h-5 mr-2" />
+                  <span>Exclusive content</span>
+                </div>
               </div>
             </div>
           </div>

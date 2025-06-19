@@ -1,6 +1,7 @@
-1: Create Blog Card component
-2: Create Blog Page
-3: Create Blog Creator
-4: Fix the home page, about page, contact page designs bugs
-5: Fix the unlinked links in both mobile and desktop navbar
-6: adding blog page detail in home page and footer
+4: Create Book a Call
+5: after estimate complete show book a discovervy call as next step
+8: send estimated pdf + msg to whatsapp
+9: a cron job node server to send continous followups depending age of user creation
+10: i also get whatsapp notification as someone submit form
+11: minimal admin panel secure
+

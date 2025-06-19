@@ -1,3 +1,4 @@
+'use client'
 import TestimonialsSlider from '@/components/testimonial-slider'
 import { Button } from '@/components/ui/button'
 import React, { useRef } from 'react'

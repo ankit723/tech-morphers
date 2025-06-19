@@ -1,3 +1,4 @@
+'use client'
 import dynamic from 'next/dynamic'
 import React, { useEffect, useState } from 'react'
 
@@ -25,7 +26,7 @@ const Process = ({id, title, description, lottie: lottiePath}: {id: string, titl
   }, [lottiePath]);
 
   return (
-    <div className='flex flex-col justify-center bg-[#2A2A2A] rounded-3xl p-10 gap-5 m-3 max-w-[35rem]'>
+    <div className='flex flex-col justify-center bg-[#2A2A2A] rounded-3xl p-10 gap-5 m-3 max-w-[35rem] w-full'>
         <h1 className='text-4xl font-bold text-gray-200'>{id}</h1>
         {animationData ? (
           <Lottie animationData={animationData} loop={true} className='w-full h-[10rem] object-cover rounded-3xl' />
@@ -35,8 +36,8 @@ const Process = ({id, title, description, lottie: lottiePath}: {id: string, titl
             <p className='text-gray-400'>Loading animation...</p>
           </div>
         )}
-        <h2 className='text-2xl font-bold text-gray-200'>{title}</h2>
-        <p className='text-sm text-gray-200 w-[20rem]'>{description}</p>
+        <h2 className='text-2xl font-bold text-gray-200 break-words'>{title}</h2>
+        <p className='text-sm text-gray-200 w-full break-words leading-relaxed'>{description}</p>
     </div>
   )
 }

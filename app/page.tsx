@@ -1,4 +1,3 @@
-'use client'
 import Navbar from './components/home/navbar'
 import Hero from './components/home/hero'
 import Services from './components/home/services'
@@ -11,8 +10,9 @@ import Testimonials from './components/home/testimonials'
 import Footer from './components/home/footer'
 import FAQWithCTA from './components/home/faq'
 import OurProjects from './components/home/ourProjects'
+import BlogSection from './components/home/blogSection'
 
-const Page = () => {
+const Page = async () => {
   return (
     <div className='overflow-x-hidden'>
       <Navbar />
@@ -24,6 +24,7 @@ const Page = () => {
       <EstimatorCta />
       <Services />
       <OurProjects />
+      <BlogSection />
       <FAQWithCTA />
       <Testimonials />
       <div className="relative mt-[65rem]">

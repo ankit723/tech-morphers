@@ -231,13 +231,13 @@ const Numbers = () => {
                         text="TRUST" 
                         initialColor="dark-adaptive" 
                         endColor="blue-700" 
-                        className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold" 
+                        className="text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-bold" 
                     />
                     <LetterHover 
                         text="NUMBERS" 
                         initialColor="blue-700" 
                         endColor="dark-adaptive" 
-                        className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold" 
+                        className="text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-bold" 
                     />
                 </div>
                 <div ref={secondRowRef} className="flex gap-5 md:gap-10 justify-center xl:justify-end mt-3 md:-mt-3">
@@ -245,13 +245,13 @@ const Numbers = () => {
                         text="NOT" 
                         initialColor="blue-700" 
                         endColor="dark-adaptive" 
-                        className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold" 
+                        className="text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-bold" 
                     />
                     <LetterHover 
                         text="WORDS" 
                         initialColor="dark-adaptive" 
                         endColor="blue-700" 
-                        className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold" 
+                        className="text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-bold" 
                     />
                 </div>
             </motion.div>
