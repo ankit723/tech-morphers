@@ -1,33 +1,27 @@
-import type { Metadata } from 'next'
-import Navbar from '@/app/components/home/navbar'
-import Footer from '@/app/components/home/footer'
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Mobile App Development Services | Tech Morphers - iOS, Android & Cross-Platform Apps',
-  description: 'Professional mobile app development services by Tech Morphers. Native iOS and Android apps, cross-platform solutions, React Native, Flutter development. Build high-performance, user-friendly mobile applications that engage users and drive business growth.',
+  title: "Professional Development Services | Tech Morphers - Web, Mobile, Design & Game Development",
+  description: "Comprehensive technology services from Tech Morphers. Expert web development, mobile apps, UI/UX design, and game development solutions. Transform your business with cutting-edge technology and innovative digital solutions tailored to your needs.",
   keywords: [
+    "tech services",
+    "web development services",
     "mobile app development",
-    "iOS app development",
-    "Android app development",
-    "cross-platform mobile apps",
-    "React Native development",
-    "Flutter development",
-    "native mobile apps",
-    "mobile app design",
-    "app store optimization",
-    "mobile app consulting",
-    "custom mobile apps",
-    "enterprise mobile solutions",
-    "mobile app development company",
-    "smartphone app development",
-    "mobile application services",
-    "app development services"
+    "UI UX design services",
+    "game development",
+    "software development company",
+    "digital transformation",
+    "custom software solutions",
+    "technology consulting",
+    "full-stack development",
+    "enterprise solutions",
+    "startup development services"
   ],
   authors: [{ name: "Tech Morphers" }],
   creator: "Tech Morphers",
   publisher: "Tech Morphers",
-  category: "Mobile App Development",
-  classification: "Technology Services",
+  category: "Technology Services",
+  classification: "Business Services",
   robots: {
     index: true,
     follow: true,
@@ -40,23 +34,23 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://techmorphers.com/services/mobile",
+    canonical: "https://techmorphers.com/services",
     languages: {
-      "en-US": "https://techmorphers.com/services/mobile",
-      "x-default": "https://techmorphers.com/services/mobile",
+      "en-US": "https://techmorphers.com/services",
+      "x-default": "https://techmorphers.com/services",
     },
   },
   openGraph: {
-    title: 'Mobile App Development Services | Tech Morphers - Native & Cross-Platform Solutions',
-    description: 'Expert mobile app development for iOS and Android. Native apps, cross-platform solutions with React Native & Flutter. Build engaging, high-performance mobile applications that users love.',
-    url: "https://techmorphers.com/services/mobile",
+    title: "Professional Development Services | Tech Morphers - Complete Digital Solutions",
+    description: "From web development to mobile apps, UI/UX design to game development - Tech Morphers provides comprehensive technology services to transform your business ideas into reality.",
+    url: "https://techmorphers.com/services",
     siteName: "Tech Morphers",
     images: [
       {
-        url: "https://techmorphers.com/images/mobile-development-og.png",
+        url: "https://techmorphers.com/images/services-og.png",
         width: 1200,
         height: 630,
-        alt: "Tech Morphers Mobile App Development Services - iOS, Android & Cross-Platform",
+        alt: "Tech Morphers Professional Development Services - Web, Mobile, Design & Games",
         type: "image/png",
       },
       {
@@ -74,17 +68,17 @@ export const metadata: Metadata = {
     phoneNumbers: ["+1-555-123-4567"],
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     site: "@techmorphers",
     creator: "@techmorphers",
-    title: 'Mobile App Development Services | Tech Morphers',
-    description: 'Professional mobile app development for iOS & Android. Native and cross-platform solutions with React Native & Flutter. High-performance apps that engage users.',
+    title: "Professional Development Services | Tech Morphers",
+    description: "Comprehensive technology services: web development, mobile apps, UI/UX design & game development. Transform your business with innovative digital solutions.",
     images: [
       {
-        url: "https://techmorphers.com/images/mobile-development-twitter.png",
+        url: "https://techmorphers.com/images/services-twitter.png",
         width: 1200,
         height: 630,
-        alt: "Tech Morphers Mobile App Development Services",
+        alt: "Tech Morphers Professional Development Services",
       }
     ],
   },
@@ -130,8 +124,8 @@ export const metadata: Metadata = {
     "color-scheme": "light dark",
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "default",
-    "apple-mobile-web-app-title": "Tech Morphers Mobile",
-    "application-name": "Tech Morphers Mobile Development",
+    "apple-mobile-web-app-title": "Tech Morphers Services",
+    "application-name": "Tech Morphers Services",
     "mobile-web-app-capable": "yes",
     "msapplication-TileColor": "#2a9df4",
     "msapplication-TileImage": "/mstile-144x144.png",
@@ -154,14 +148,10 @@ export const metadata: Metadata = {
   },
 }
 
-export default function MobileLayout({ children }: { children: React.ReactNode }) {
+export default function ServicesLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0D0D1F]">
-      <Navbar />
+    <div>
       {children}
-      <div className="relative mt-[50rem]">
-        <Footer />
-      </div>
     </div>
   )
-} 
+}
