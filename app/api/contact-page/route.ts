@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { sendContactPageNotification } from '@/lib/emailNotifications';
+import { sendFormLeadNotificationToAdmin } from '@/lib/whatsapp';
 
 export async function POST(request: NextRequest) {
   try {
@@ -31,6 +32,28 @@ export async function POST(request: NextRequest) {
     } catch (emailError) {
       console.error('Error sending email notification:', emailError);
       // Don't fail the API call if email fails
+    }
+
+    // Send WhatsApp notification to admin
+    try {
+      const whatsappResult = await sendFormLeadNotificationToAdmin({
+        name,
+        email,
+        phone,
+        companyName: undefined,
+        message,
+        formType: 'Contact Page Form',
+        submissionId: contactPageSubmission.id,
+      });
+
+      if (whatsappResult.success) {
+        console.log('WhatsApp notification sent to admin for contact page submission');
+      } else {
+        console.error('Failed to send WhatsApp notification to admin:', whatsappResult.error);
+      }
+    } catch (whatsappError) {
+      console.error('Error sending WhatsApp notification to admin:', whatsappError);
+      // Don't fail the API call if WhatsApp fails
     }
 
     return NextResponse.json({ 

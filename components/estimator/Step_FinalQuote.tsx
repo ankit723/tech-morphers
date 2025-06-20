@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { MailCheck, RefreshCw, MessageCircle, Info } from 'lucide-react';
 import Confetti from 'react-confetti';
+import { useRouter } from 'next/navigation';
 
 interface StepFinalQuoteProps {
   formData: {
@@ -19,6 +20,7 @@ interface StepFinalQuoteProps {
 const StepFinalQuote: React.FC<StepFinalQuoteProps> = ({ formData, onStartOver }) => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const router = useRouter();
   // const [isDownloading, setIsDownloading] = useState(false);
   // const [downloadError, setDownloadError] = useState<string | null>(null);
 
@@ -126,14 +128,26 @@ const StepFinalQuote: React.FC<StepFinalQuoteProps> = ({ formData, onStartOver }
           <RefreshCw className="mr-2 h-5 w-5" /> Start Another Estimate
         </Button>
         
-        <Button 
-          size="lg" 
-          className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground"
-          // onClick={() => { /* Potentially link to contact page or open mail client */ }}
+        <Button
+  size="lg"
+  className="relative w-full md:w-auto px-6 py-3 rounded-lg font-semibold z-10
+             text-white bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600
+             shadow-[0_0_20px_rgba(147,51,234,0.7),0_0_40px_rgba(59,130,246,0.6)]
+             hover:shadow-[0_0_30px_10px_rgba(139,92,246,0.9),0_0_60px_20px_rgba(236,72,153,0.8)]
+             hover:scale-105 transition-all duration-300 ease-in-out
+             before:content-[''] before:absolute before:inset-0 before:rounded-lg
+             before:bg-gradient-to-r before:from-blue-500 before:via-purple-500 before:to-pink-500
+             before:blur-[25px] before:opacity-70 before:animate-glow-pulse before:-z-10
+             dark:before:opacity-100 dark:before:blur-[30px]"
+  onClick={() => router.push("/schedule-call")}
+>
+  <MessageCircle className="mr-2 h-5 w-5 z-10 relative" />
+  <span className="z-10 relative">Get a Free Discovery Call Now!</span>
+</Button>
 
-        >
-          <MessageCircle className="mr-2 h-5 w-5" /> Contact Support
-        </Button>
+
+
+
       </div>
       
       {/* {downloadError && (
@@ -144,7 +158,7 @@ const StepFinalQuote: React.FC<StepFinalQuoteProps> = ({ formData, onStartOver }
 
       {/* Optional: Add a small note about typical processing time */}
       <p className="text-xs text-muted-foreground dark:text-slate-500 mt-8">
-        Most quotations are delivered within 5-10 minutes. For complex projects, it might take a little longer.
+        Most quotations are delivered within 2-5 minutes. For complex projects, it might take a little longer.
       </p>
     </motion.div>
   );

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { Package } from '@prisma/client'; // Import the enum
 import { sendContactUsNotification } from '@/lib/emailNotifications';
+import { sendFormLeadNotificationToAdmin } from '@/lib/whatsapp';
 
 // Helper to validate and map plan IDs to Package enum
 function mapToPackageEnum(planId: string): Package | null {
@@ -66,6 +67,28 @@ export async function POST(request: Request) {
     } catch (emailError) {
       console.error('Error sending email notification:', emailError);
       // Don't fail the API call if email fails
+    }
+
+    // Send WhatsApp notification to admin
+    try {
+      const whatsappResult = await sendFormLeadNotificationToAdmin({
+        name: fullName,
+        email,
+        phone,
+        companyName: companyName || undefined,
+        message,
+        formType: `Contact Form - ${mappedPackage} Package`,
+        submissionId: contactSubmission.id,
+      });
+
+      if (whatsappResult.success) {
+        console.log('WhatsApp notification sent to admin for contact form submission');
+      } else {
+        console.error('Failed to send WhatsApp notification to admin:', whatsappResult.error);
+      }
+    } catch (whatsappError) {
+      console.error('Error sending WhatsApp notification to admin:', whatsappError);
+      // Don't fail the API call if WhatsApp fails
     }
 
     return NextResponse.json({ 

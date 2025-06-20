@@ -651,7 +651,7 @@ const Navbar = () => {
       <div className="hidden 2xl:flex items-center space-x-6">
         {[
           { label: "Contact", path: "/contact" },
-          { label: "Support", path: "/support" },
+          { label: "Estimate", path: "/estimator" },
           { label: "Schedule Call", path: "/schedule-call" },
         ].map((item, i) => (
           <motion.div

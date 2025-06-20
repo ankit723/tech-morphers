@@ -5,6 +5,7 @@ import { generateQuotationPDF } from '@/lib/pdfGenerator'; // Added for PDF gene
 import { sendEmail } from '@/lib/emailer';
 import { QuotationPdfEmail } from '@/components/emails/QuotationPdfEmail';
 import { uploadPDFToGCS } from '@/lib/googleCloudStorage'; // Import GCS service
+import { sendEstimatorPDFToUser, sendLeadNotificationToAdmin } from '@/lib/whatsapp'; // Import WhatsApp functions
 
 // Helper to convert Blob to Buffer
 async function blobToBuffer(blob: Blob): Promise<Buffer> {
@@ -144,11 +145,59 @@ The Tech Morphers Team`;
       console.log(`Resend Email ID: ${emailResult.data.id}`);
     }
 
+    // 4. Send WhatsApp message to user with PDF (if phone number provided)
+    let whatsappUserResult = null;
+    if (newEstimate.phone && pdfUrl) {
+      try {
+        whatsappUserResult = await sendEstimatorPDFToUser({
+          fullName: newEstimate.fullName,
+          phone: newEstimate.phone,
+          estimateId: newEstimate.id,
+          pdfUrl: pdfUrl,
+        });
+        
+        if (whatsappUserResult.success) {
+          console.log(`WhatsApp message with PDF sent to user: ${newEstimate.phone}`);
+        } else {
+          console.error('Failed to send WhatsApp message to user:', whatsappUserResult.error);
+        }
+      } catch (whatsappError) {
+        console.error('Error sending WhatsApp message to user:', whatsappError);
+      }
+    }
+
+    // 5. Send WhatsApp notification to admin
+    let whatsappAdminResult = null;
+    try {
+      whatsappAdminResult = await sendLeadNotificationToAdmin({
+        fullName: newEstimate.fullName,
+        email: newEstimate.email,
+        phone: newEstimate.phone || undefined,
+        companyName: newEstimate.companyName || undefined,
+        projectType: newEstimate.projectType || undefined,
+        budgetRange: newEstimate.budgetRange || undefined,
+        estimateId: newEstimate.id,
+        pdfUrl: pdfUrl,
+      });
+      
+      if (whatsappAdminResult.success) {
+        console.log('WhatsApp lead notification sent to admin');
+      } else {
+        console.error('Failed to send WhatsApp notification to admin:', whatsappAdminResult.error);
+      }
+    } catch (whatsappError) {
+      console.error('Error sending WhatsApp notification to admin:', whatsappError);
+    }
+
     return NextResponse.json({
       message: 'Estimate processed, PDF stored in cloud, and your quotation document has been emailed to you!',
       estimateId: newEstimate.id,
       emailId: emailResult.data?.id,
       pdfUrl: pdfUrl, // Include PDF URL in successful response
+      whatsapp: {
+        userNotificationSent: whatsappUserResult?.success || false,
+        adminNotificationSent: whatsappAdminResult?.success || false,
+      },
     }, { status: 200 });
 
   } catch (error: any) {

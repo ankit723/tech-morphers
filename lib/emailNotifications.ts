@@ -4,7 +4,8 @@ import {
   GetStartedEmail, 
   TalkToUsEmail, 
   NewsletterEmail, 
-  ContactPageEmail 
+  ContactPageEmail,
+  ScheduleCallEmail
 } from '@/components/emails/NotificationEmails';
 
 export interface ContactUsNotificationData {
@@ -47,6 +48,19 @@ export interface ContactPageNotificationData {
   email: string;
   phone: string;
   message: string;
+  submissionId: string;
+}
+
+export interface ScheduleCallNotificationData {
+  name: string;
+  email: string;
+  phone: string;
+  companyName?: string;
+  projectBrief: string;
+  scheduledDate: string;
+  scheduledTime: string;
+  duration: number;
+  meetingLink: string;
   submissionId: string;
 }
 
@@ -221,6 +235,60 @@ Your Message:
 "${data.message}"
 
 Reference ID: ${data.submissionId.substring(0, 8).toUpperCase()}
+
+Best regards,
+Tech Morphers Team
+https://www.techmorphers.com`
+  });
+
+  return emailResult;
+}
+
+export async function sendScheduleCallNotification(data: ScheduleCallNotificationData) {
+  const emailResult = await sendEmail({
+    to: data.email,
+    subject: `Your Consultation Call is Confirmed - ${new Date(data.scheduledDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}`,
+    react: ScheduleCallEmail({
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      companyName: data.companyName,
+      projectBrief: data.projectBrief,
+      scheduledDate: data.scheduledDate,
+      scheduledTime: data.scheduledTime,
+      duration: data.duration,
+      meetingLink: data.meetingLink,
+      submissionId: data.submissionId,
+    }),
+    text: `Dear ${data.name},
+
+Your consultation call with Tech Morphers has been successfully scheduled. We're excited to discuss your project and help bring your vision to life!
+
+Call Details:
+- Date: ${new Date(data.scheduledDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+- Time: ${data.scheduledTime}
+- Duration: ${data.duration} minutes
+- Meeting Type: Video Call (Google Meet)
+- Reference ID: ${data.submissionId.substring(0, 8).toUpperCase()}
+
+Meeting Link: ${data.meetingLink}
+
+Your Project Brief:
+"${data.projectBrief}"
+
+Before Our Call:
+• Please prepare any relevant documents or ideas
+• Test your camera and microphone beforehand
+• Have your project requirements ready to discuss
+• Join the meeting 2-3 minutes early
+
+Contact Details:
+Email: ${data.email}
+Phone: ${data.phone}${data.companyName ? `\nCompany: ${data.companyName}` : ''}
+
+If you need to reschedule or have any questions, please reply to this email or contact us at least 24 hours before the scheduled time.
+
+We look forward to speaking with you and discussing how we can help transform your ideas into reality!
 
 Best regards,
 Tech Morphers Team

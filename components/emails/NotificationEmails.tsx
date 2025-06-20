@@ -604,4 +604,194 @@ export const BlogNotificationEmail = ({
       </Container>
     </Body>
   </Html>
-); 
+);
+
+// Schedule Call Email
+interface ScheduleCallEmailProps {
+  name: string;
+  email: string;
+  phone: string;
+  companyName?: string;
+  projectBrief: string;
+  scheduledDate: string;
+  scheduledTime: string;
+  duration: number;
+  meetingLink: string;
+  submissionId: string;
+}
+
+export const ScheduleCallEmail = ({
+  name,
+  email,
+  phone,
+  companyName,
+  projectBrief,
+  scheduledDate,
+  scheduledTime,
+  duration,
+  meetingLink,
+  submissionId,
+}: ScheduleCallEmailProps) => {
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const formatTime = (timeString: string) => {
+    const [hours, minutes] = timeString.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour % 12 || 12;
+    return `${displayHour}:${minutes} ${ampm}`;
+  };
+
+  // Google Meet specific styles
+  const meetingCardStyle = {
+    backgroundColor: '#f8f9fa',
+    border: '2px solid #4285f4',
+    borderRadius: '12px',
+    padding: '24px',
+    margin: '24px 0',
+    textAlign: 'center' as const,
+  };
+
+  const meetButtonStyle = {
+    backgroundColor: '#4285f4',
+    borderRadius: '8px',
+    color: '#fff',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    textDecoration: 'none',
+    textAlign: 'center' as const,
+    display: 'inline-block',
+    padding: '14px 32px',
+    marginTop: '12px',
+    marginBottom: '16px',
+    border: 'none',
+    boxShadow: '0 2px 4px rgba(66, 133, 244, 0.3)',
+  };
+
+  const meetingLinkStyle = {
+    color: '#4285f4',
+    fontSize: '14px',
+    wordBreak: 'break-all' as const,
+    textDecoration: 'underline',
+    fontFamily: 'monospace',
+  };
+
+  return (
+    <Html>
+      <Head />
+      <Preview>Your consultation call is confirmed - {formatDate(scheduledDate)} at {formatTime(scheduledTime)}</Preview>
+      <Body style={main}>
+        <Container style={container}>
+          <Section style={headerSection}>
+            <Text style={headerText}>Tech Morphers</Text>
+          </Section>
+          <Section style={box}>
+            <Heading style={heading}>🎉 Your Consultation Call is Confirmed!</Heading>
+            <Text style={paragraph}>Dear {name},</Text>
+            <Text style={paragraph}>
+              Your consultation call with Tech Morphers has been successfully scheduled. We&apos;re excited to discuss your project and help bring your vision to life!
+            </Text>
+            
+            <Section style={infoBox}>
+              <Heading as="h3" style={{ ...heading, fontSize: '18px', marginTop: '0', marginBottom: '10px' }}>
+                📅 Call Details
+              </Heading>
+              <Text style={{...paragraph, marginBottom: '8px'}}>
+                <strong>Date:</strong> {formatDate(scheduledDate)}
+              </Text>
+              <Text style={{...paragraph, marginBottom: '8px'}}>
+                <strong>Time:</strong> {formatTime(scheduledTime)}
+              </Text>
+              <Text style={{...paragraph, marginBottom: '8px'}}>
+                <strong>Duration:</strong> {duration} minutes
+              </Text>
+              <Text style={{...paragraph, marginBottom: '0'}}>
+                <strong>Reference ID:</strong> {submissionId.substring(0, 8).toUpperCase()}
+              </Text>
+            </Section>
+
+            {/* Enhanced Google Meet Section */}
+            <Section style={meetingCardStyle}>
+              <Text style={{ fontSize: '18px', fontWeight: 'bold', color: '#4285f4', margin: '0 0 8px 0' }}>
+                🎥 Join with Google Meet
+              </Text>
+              <Text style={{ fontSize: '14px', color: '#5f6368', margin: '0 0 16px 0' }}>
+                Click the button below to join the video call
+              </Text>
+              
+              <div style={{ textAlign: 'center', margin: '16px 0' }}>
+                <Button style={meetButtonStyle} href={meetingLink}>
+                  📹 Join Meeting
+                </Button>
+              </div>
+
+              <Text style={{ fontSize: '12px', color: '#5f6368', margin: '8px 0 4px 0' }}>
+                Or join by clicking this link:
+              </Text>
+              <Link href={meetingLink} style={meetingLinkStyle}>
+                {meetingLink}
+              </Link>
+
+              <Text style={{ fontSize: '12px', color: '#5f6368', margin: '16px 0 0 0', fontStyle: 'italic' }}>
+                💡 Tip: Click &quot;Join Meeting&quot; 2-3 minutes before the scheduled time
+              </Text>
+            </Section>
+
+            <Text style={paragraph}>
+              <strong>Your Project Brief:</strong><br/>
+              &quot;{projectBrief}&quot;
+            </Text>
+
+            <Section style={infoBox}>
+              <Heading as="h3" style={{ ...heading, fontSize: '18px', marginTop: '0', marginBottom: '10px' }}>
+                📝 Before Our Call
+              </Heading>
+              <Text style={{...paragraph, marginBottom: '8px'}}>
+                • Please prepare any relevant documents or ideas
+              </Text>
+              <Text style={{...paragraph, marginBottom: '8px'}}>
+                • Test your camera and microphone beforehand
+              </Text>
+              <Text style={{...paragraph, marginBottom: '8px'}}>
+                • Have your project requirements ready to discuss
+              </Text>
+              <Text style={{...paragraph, marginBottom: '0'}}>
+                • Join the meeting 2-3 minutes early
+              </Text>
+            </Section>
+
+            <Text style={paragraph}>
+              <strong>Contact Details:</strong><br/>
+              Email: {email}<br/>
+              Phone: {phone}<br/>
+              {companyName && <>Company: {companyName}<br/></>}
+            </Text>
+
+            <Text style={paragraph}>
+              If you need to reschedule or have any questions, please reply to this email or contact us at least 24 hours before the scheduled time.
+            </Text>
+
+            <Text style={paragraph}>
+              We look forward to speaking with you and discussing how we can help transform your ideas into reality!
+            </Text>
+
+            <Hr style={{ borderColor: '#e6ebf1', margin: '20px 0' }} />
+            <Text style={footerText}>
+              © {new Date().getFullYear()} Tech Morphers. All rights reserved.<br />
+              <Link href="https://www.techmorphers.com" style={{ color: '#8898aa', textDecoration: 'underline' }}>
+                techmorphers.com
+              </Link>
+            </Text>
+          </Section>
+        </Container>
+      </Body>
+    </Html>
+  );
+}; 

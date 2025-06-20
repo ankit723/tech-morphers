@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { sendGetStartedNotification } from '@/lib/emailNotifications';
+import { sendFormLeadNotificationToAdmin } from '@/lib/whatsapp';
 
 export async function POST(request: Request) {
   try {
@@ -53,13 +54,35 @@ export async function POST(request: Request) {
       // Don't fail the API call if email fails
     }
 
+    // Send WhatsApp notification to admin
+    try {
+      const whatsappResult = await sendFormLeadNotificationToAdmin({
+        name,
+        email,
+        phone: phone || undefined,
+        companyName: companyName || undefined,
+        message: `Service: ${service}\nBudget: ${budget || 'Not specified'}\nProject Vision: ${projectVision}`,
+        formType: 'Get Started Form',
+        submissionId: getStartedSubmission.id,
+      });
+
+      if (whatsappResult.success) {
+        console.log('WhatsApp notification sent to admin for get-started submission');
+      } else {
+        console.error('Failed to send WhatsApp notification to admin:', whatsappResult.error);
+      }
+    } catch (whatsappError) {
+      console.error('Error sending WhatsApp notification to admin:', whatsappError);
+      // Don't fail the API call if WhatsApp fails
+    }
+
     return NextResponse.json({ 
       message: 'Get Started form submitted successfully!', 
       submissionId: getStartedSubmission.id 
     }, { status: 201 });
 
   } catch (error) {
-    console.error('Error submitting Get Started form:', error);
+    console.error('Error handling Get Started form submission:', error);
     if (error instanceof Error && 'code' in error && (error as any).code === 'P2002') {
       // Example: if you add a unique constraint on email for GetStarted model
       // if ((error as any).meta?.target?.includes('email')) {
@@ -67,6 +90,6 @@ export async function POST(request: Request) {
       // }
       return NextResponse.json({ error: 'A submission with these details might already exist.' }, { status: 409 });
     }
-    return NextResponse.json({ error: 'Failed to submit Get Started form.' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });
   }
 } 

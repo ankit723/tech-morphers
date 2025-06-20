@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/providers/themeProvider";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import Image from "next/image";
+import { WhatsappButton } from "@/components/ui/whatsapp";
 
 const gothamBook = localFont({
   src: "../public/Gotham-font-family/Gotham/Gotham-Book.otf",
@@ -80,7 +81,8 @@ export default function RootLayout({
           enableSystem
           storageKey="techmorphers-theme"
         >
-        {children}
+          {children}
+          <WhatsappButton />
         </ThemeProvider>
         <Analytics />
         
