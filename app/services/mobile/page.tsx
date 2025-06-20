@@ -8,15 +8,11 @@ import {
   SiFirebase,
   SiAmazon,
   SiGooglecloud,
-  SiApple,
-  SiAndroid,
   SiXcode,
   SiAndroidstudio,
   SiMongodb,
   SiPostgresql,
-  SiRedis,
   SiDocker,
-  SiGithub
 } from 'react-icons/si';
 import {
   Smartphone,
@@ -24,14 +20,11 @@ import {
   Monitor,
   Zap,
   Shield,
-  Users,
   Award,
   Star,
   CheckCircle,
   ArrowRight,
   Code2,
-  Globe,
-  Cloud,
   Lightbulb,
   Rocket,
   Settings,
@@ -39,15 +32,13 @@ import {
   Share2,
   Bell,
   Search,
-  Database,
   Lock,
   TrendingUp
 } from 'lucide-react';
-import { useState } from 'react';
 import { plans } from '@/lib/plansData';
 
 const AppDevelopment = () => {
-  const [activeTab, setActiveTab] = useState('features');
+
 
   // Filter plans relevant to mobile development (all plans since they include mobile development)
   const mobilePlans = plans.filter(plan => plan.id !== 'custom').concat(plans.find(plan => plan.id === 'custom')!);
@@ -732,7 +723,7 @@ const AppDevelopment = () => {
                   ))}
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                  "{testimonial.content}"
+                  &quot;{testimonial.content}&quot;
                 </p>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
@@ -803,7 +794,7 @@ const AppDevelopment = () => {
             Ready to Build Your Mobile App?
           </h2>
           <p className="text-xl text-purple-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Let's transform your app idea into a reality. Our expert team is ready to create 
+            Let&apos;s transform your app idea into a reality. Our expert team is ready to create 
             a mobile application that engages users and drives business success.
           </p>
           

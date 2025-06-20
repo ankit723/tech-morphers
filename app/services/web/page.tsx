@@ -16,9 +16,6 @@ import {
   Award,
   Zap,
   Shield,
-  Gauge,
-  Layers3,
-  Database,
   Building
 } from 'lucide-react';
 import { 
@@ -34,18 +31,10 @@ import {
   SiAmazon,
   SiRedis,
   SiGraphql,
-  SiTailwindcss,
-  SiVuedotjs,
-  SiAngular,
-  SiFirebase,
-  SiKubernetes,
-  SiJenkins
 } from 'react-icons/si';
-import { useState } from 'react';
 import { plans } from '@/lib/plansData';
 
 const WebDevelopment = () => {
-  const [activeTab, setActiveTab] = useState('features');
 
   // Filter plans relevant to web development (all plans since they include web development)
   const webPlans = plans.filter(plan => plan.id !== 'custom').concat(plans.find(plan => plan.id === 'custom')!);
@@ -262,11 +251,11 @@ const WebDevelopment = () => {
     },
     {
       question: "What technologies do you recommend?",
-      answer: "We recommend technologies based on your specific needs, scalability requirements, and long-term goals. We'll discuss the best options during our consultation."
+      answer: "We recommend technologies based on your specific needs, scalability requirements, and long-term goals. We&apos;ll discuss the best options during our consultation."
     },
     {
       question: "Do you provide hosting services?",
-      answer: "While we don't provide hosting directly, we help you choose the best hosting solution and can manage the deployment process for you."
+      answer: "While we don&apos;t provide hosting directly, we help you choose the best hosting solution and can manage the deployment process for you."
     }
   ];
 
@@ -635,7 +624,7 @@ const WebDevelopment = () => {
               What Our Clients Say
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">
-              Don't just take our word for it
+              Don&apos;t just take our word for it
             </p>
           </motion.div>
 
@@ -654,7 +643,7 @@ const WebDevelopment = () => {
                   ))}
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                  "{testimonial.content}"
+                  &quot;{testimonial.content}&quot;
                 </p>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
@@ -725,7 +714,7 @@ const WebDevelopment = () => {
             Ready to Build Something Amazing?
           </h2>
           <p className="text-xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Let's discuss your project and create a web application that drives results. 
+            Let&apos;s discuss your project and create a web application that drives results. 
             Our team is ready to turn your vision into reality with cutting-edge technology and exceptional design.
           </p>
           
@@ -743,7 +732,7 @@ const WebDevelopment = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300"
-            >
+          >
               Schedule Consultation
             </motion.button>
           </div>

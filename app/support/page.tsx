@@ -3,29 +3,21 @@ import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import {
-  HelpCircle,
   MessageCircle,
   Book,
   Mail,
-  Phone,
   Search,
   ChevronDown,
   ChevronRight,
   Clock,
-  CheckCircle,
   AlertCircle,
-  Info,
   Zap,
   Shield,
-  Users,
   FileText,
   Video,
-  Download,
-  ExternalLink,
   Headphones,
   LifeBuoy,
   MessageSquare,
-  Bookmark,
   ArrowRight,
   Star,
   ThumbsUp,
@@ -40,6 +32,7 @@ const Support = () => {
   
   useEffect(() => {
     setIsDark(theme === "dark");
+    console.log(isDark)
   }, [theme]);
 
   const supportChannels = [
@@ -216,7 +209,7 @@ const Support = () => {
               className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-sm font-medium mb-8 shadow-lg"
             >
               <LifeBuoy className="w-4 h-4 mr-2" />
-              We're Here to Help You Succeed
+              We&apos;re Here to Help You Succeed
             </motion.div>
             
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-8 leading-tight">
@@ -228,7 +221,7 @@ const Support = () => {
             
             <p className="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
               Get the help you need, when you need it. Our comprehensive support system 
-              ensures you're never stuck and always moving forward.
+              ensures you&apos;re never stuck and always moving forward.
             </p>
 
             {/* Search Bar */}

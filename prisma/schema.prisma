@@ -79,6 +79,84 @@ model ContactPage {
   createdAt   DateTime @default(now())
 }
 
+// Call Scheduling Models
+model ScheduledCall {
+  id              String           @id @default(uuid())
+  name            String
+  email           String
+  phone           String
+  companyName     String?
+  projectBrief    String
+  
+  // Call Details
+  scheduledDate   DateTime
+  scheduledTime   String          // Format: "14:30" (24-hour format)
+  timezone        String          @default("UTC")
+  duration        Int             @default(30) // Duration in minutes
+  meetingLink     String?         // Generated meeting link
+  
+  // Status and Notes
+  status          CallStatus      @default(SCHEDULED)
+  adminNotes      String?
+  clientNotes     String?
+  
+  // Reminders
+  reminderSent    Boolean         @default(false)
+  reminderSentAt  DateTime?
+  
+  // Follow-up
+  followUpSent    Boolean         @default(false)
+  followUpSentAt  DateTime?
+  
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  @@index([scheduledDate])
+  @@index([email])
+}
+
+model CallAvailability {
+  id            String      @id @default(uuid())
+  dayOfWeek     Int         // 0 = Sunday, 1 = Monday, etc.
+  startTime     String      // Format: "09:00"
+  endTime       String      // Format: "17:00"
+  timezone      String      @default("UTC")
+  isActive      Boolean     @default(true)
+  
+  // Break times within the day
+  breaks        CallBreak[]
+  
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  
+  @@unique([dayOfWeek, startTime, endTime])
+}
+
+model CallBreak {
+  id              String           @id @default(uuid())
+  startTime       String           // Format: "12:00"
+  endTime         String           // Format: "13:00"
+  description     String?          // e.g., "Lunch Break"
+  
+  availabilityId  String
+  availability    CallAvailability @relation(fields: [availabilityId], references: [id], onDelete: Cascade)
+  
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model CallBlockedDate {
+  id          String    @id @default(uuid())
+  date        DateTime  // Specific date to block
+  reason      String?   // e.g., "Holiday", "Conference"
+  isRecurring Boolean   @default(false) // For annual holidays
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@unique([date])
+}
+
 // Blog Models
 model BlogPost {
   id                String         @id @default(uuid())
@@ -305,4 +383,14 @@ enum ModerationAction {
   UNPIN
   EDIT
   BAN_USER
+}
+
+enum CallStatus {
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+  RESCHEDULED
 }

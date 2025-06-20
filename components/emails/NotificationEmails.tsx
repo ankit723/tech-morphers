@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Html, Head, Preview, Body, Container, Section, Heading, Text, Hr, Button, Link } from '@react-email/components';
+import Image from 'next/image';
 
 // Common styles
 const main = {
@@ -530,7 +531,7 @@ export const BlogNotificationEmail = ({
           
           {blogFeaturedImage && (
             <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-              <img 
+              <Image 
                 src={blogFeaturedImage} 
                 alt={blogTitle}
                 style={{

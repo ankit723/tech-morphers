@@ -455,7 +455,7 @@ const OurBrands = () => {
                                                 }}
                                                 viewport={{ once: true, margin: "-80px" }}
                                             >
-                                                {rowCompanies.map((company, index) => (
+                                                {rowCompanies.map((company) => (
                                                     <motion.div
                                                         key={company.name}
                                                         ref={addToRefs}
@@ -551,7 +551,7 @@ const OurBrands = () => {
                                         initial="hidden"
                                         animate="show"
                                     >
-                                        {filteredCompanies.map((company, index) => (
+                                        {filteredCompanies.map((company) => (
                                             <motion.div
                                                 key={company.name}
                                                 ref={addToRefs}

@@ -1,7 +1,6 @@
-4: Create Book a Call
-5: after estimate complete show book a discovervy call as next step
-8: send estimated pdf + msg to whatsapp
-9: a cron job node server to send continous followups depending age of user creation
-10: i also get whatsapp notification as someone submit form
-11: minimal admin panel secure
-
+ after estimate complete show book a discovervy call as next step
+ send estimated pdf + msg to whatsapp
+ cron job node server to send continous followups depending age of user creation
+ i also get whatsapp notification as someone submit form
+ minimal admin panel secure
+ add convert to client button and converted to client tab in admin panel

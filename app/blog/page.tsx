@@ -3,7 +3,6 @@ import { Metadata } from "next"
 import { getBlogPosts, getBlogCategories, getBlogTags, getFeaturedPosts } from "@/lib/blog-actions"
 import { BlogListClient } from "@/components/blog/blog-list-client"
 import { BlogCard } from "@/components/blog/blog-card"
-import { TextGenerateEffect } from "@/components/ui/text-generate-effect"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -18,14 +17,8 @@ import {
   Filter,
   TrendingUp,
   Users,
-  Eye,
-  Heart,
   ArrowRight,
-  Bookmark,
-  Share2,
-  MessageCircle,
   Award,
-  Zap,
   Globe,
   PenTool,
   Code,
@@ -34,7 +27,8 @@ import {
   Rss,
   Bell,
   ChevronRight,
-  Shield
+  Shield,
+  Zap
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -234,7 +228,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16 animate-fade-in-up">
               <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
-                What You'll Find Here
+                What You&apos;ll Find Here
               </h2>
               <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
                 Comprehensive content designed to help developers and tech enthusiasts grow
@@ -284,7 +278,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 </div>
                 <div className="hidden md:flex items-center bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-3 rounded-full shadow-lg">
                   <Award className="w-6 h-6 mr-2" />
-                  <span className="font-semibold">Editor's Choice</span>
+                  <span className="font-semibold">Editor&apos;s Choice</span>
                 </div>
               </div>
               

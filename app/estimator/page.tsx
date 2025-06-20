@@ -217,7 +217,7 @@ const EstimatorPage = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8"
         >
-          {trustStats.map((stat, index) => (
+          {trustStats.map((stat) => (
             <div
               key={stat.label}
               className="text-center bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-white/20 shadow-lg"
@@ -289,7 +289,7 @@ const EstimatorPage = () => {
           className="w-full max-w-4xl mx-auto mt-8 relative z-10"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {securityFeatures.map((feature, index) => (
+            {securityFeatures.map((feature) => (
               <div
                 key={feature.title}
                 className="text-center bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-white/20"
@@ -321,7 +321,7 @@ const EstimatorPage = () => {
             Trusted by 200+ Companies
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {testimonials.slice(0, 2).map((testimonial, index) => (
+            {testimonials.slice(0, 2).map((testimonial) => (
               <div
                 key={testimonial.name}
                 className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-6 border border-white/20"
@@ -332,7 +332,7 @@ const EstimatorPage = () => {
                   ))}
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
-                  "{testimonial.content}"
+                  &quot;{testimonial.content}&quot;
                 </p>
                 <div>
                   <div className="font-semibold text-gray-900 dark:text-white text-sm">

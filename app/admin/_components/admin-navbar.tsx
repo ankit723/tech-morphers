@@ -19,7 +19,8 @@ import {
   Bell,
   Search,
   Mail,
-  Contact
+  Contact,
+  Calendar
 } from "lucide-react"
 import { ModeToggle } from "@/components/ui/themeToggle"
 
@@ -77,6 +78,12 @@ const navItems = [
     href: "/admin/estimators",
     icon: Calculator,
     description: "Project estimates"
+  },
+  {
+    title: "Scheduled Calls",
+    href: "/admin/scheduled-calls",
+    icon: Calendar,
+    description: "Manage scheduled calls"
   },
 ]
 

@@ -11,6 +11,7 @@ import Footer from './components/home/footer'
 import FAQWithCTA from './components/home/faq'
 import OurProjects from './components/home/ourProjects'
 import BlogSection from './components/home/blogSection'
+import CallSchedulerSection from './components/home/callSchedulerSection'
 
 const Page = async () => {
   return (
@@ -25,6 +26,7 @@ const Page = async () => {
       <Services />
       <OurProjects />
       <BlogSection />
+      <CallSchedulerSection />
       <FAQWithCTA />
       <Testimonials />
       <div className="relative mt-[65rem]">

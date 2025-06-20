@@ -13,18 +13,11 @@ import {
   Award, 
   Zap,
   Globe,
-  Target,
-  Lightbulb,
   TrendingUp,
   Shield,
   Clock,
-  Monitor,
-  Database,
-  Cloud,
   Search,
   PenTool,
-  Layers,
-  Eye,
   Rocket,
   Settings,
   BarChart3,
@@ -32,7 +25,8 @@ import {
   MessageSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Navbar from '../components/home/navbar';
+import Footer from '../components/home/footer';
 
 const ServicesPage = () => {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -234,6 +228,8 @@ const ServicesPage = () => {
     : services.filter(service => service.category === activeCategory);
 
   return (
+    <>
+    <Navbar />
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-[#0A0A1B] dark:via-[#1A1A35] dark:to-[#0A0A1B]">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -509,7 +505,7 @@ const ServicesPage = () => {
               What Our Clients Say
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">
-              Real feedback from real clients who've experienced our services
+              Real feedback from real clients who&apos;ve experienced our services
             </p>
           </div>
 
@@ -526,7 +522,7 @@ const ServicesPage = () => {
                   ))}
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                  "{testimonial.content}"
+                  &quot;{testimonial.content}&quot;
                 </p>
                 <div className="flex items-center justify-between">
                   <div>
@@ -565,14 +561,14 @@ const ServicesPage = () => {
               Ready to Start Your Project?
             </h2>
             <p className="text-xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Let's discuss your ideas and transform them into powerful digital solutions 
+              Let&apos;s discuss your ideas and transform them into powerful digital solutions 
               that drive your business forward.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 onClick={() => window.location.href = '/contact'}
-                className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-white text-blue-600 hover:text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 Get Free Consultation
                 <ArrowRight className="w-5 h-5 ml-2" />
@@ -580,7 +576,7 @@ const ServicesPage = () => {
               <Button
                 variant="outline"
                 onClick={() => window.location.href = '/about-us'}
-                className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300"
+                className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300"
               >
                 Learn About Us
               </Button>
@@ -589,6 +585,10 @@ const ServicesPage = () => {
         </div>
       </section>
     </div>
+    <div className="relative mt-[70rem]">
+      <Footer />
+    </div>
+    </>
   );
 };
 

@@ -613,15 +613,15 @@ const Navbar = () => {
               
               {!isExpanded && (
                 <motion.button 
-                  className="flex items-center justify-center cursor-pointer rounded-full bg-white text-black px-5 py-3.5 text-sm hover:bg-opacity-90 transition-all text-center font-bold"
+                  className="flex items-center justify-center cursor-pointer rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3.5 text-sm hover:shadow-lg transition-all text-center font-bold"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  onClick={() => router.push("/contact")}
+                  onClick={() => router.push("/schedule-call")}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Bring dream to life!
+                  Schedule Call
                 </motion.button>
               )}
             </div>
@@ -652,6 +652,7 @@ const Navbar = () => {
         {[
           { label: "Contact", path: "/contact" },
           { label: "Support", path: "/support" },
+          { label: "Schedule Call", path: "/schedule-call" },
           { label: "Login", path: "/login" }
         ].map((item, i) => (
           <motion.div
@@ -751,6 +752,7 @@ const Navbar = () => {
                 {[
                   { label: "Contact", path: "/contact" },
                   { label: "Support", path: "/support" },
+                  { label: "Schedule Call", path: "/schedule-call" },
                   { label: "Login", path: "/login" }
                 ].map((item) => (
                   <Link

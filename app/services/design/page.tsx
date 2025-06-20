@@ -18,24 +18,19 @@ import {
   Eye, 
   Users, 
   Zap, 
-  Award, 
   Star, 
-  Lightbulb,
   Target,
   Layers,
   Smartphone,
   Monitor,
   Globe,
   PenTool,
-  Figma,
   Search,
   TrendingUp
 } from 'lucide-react';
-import { useState } from 'react';
 import { plans } from '@/lib/plansData';
 
 const UIUXDesign = () => {
-  const [activeTab, setActiveTab] = useState('features');
 
   const features = [
     {
@@ -744,7 +739,7 @@ const UIUXDesign = () => {
                   ))}
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                  "{testimonial.content}"
+                  &quot;{testimonial.content}&quot;
                 </p>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-pink-600 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
@@ -815,7 +810,7 @@ const UIUXDesign = () => {
             Ready to Transform Your Digital Experience?
           </h2>
           <p className="text-xl text-pink-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Let's collaborate to create designs that not only look stunning but also perform exceptionally, 
+            Let&apos;s collaborate to create designs that not only look stunning but also perform exceptionally, 
             driving user satisfaction and business growth.
           </p>
           

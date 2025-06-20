@@ -1,37 +1,28 @@
 'use client'
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { 
   Users, 
-  Target, 
   Award, 
   Star, 
-  CheckCircle, 
   ArrowRight, 
   Zap, 
   Globe, 
   Heart, 
   Lightbulb,
   Trophy,
-  Code,
   Palette,
   Smartphone,
   Monitor,
   TrendingUp,
   Shield,
   Clock,
-  MapPin,
-  Mail,
-  Phone,
   Linkedin,
   Twitter,
-  Github
+  Github,
+  CheckCircle
 } from 'lucide-react';
-import { useState } from 'react';
 
 const AboutUs = () => {
-  const [activeTab, setActiveTab] = useState('story');
-
   const stats = [
     { number: "500+", label: "Projects Completed", icon: <Trophy className="w-6 h-6" /> },
     { number: "98%", label: "Client Satisfaction", icon: <Star className="w-6 h-6" /> },
@@ -382,11 +373,11 @@ const AboutUs = () => {
               </p>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                 Our journey began when our founder, Ankit Biswas, recognized the need for a development partner 
-                that truly understands both technology and business objectives. Today, we're proud to have 
+                that truly understands both technology and business objectives. Today, we&apos;re proud to have 
                 delivered 500+ successful projects across various industries.
               </p>
               <div className="grid grid-cols-2 gap-4">
-                {services.map((service, index) => (
+                {services.map((service) => (
                   <div key={service.title} className="bg-white/70 dark:bg-white/10 rounded-2xl p-4 border border-white/20">
                     <div className="flex items-center mb-2">
                       <div className="text-blue-600 mr-2">{service.icon}</div>
@@ -656,7 +647,7 @@ const AboutUs = () => {
               What Our Clients Say
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">
-              Real feedback from real clients who've experienced our work
+              Real feedback from real clients who&apos;ve experienced our work
             </p>
           </motion.div>
 
@@ -675,7 +666,7 @@ const AboutUs = () => {
                   ))}
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                  "{testimonial.content}"
+                  &quot;{testimonial.content}&quot;
                 </p>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
@@ -711,7 +702,7 @@ const AboutUs = () => {
             Ready to Start Your Digital Journey?
           </h2>
           <p className="text-xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Let's collaborate to transform your ideas into powerful digital solutions that drive growth and success. 
+            Let&apos;s collaborate to transform your ideas into powerful digital solutions that drive growth and success. 
             Our team is ready to bring your vision to life.
           </p>
           

@@ -8,19 +8,14 @@ import {
   SiAutodesk,
   SiAdobephotoshop,
   SiJavascript,
-  SiPython,
   SiSteam,
   SiPlaystation,
-  SiNintendoswitch,
-  SiAndroid,
-  SiApple
 } from 'react-icons/si';
 import {
   Gamepad2,
   Zap,
   Shield,
   Users,
-  Award,
   Star,
   CheckCircle,
   ArrowRight,
@@ -28,8 +23,6 @@ import {
   Palette,
   Volume2,
   Cpu,
-  Globe,
-  Smartphone,
   Monitor,
   Trophy,
   Target,
@@ -39,14 +32,10 @@ import {
   Layers,
   Play,
   Download,
-  TrendingUp,
-  PaintBucket
 } from 'lucide-react';
-import { useState } from 'react';
 import { plans } from '@/lib/plansData';
 
 const GameDevelopment = () => {
-  const [activeTab, setActiveTab] = useState('features');
 
   const features = [
     {
@@ -785,7 +774,7 @@ const GameDevelopment = () => {
                   ))}
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                  "{testimonial.content}"
+                  &quot;{testimonial.content}&quot;
                 </p>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
@@ -856,7 +845,7 @@ const GameDevelopment = () => {
             Ready to Create Your Game?
           </h2>
           <p className="text-xl text-green-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Let's bring your game idea to life. Our expert team is ready to create 
+            Let&apos;s bring your game idea to life. Our expert team is ready to create 
             an engaging gaming experience that players will love and remember.
           </p>
           
@@ -874,7 +863,7 @@ const GameDevelopment = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-green-600 transition-all duration-300"
-            >
+          >
               Schedule Consultation
             </motion.button>
           </div>

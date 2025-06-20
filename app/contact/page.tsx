@@ -9,21 +9,13 @@ import {
   CheckCircle2, 
   Mail, 
   Phone, 
-  MapPin, 
   Clock, 
-  MessageSquare, 
   Send,
   ArrowRight,
   Users,
-  Calendar,
   Zap,
-  Shield,
   Globe,
   Headphones,
-  Star,
-  CheckCircle,
-  Video,
-  Coffee,
   Linkedin,
   Twitter,
   Github,
@@ -211,10 +203,10 @@ const Contact = () => {
                   Project Inquiry Sent!
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  Thanks for reaching out! We'll get back to you within 2 hours.
+                  Thanks for reaching out! We&apos;ll get back to you within 2 hours.
                 </p>
                 <div className="bg-orange-50 dark:bg-orange-900/20 rounded-2xl p-4">
-                  <h4 className="font-semibold text-orange-900 dark:text-orange-100 mb-2">What's Next?</h4>
+                  <h4 className="font-semibold text-orange-900 dark:text-orange-100 mb-2">What&apos;s Next?</h4>
                   <ul className="text-sm text-orange-700 dark:text-orange-300 space-y-1">
                     <li>• Project analysis & feasibility study</li>
                     <li>• Schedule strategy call</li>
@@ -252,14 +244,14 @@ const Contact = () => {
             </motion.div>
             
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-8 leading-tight">
-              Let's Build Your
+              Let&apos;s Build Your
               <span className="block bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 bg-clip-text text-transparent">
                 Next Big Project
               </span>
             </h1>
             
             <p className="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
-              From concept to launch, we're your technology partner. Get expert consultation, 
+              From concept to launch, we&apos;re your technology partner. Get expert consultation, 
               transparent pricing, and delivery that exceeds expectations.
             </p>
 
@@ -328,7 +320,7 @@ const Contact = () => {
               Why Partner With Us?
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              We don't just build projects, we build lasting business relationships
+              We don&apos;t just build projects, we build lasting business relationships
             </p>
           </motion.div>
 
@@ -370,7 +362,7 @@ const Contact = () => {
               Ready to Get Started?
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Choose how you'd like to begin your project journey
+              Choose how you&apos;d like to begin your project journey
             </p>
           </motion.div>
 
@@ -446,7 +438,7 @@ const Contact = () => {
                     Start Your Project Today
                   </h2>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Share your project details and we'll provide a custom proposal within 24 hours.
+                    Share your project details and we&apos;ll provide a custom proposal within 24 hours.
                   </p>
                 </div>
 
@@ -719,7 +711,7 @@ const Contact = () => {
           </h2>
           <p className="text-xl text-orange-100 mb-12 max-w-3xl mx-auto leading-relaxed">
             Join 500+ businesses that trust us with their digital transformation. 
-            Let's discuss how we can help you achieve your goals.
+            Let&apos;s discuss how we can help you achieve your goals.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

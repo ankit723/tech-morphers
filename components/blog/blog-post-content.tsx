@@ -8,6 +8,7 @@ import { BlogPostWithRelations, likeBlogPost } from "@/lib/blog-actions"
 import { Button } from "@/components/ui/button"
 import { EnhancedContentRenderer } from "./enhanced-content-renderer"
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect"
+import Image from "next/image"
 
 interface BlogPostContentProps {
   post: BlogPostWithRelations
@@ -239,7 +240,7 @@ export function BlogPostContent({ post }: BlogPostContentProps) {
         >
           <div className="flex items-start gap-4">
             {post.authorImage ? (
-              <img
+              <Image
                 src={post.authorImage}
                 alt={post.author}
                 className="w-16 h-16 rounded-full object-cover"
