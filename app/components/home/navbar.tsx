@@ -613,7 +613,7 @@ const Navbar = () => {
               
               {!isExpanded && (
                 <motion.button 
-                  className="flex items-center justify-center cursor-pointer rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3.5 text-sm hover:shadow-lg transition-all text-center font-bold"
+                  className="flex items-center justify-center cursor-pointer rounded-full bg-white  text-black px-6 py-3.5 text-sm hover:shadow-lg transition-all text-center font-bold"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -653,7 +653,6 @@ const Navbar = () => {
           { label: "Contact", path: "/contact" },
           { label: "Support", path: "/support" },
           { label: "Schedule Call", path: "/schedule-call" },
-          { label: "Login", path: "/login" }
         ].map((item, i) => (
           <motion.div
             key={item.label}
@@ -753,7 +752,6 @@ const Navbar = () => {
                   { label: "Contact", path: "/contact" },
                   { label: "Support", path: "/support" },
                   { label: "Schedule Call", path: "/schedule-call" },
-                  { label: "Login", path: "/login" }
                 ].map((item) => (
                   <Link
                     key={item.label}
