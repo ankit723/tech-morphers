@@ -66,6 +66,60 @@ export async function sendWhatsAppMessage({ to, message, mediaUrl }: WhatsAppMes
   }
 }
 
+// Helper function to format phone numbers for WhatsApp
+function formatWhatsAppNumber(phoneNumber: string): string {
+  // Remove all non-digit characters
+  let cleanNumber = phoneNumber.replace(/\D/g, '');
+  
+  // If the number doesn't start with a country code, assume it's Indian (+91)
+  if (cleanNumber.length === 10) {
+    cleanNumber = '91' + cleanNumber;
+  }
+  
+  // If it starts with 0, replace with country code
+  if (cleanNumber.startsWith('0')) {
+    cleanNumber = '91' + cleanNumber.substring(1);
+  }
+  
+  // If it already has +91 but as text, clean it
+  if (cleanNumber.startsWith('91') && cleanNumber.length === 12) {
+    return cleanNumber;
+  }
+  
+  return cleanNumber;
+}
+
+// Test function to verify WhatsApp configuration
+export async function testWhatsAppConfiguration() {
+  if (!client || !whatsappNumber) {
+    return {
+      success: false,
+      error: 'Twilio client not configured',
+      configured: false,
+    };
+  }
+
+  try {
+    // Send a test message to the admin number
+    const result = await sendWhatsAppMessage({
+      to: '+919795786303',
+      message: '🧪 *WhatsApp Integration Test*\n\nThis is a test message to verify that WhatsApp integration is working correctly.\n\n*Tech Morphers WhatsApp Service* ✅',
+    });
+
+    return {
+      success: result.success,
+      configured: true,
+      result,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      configured: true,
+    };
+  }
+}
+
 export async function sendEstimatorPDFToUser(userData: {
   fullName: string;
   phone?: string;
@@ -195,6 +249,8 @@ export async function sendScheduleCallConfirmationToUser(callData: {
     });
   };
 
+  const formattedPhone = formatWhatsAppNumber(callData.phone);
+
   const formatTime = (timeString: string) => {
     const [hours, minutes] = timeString.split(':');
     const hour = parseInt(hours);
@@ -236,7 +292,7 @@ If you need to reschedule, please contact us at least 24 hours in advance.
 *Tech Morphers Team* 🚀`;
 
   return await sendWhatsAppMessage({
-    to: callData.phone,
+    to: formattedPhone,
     message,
   });
 }
@@ -308,56 +364,157 @@ ${callData.companyName ? `🏢 *Company:* ${callData.companyName}` : ''}
   });
 }
 
-// Helper function to format phone numbers for WhatsApp
-function formatWhatsAppNumber(phoneNumber: string): string {
-  // Remove all non-digit characters
-  let cleanNumber = phoneNumber.replace(/\D/g, '');
-  
-  // If the number doesn't start with a country code, assume it's Indian (+91)
-  if (cleanNumber.length === 10) {
-    cleanNumber = '91' + cleanNumber;
-  }
-  
-  // If it starts with 0, replace with country code
-  if (cleanNumber.startsWith('0')) {
-    cleanNumber = '91' + cleanNumber.substring(1);
-  }
-  
-  // If it already has +91 but as text, clean it
-  if (cleanNumber.startsWith('91') && cleanNumber.length === 12) {
-    return cleanNumber;
-  }
-  
-  return cleanNumber;
+export async function sendPaymentNotificationToClient(paymentData: {
+  clientName: string;
+  clientPhone: string;
+  invoiceNumber: string;
+  amount: number;
+  currency: string;
+  paymentMethod: string;
+  transactionId: string;
+  submissionId: string;
+}) {
+  const message = `💳 *Payment Submitted Successfully!*
+
+Hi ${paymentData.clientName}! 
+
+Your payment has been successfully submitted and is now under review.
+
+💰 *Payment Details:*
+📄 *Invoice:* ${paymentData.invoiceNumber}
+💵 *Amount:* ${paymentData.currency} ${paymentData.amount.toFixed(2)}
+💳 *Method:* ${paymentData.paymentMethod}
+🔢 *Transaction ID:* ${paymentData.transactionId}
+
+⏳ *Status:* Under Review
+🕐 *Processing Time:* 24-48 hours
+
+✅ *What's Next:*
+• Our team will verify your payment
+• You'll receive a confirmation once approved
+• Invoice status will be updated in your portal
+
+📄 *Reference ID:* ${paymentData.submissionId.substring(0, 8).toUpperCase()}
+
+🔗 *Track Status:* ${process.env.NEXT_PUBLIC_APP_URL}/client/dashboard
+
+Thank you for your payment!
+
+Best regards,
+*Tech Morphers Team* 🚀`;
+
+  return await sendWhatsAppMessage({
+    to: paymentData.clientPhone,
+    message,
+  });
 }
 
-// Test function to verify WhatsApp configuration
-export async function testWhatsAppConfiguration() {
-  if (!client || !whatsappNumber) {
-    return {
-      success: false,
-      error: 'Twilio client not configured',
-      configured: false,
-    };
+export async function sendPaymentNotificationToAdmin(paymentData: {
+  clientName: string;
+  clientEmail: string;
+  clientPhone?: string;
+  invoiceNumber: string;
+  amount: number;
+  currency: string;
+  paymentMethod: string;
+  transactionId: string;
+  paymentProofUrl: string;
+  submissionId: string;
+}) {
+  const adminWhatsApp = '+919795786303';
+
+  const message = `💰 *New Payment Submitted!*
+
+*Client Details:*
+👤 *Name:* ${paymentData.clientName}
+📧 *Email:* ${paymentData.clientEmail}
+${paymentData.clientPhone ? `📱 *Phone:* ${paymentData.clientPhone}` : ''}
+
+*Payment Details:*
+📄 *Invoice:* ${paymentData.invoiceNumber}
+💵 *Amount:* ${paymentData.currency} ${paymentData.amount.toFixed(2)}
+💳 *Method:* ${paymentData.paymentMethod}
+🔢 *Transaction ID:* ${paymentData.transactionId}
+
+📎 *Payment Proof:* ${paymentData.paymentProofUrl}
+
+📄 *Reference ID:* ${paymentData.submissionId.substring(0, 8).toUpperCase()}
+
+🎯 *Action Required:*
+• Verify the payment proof
+• Approve or reject the payment
+• Update client on payment status
+
+*Admin Dashboard:* https://techmorphers.com/admin/clients
+
+*Tech Morphers CRM* 📊`;
+
+  return await sendWhatsAppMessage({
+    to: adminWhatsApp,
+    message,
+  });
+}
+
+export async function sendPaymentStatusUpdateToClient(updateData: {
+  clientName: string;
+  clientPhone: string;
+  invoiceNumber: string;
+  amount: number;
+  currency: string;
+  status: string; // VERIFIED, PAID, REJECTED
+  submissionId: string;
+}) {
+  let statusMessage = '';
+  let statusEmoji = '';
+  let nextSteps = '';
+
+  switch (updateData.status) {
+    case 'VERIFIED':
+      statusEmoji = '✅';
+      statusMessage = 'Payment Verified';
+      nextSteps = '• Your payment has been confirmed\n• Invoice will be marked as paid\n• Project work will proceed as planned';
+      break;
+    case 'PAID':
+      statusEmoji = '🎉';
+      statusMessage = 'Payment Completed';
+      nextSteps = '• Payment successfully processed\n• Invoice is now fully paid\n• Thank you for your business!';
+      break;
+    case 'REJECTED':
+      statusEmoji = '❌';
+      statusMessage = 'Payment Needs Review';
+      nextSteps = '• Please check your payment details\n• Contact support for assistance\n• Resubmit payment if necessary';
+      break;
+    default:
+      statusEmoji = '📋';
+      statusMessage = 'Payment Status Updated';
+      nextSteps = '• Check your client portal for details\n• Contact support if you have questions';
   }
 
-  try {
-    // Send a test message to the admin number
-    const result = await sendWhatsAppMessage({
-      to: '+919795786303',
-      message: '🧪 *WhatsApp Integration Test*\n\nThis is a test message to verify that WhatsApp integration is working correctly.\n\n*Tech Morphers WhatsApp Service* ✅',
-    });
+  const message = `${statusEmoji} *${statusMessage}*
 
-    return {
-      success: result.success,
-      configured: true,
-      result,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
-      configured: true,
-    };
-  }
+Hi ${updateData.clientName}! 
+
+Your payment status has been updated.
+
+💰 *Payment Details:*
+📄 *Invoice:* ${updateData.invoiceNumber}
+💵 *Amount:* ${updateData.currency} ${updateData.amount.toFixed(2)}
+📊 *Status:* ${statusMessage}
+
+✨ *Next Steps:*
+${nextSteps}
+
+📄 *Reference ID:* ${updateData.submissionId.substring(0, 8).toUpperCase()}
+
+🔗 *View Details:* ${process.env.NEXT_PUBLIC_APP_URL}/client/dashboard
+
+${updateData.status === 'REJECTED' ? '📞 Need help? Reply to this message or contact our support team.' : 'Thank you for choosing Tech Morphers!'}
+
+Best regards,
+*Tech Morphers Team* 🚀`;
+
+  return await sendWhatsAppMessage({
+    to: updateData.clientPhone,
+    message,
+  });
 } 

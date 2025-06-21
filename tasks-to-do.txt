@@ -1,18 +1,13 @@
  cron job node server to send continous followups depending age of user creation
 
- minimal admin panel secure
- 
- add convert to client button and converted to client tab in admin panel
- 
- all converted clients will have there own system generated password which can be changed by the user and will have a dashbord where they can see there final quotation, aggrement, genetaed invoices documents,
 
- admin can select the converted client to enter the dashbord of that client but the client needs to acces the dashoard using their email and password
+Issue :
 
+1) in the payment approval the admin is not able tyo see the payment proof 
+2) in the client projects, when client clink on the project it shows all the  documents rather then which are realated to that particular project, and in there in the document there is only download no sign button, 
 
+3) to avoid these issue, iwould suggest to use single compnent to show ever where, like one docment card to show uniformly in the client dashboard and projects and one document card to show uniformly in the admin clients or admin clients project to maaintain uniformity and consistentency and scalabilirty
 
- now i want you to implement these
+note: and this time do not miss any fearture make it production grade
 
-few notes
-1) for document uiploading use the exsisiting google storage bucket uploading functionality
-2) keep these functionality minimal do not need too much of overly complecated logic 
-3) just keep the design moderna dn proffesional
+understand the whole project and ask me clarifying questioons befor coding

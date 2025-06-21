@@ -38,6 +38,16 @@ model Estimator {
   companyName         String?
   userRole            String?
   pdfUrl              String?
+  
+  // Client conversion
+  isConverted         Boolean  @default(false)
+  convertedAt         DateTime?
+  clientId            String?
+  client              Client?  @relation(fields: [clientId], references: [id])
+  
+  // Document relations
+  documents           ClientDocument[]
+  
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 }
@@ -77,6 +87,196 @@ model ContactPage {
   phone       String
   message     String
   createdAt   DateTime @default(now())
+}
+
+// Client Management Models
+model Client {
+  id              String   @id @default(uuid())
+  email           String   @unique
+  password        String   // Hashed password
+  fullName        String
+  companyName     String?
+  phone           String?
+  
+  // System generated password for admin reference
+  systemPassword  String
+  hasChangedPassword Boolean @default(false)
+  
+  // Login tracking
+  lastLoginAt     DateTime?
+  
+  // Relations
+  estimators      Estimator[]
+  documents       ClientDocument[]
+  paymentRecords  PaymentRecord[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([email])
+}
+
+model ClientDocument {
+  id          String      @id @default(uuid())
+  clientId    String
+  client      Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  
+  // Project/Estimator relation (optional)
+  estimatorId String?
+  estimator   Estimator?  @relation(fields: [estimatorId], references: [id], onDelete: SetNull)
+  
+  // Document details
+  title       String
+  description String?
+  type        DocumentType
+  fileUrl     String
+  fileName    String
+  fileSize    Int         // in bytes
+  
+  // Upload info
+  uploadedBy  String      // Admin who uploaded
+  uploadedAt  DateTime    @default(now())
+  
+  // Signing functionality (except for invoices)
+  requiresSignature Boolean @default(false)
+  isSigned         Boolean @default(false)
+  signedAt         DateTime?
+  signedBy         String? // Client name who signed
+  signatureData    String? // Base64 signature or signature metadata
+  
+  // Invoice-specific fields
+  invoiceNumber    String? // For invoices only
+  invoiceAmount    Decimal? @db.Decimal(10,2) // For invoices only
+  currency         String? @default("USD") // For invoices only
+  dueDate          DateTime? // For invoices only
+  
+  // Payment tracking (for invoices)
+  paymentStatus    PaymentStatus @default(PENDING)
+  paidAt           DateTime?
+  paymentProof     String? // URL to payment screenshot
+  transactionId    String? // Client provided transaction ID
+  paymentMethod    String? // UPI, Bank Transfer, etc.
+  paymentNotes     String? // Additional payment notes
+  
+  // Admin verification for payments
+  paymentVerified  Boolean @default(false)
+  verifiedBy       String? // Admin who verified payment
+  verifiedAt       DateTime?
+  verificationNotes String?
+  
+  // Relations
+  paymentRecords   PaymentRecord[]
+  
+  @@index([clientId])
+  @@index([type])
+  @@index([paymentStatus])
+  @@index([invoiceNumber])
+}
+
+// New model for payment records and accounting
+model PaymentRecord {
+  id              String        @id @default(uuid())
+  
+  // Document reference
+  documentId      String
+  document        ClientDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  
+  // Client info
+  clientId        String
+  client          Client        @relation(fields: [clientId], references: [id])
+  
+  // Payment details
+  amount          Decimal       @db.Decimal(10,2)
+  currency        String        @default("USD")
+  paymentMethod   String        // UPI, Bank Transfer, Cash, Card, etc.
+  transactionId   String?
+  
+  // Payment proof
+  proofImageUrl   String?       // Screenshot of payment
+  proofFileName   String?
+  
+  // Status and verification
+  status          PaymentStatus @default(PENDING)
+  verifiedBy      String?       // Admin who verified
+  verifiedAt      DateTime?
+  
+  // Accounting
+  accountingNotes String?
+  category        String?       // Project Payment, Maintenance, etc.
+  fiscalYear      String?
+  taxAmount       Decimal?      @db.Decimal(10,2)
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@index([clientId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// Bank details for admin (for invoice generation)
+model BankDetails {
+  id                String   @id @default(uuid())
+  
+  // Bank information
+  bankName          String
+  accountHolderName String
+  accountNumber     String
+  ifscCode          String
+  branchName        String
+  
+  // Digital payment
+  upiId             String?
+  
+  // Status flags
+  isActive          Boolean  @default(true)
+  isDefault         Boolean  @default(false)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@index([isActive, isDefault])
+}
+
+// Invoice template settings
+model InvoiceSettings {
+  id              String   @id @default(uuid())
+  
+  // Company details for invoices
+  companyName     String
+  companyAddress  String
+  companyEmail    String
+  companyPhone    String
+  companyWebsite  String?
+  taxNumber       String?
+  
+  // Invoice configuration
+  invoicePrefix   String   @default("INV")
+  currentNumber   Int      @default(1000)
+  taxRate         Float    @default(18.0) // Default tax rate percentage
+  defaultDueDays  Int      @default(30)   // Default due date in days
+  
+  // Default terms and text
+  paymentTerms    String?
+  footerText      String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Admin {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  password    String   // Hashed password
+  name        String
+  role        AdminRole @default(ADMIN)
+  isActive    Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  lastLoginAt DateTime?
+  
+  @@index([email])
 }
 
 // Call Scheduling Models
@@ -393,4 +593,29 @@ enum CallStatus {
   CANCELLED
   NO_SHOW
   RESCHEDULED
+}
+
+enum DocumentType {
+  SPECIFICATION
+  CONTRACT
+  INVOICE
+  PROPOSAL
+  REPORT
+  OTHER
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  MODERATOR
+}
+
+enum PaymentStatus {
+  PENDING
+  SUBMITTED
+  VERIFIED
+  PAID
+  FAILED
+  DISPUTED
+  REFUNDED
 }

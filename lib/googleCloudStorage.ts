@@ -48,16 +48,57 @@ export interface UploadResult {
 }
 
 /**
- * Upload a PDF buffer to Google Cloud Storage
- * @param buffer - PDF file buffer
+ * Get MIME type from file extension
+ * @param fileName - File name with extension
+ * @returns MIME type string
+ */
+function getMimeTypeFromFileName(fileName: string): string {
+  const extension = fileName.toLowerCase().split('.').pop();
+  
+  const mimeTypes: { [key: string]: string } = {
+    // Images
+    'jpg': 'image/jpeg',
+    'jpeg': 'image/jpeg',
+    'png': 'image/png',
+    'gif': 'image/gif',
+    'webp': 'image/webp',
+    'bmp': 'image/bmp',
+    'svg': 'image/svg+xml',
+    
+    // Documents
+    'pdf': 'application/pdf',
+    'doc': 'application/msword',
+    'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'txt': 'text/plain',
+    'rtf': 'application/rtf',
+    
+    // Spreadsheets
+    'xls': 'application/vnd.ms-excel',
+    'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'csv': 'text/csv',
+    
+    // Other
+    'zip': 'application/zip',
+    'json': 'application/json',
+    'xml': 'application/xml'
+  };
+  
+  return mimeTypes[extension || ''] || 'application/octet-stream';
+}
+
+/**
+ * Upload a file buffer to Google Cloud Storage with proper MIME type detection
+ * @param buffer - File buffer
  * @param fileName - Name for the file
  * @param folder - Optional folder path (e.g., 'quotations/')
+ * @param contentType - Optional explicit content type (if not provided, will be detected from filename)
  * @returns Promise with upload result
  */
-export async function uploadPDFToGCS(
+export async function uploadFileToGCS(
   buffer: Buffer,
   fileName: string,
-  folder = 'quotations/'
+  folder = 'uploads/',
+  contentType?: string
 ): Promise<UploadResult> {
   if (!storage || !bucketName) {
     return {
@@ -71,10 +112,13 @@ export async function uploadPDFToGCS(
     const fullFileName = `${folder}${fileName}`;
     const file = bucket.file(fullFileName);
 
+    // Detect MIME type if not provided
+    const detectedContentType = contentType || getMimeTypeFromFileName(fileName);
+
     // Upload the buffer
     await file.save(buffer, {
       metadata: {
-        contentType: 'application/pdf',
+        contentType: detectedContentType,
         cacheControl: 'public, max-age=3600', // Cache for 1 hour
       },
     });
@@ -82,7 +126,7 @@ export async function uploadPDFToGCS(
     // Get the public URL
     const publicUrl = `https://storage.googleapis.com/${bucketName}/${fullFileName}`;
 
-    console.log(`PDF uploaded successfully to: ${publicUrl}`);
+    console.log(`File uploaded successfully to: ${publicUrl} with content type: ${detectedContentType}`);
 
     return {
       success: true,
@@ -90,12 +134,28 @@ export async function uploadPDFToGCS(
       fileName: fullFileName,
     };
   } catch (error) {
-    console.error('Error uploading PDF to Google Cloud Storage:', error);
+    console.error('Error uploading file to Google Cloud Storage:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred',
     };
   }
+}
+
+/**
+ * Upload a PDF buffer to Google Cloud Storage
+ * @param buffer - PDF file buffer
+ * @param fileName - Name for the file
+ * @param folder - Optional folder path (e.g., 'quotations/')
+ * @returns Promise with upload result
+ */
+export async function uploadPDFToGCS(
+  buffer: Buffer,
+  fileName: string,
+  folder = 'quotations/'
+): Promise<UploadResult> {
+  // Use the generic upload function with PDF content type
+  return uploadFileToGCS(buffer, fileName, folder, 'application/pdf');
 }
 
 /**

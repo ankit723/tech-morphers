@@ -1,18 +1,46 @@
-import { AdminNavbar } from "./_components/admin-navbar";
+"use client"
+
+import { useState } from "react"
+import { AdminSidebar, AdminTopBar, AdminMobileSidebar } from "./_components/admin-sidebar"
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
-      <AdminNavbar />
-      <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6">
-        <div className="container mx-auto">
-          {children}
-        </div>
-      </main>
+    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block">
+        <AdminSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      </div>
+
+      {/* Mobile Sidebar */}
+      <AdminMobileSidebar isOpen={isMobileMenuOpen} setIsOpen={setIsMobileMenuOpen} />
+
+      {/* Main Content Area */}
+      <div 
+        className="flex-1 flex flex-col transition-all duration-300"
+        style={{ marginLeft: isCollapsed ? 80 : 280 }}
+      >
+        {/* Top Bar */}
+        <AdminTopBar 
+          isCollapsed={isCollapsed} 
+          setIsCollapsed={setIsCollapsed}
+          isMobileMenuOpen={isMobileMenuOpen}
+          setIsMobileMenuOpen={setIsMobileMenuOpen}
+        />
+
+        {/* Page Content */}
+        <main className="flex-1 pt-16 p-6 lg:p-8 mt-[3rem]">
+          <div className="max-w-7xl mx-auto">
+            {children}
+          </div>
+        </main>
+      </div>
     </div>
   )
 }

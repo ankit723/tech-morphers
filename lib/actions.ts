@@ -32,336 +32,232 @@ export type DashboardStats = {
   }
 }
 
+// Helper function to calculate percentage change
+function calculatePercentageChange(current: number, previous: number): number {
+  if (previous === 0) return current > 0 ? 100 : 0
+  return ((current - previous) / previous) * 100
+}
+
 export async function getDashboardStats(): Promise<DashboardStats> {
   try {
-    // Get current date and previous month for comparison
     const now = new Date()
-    const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1)
-    const previousMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
-    const previousMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0)
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+    const startOfPreviousMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+    const endOfPreviousMonth = new Date(now.getFullYear(), now.getMonth(), 0)
 
-    // Get total counts for each model
+    // Get current month data
     const [
-      contactInquiries,
-      estimatorRequests,
-      getStartedForms,
-      talkToUsForms,
-      letsTalkSubscriptions,
-      contactPageForms
+      contactUs,
+      estimator,
+      getStarted,
+      talkToUs,
+      letsTalk,
+      contactPage,
     ] = await Promise.all([
-      prisma.contactUs.count(),
-      prisma.estimator.count(),
-      prisma.getStarted.count(),
-      prisma.talkToUs.count(),
-      prisma.letsTalk.count(),
-      prisma.contactPage.count()
+      prisma.contactUs.findMany({ where: { createdAt: { gte: startOfMonth } } }),
+      prisma.estimator.findMany({ where: { createdAt: { gte: startOfMonth } } }),
+      prisma.getStarted.findMany({ where: { createdAt: { gte: startOfMonth } } }),
+      prisma.talkToUs.findMany({ where: { createdAt: { gte: startOfMonth } } }),
+      prisma.letsTalk.findMany({ where: { createdAt: { gte: startOfMonth } } }),
+      prisma.contactPage.findMany({ where: { createdAt: { gte: startOfMonth } } }),
     ])
 
-    // Get current month counts
+    // Get previous month data for comparison
     const [
-      contactCurrentMonth,
-      estimatorCurrentMonth,
-      getStartedCurrentMonth,
-      talkToUsCurrentMonth,
-      letsTalkCurrentMonth,
-      contactPageCurrentMonth
+      prevContactUs,
+      prevEstimator,
+      prevGetStarted,
+      prevTalkToUs,
+      prevLetsTalk,
+      prevContactPage,
     ] = await Promise.all([
-      prisma.contactUs.count({
-        where: { createdAt: { gte: currentMonthStart } }
+      prisma.contactUs.findMany({ 
+        where: { 
+          createdAt: { 
+            gte: startOfPreviousMonth,
+            lte: endOfPreviousMonth
+          } 
+        } 
       }),
-      prisma.estimator.count({
-        where: { createdAt: { gte: currentMonthStart } }
+      prisma.estimator.findMany({ 
+        where: { 
+          createdAt: { 
+            gte: startOfPreviousMonth,
+            lte: endOfPreviousMonth
+          } 
+        } 
       }),
-      prisma.getStarted.count({
-        where: { createdAt: { gte: currentMonthStart } }
+      prisma.getStarted.findMany({ 
+        where: { 
+          createdAt: { 
+            gte: startOfPreviousMonth,
+            lte: endOfPreviousMonth
+          } 
+        } 
       }),
-      prisma.talkToUs.count({
-        where: { createdAt: { gte: currentMonthStart } }
+      prisma.talkToUs.findMany({ 
+        where: { 
+          createdAt: { 
+            gte: startOfPreviousMonth,
+            lte: endOfPreviousMonth
+          } 
+        } 
       }),
-      prisma.letsTalk.count({
-        where: { createdAt: { gte: currentMonthStart } }
+      prisma.letsTalk.findMany({ 
+        where: { 
+          createdAt: { 
+            gte: startOfPreviousMonth,
+            lte: endOfPreviousMonth
+          } 
+        } 
       }),
-      prisma.contactPage.count({
-        where: { createdAt: { gte: currentMonthStart } }
-      })
+      prisma.contactPage.findMany({ 
+        where: { 
+          createdAt: { 
+            gte: startOfPreviousMonth,
+            lte: endOfPreviousMonth
+          } 
+        } 
+      }),
     ])
 
-    // Get previous month counts
+    // Get all-time data for totals
     const [
-      contactPreviousMonth,
-      estimatorPreviousMonth,
-      getStartedPreviousMonth,
-      talkToUsPreviousMonth,
-      letsTalkPreviousMonth,
-      contactPagePreviousMonth
+      allContactUs,
+      allEstimator,
+      allGetStarted,
+      allTalkToUs,
+      allLetsTalk,
+      allContactPage,
     ] = await Promise.all([
-      prisma.contactUs.count({
-        where: { 
-          createdAt: { 
-            gte: previousMonthStart,
-            lte: previousMonthEnd
-          }
-        }
-      }),
-      prisma.estimator.count({
-        where: { 
-          createdAt: { 
-            gte: previousMonthStart,
-            lte: previousMonthEnd
-          }
-        }
-      }),
-      prisma.getStarted.count({
-        where: { 
-          createdAt: { 
-            gte: previousMonthStart,
-            lte: previousMonthEnd
-          }
-        }
-      }),
-      prisma.talkToUs.count({
-        where: { 
-          createdAt: { 
-            gte: previousMonthStart,
-            lte: previousMonthEnd
-          }
-        }
-      }),
-      prisma.letsTalk.count({
-        where: { 
-          createdAt: { 
-            gte: previousMonthStart,
-            lte: previousMonthEnd
-          }
-        }
-      }),
-      prisma.contactPage.count({
-        where: { 
-          createdAt: { 
-            gte: previousMonthStart,
-            lte: previousMonthEnd
-          }
-        }
-      })
+      prisma.contactUs.findMany({ orderBy: { createdAt: 'desc' } }),
+      prisma.estimator.findMany({ orderBy: { createdAt: 'desc' } }),
+      prisma.getStarted.findMany({ orderBy: { createdAt: 'desc' } }),
+      prisma.talkToUs.findMany({ orderBy: { createdAt: 'desc' } }),
+      prisma.letsTalk.findMany({ orderBy: { createdAt: 'desc' } }),
+      prisma.contactPage.findMany({ orderBy: { createdAt: 'desc' } }),
     ])
 
-    const totalLeads = contactInquiries + estimatorRequests + getStartedForms + talkToUsForms + letsTalkSubscriptions + contactPageForms
-
-    // Get recent activities from all tables
-    const [
-      recentContacts,
-      recentEstimators,
-      recentGetStarted,
-      recentTalkToUs,
-      recentLetsTalk,
-      recentContactPage
-    ] = await Promise.all([
-      prisma.contactUs.findMany({
-        take: 10,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          name: true,
-          companyName: true,
-          selectedPackage: true,
-          createdAt: true
-        }
-      }),
-      prisma.estimator.findMany({
-        take: 10,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          fullName: true,
-          companyName: true,
-          projectType: true,
-          budgetRange: true,
-          createdAt: true
-        }
-      }),
-      prisma.getStarted.findMany({
-        take: 10,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          name: true,
-          companyName: true,
-          service: true,
-          budget: true,
-          createdAt: true
-        }
-      }),
-      prisma.talkToUs.findMany({
-        take: 10,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          name: true,
-          companyName: true,
-          createdAt: true
-        }
-      }),
-      prisma.letsTalk.findMany({
-        take: 10,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          email: true,
-          createdAt: true
-        }
-      }),
-      prisma.contactPage.findMany({
-        take: 10,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phone: true,
-          createdAt: true
-        }
-      })
-    ])
-
-    // Format recent activities
-    const recentActivities = [
-      ...recentContacts.map(item => ({
-        id: item.id,
-        type: 'contact' as const,
-        name: `${item.name}${item.companyName ? ` from ${item.companyName}` : ''}`,
-        time: formatTimeAgo(item.createdAt),
-        status: 'new' as const,
-        details: `Package: ${item.selectedPackage}`
-      })),
-      ...recentEstimators.map(item => ({
-        id: item.id,
-        type: 'estimator' as const,
-        name: `${item.fullName}${item.projectType ? ` - ${item.projectType}` : ''}${item.companyName ? ` (${item.companyName})` : ''}`,
-        time: formatTimeAgo(item.createdAt),
-        status: 'pending' as const,
-        details: item.budgetRange ? `Budget: ${item.budgetRange}` : undefined
-      })),
-      ...recentGetStarted.map(item => ({
-        id: item.id,
-        type: 'getstarted' as const,
-        name: `${item.name} - ${item.service}${item.companyName ? ` (${item.companyName})` : ''}`,
-        time: formatTimeAgo(item.createdAt),
-        status: 'new' as const,
-        details: item.budget ? `Budget: ${item.budget}` : undefined
-      })),
-      ...recentTalkToUs.map(item => ({
-        id: item.id,
-        type: 'talktous' as const,
-        name: `${item.name}${item.companyName ? ` from ${item.companyName}` : ''}`,
-        time: formatTimeAgo(item.createdAt),
-        status: 'new' as const
-      })),
-      ...recentLetsTalk.map(item => ({
-        id: item.id,
-        type: 'letstalk' as const,
-        name: `Newsletter subscription: ${item.email}`,
-        time: formatTimeAgo(item.createdAt),
-        status: 'completed' as const,
-        details: `Email subscription`
-      })),
-      ...recentContactPage.map(item => ({
-        id: item.id,
-        type: 'contactpage' as const,
-        name: `${item.name} (${item.email})`,
-        time: formatTimeAgo(item.createdAt),
-        status: 'new' as const,
-        details: item.phone ? `Phone: ${item.phone}` : undefined
-      }))
-    ].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()).slice(0, 20)
-
-    // Get package distribution from ContactUs
-    const packageDistribution = await prisma.contactUs.groupBy({
-      by: ['selectedPackage'],
-      _count: {
-        selectedPackage: true
-      }
-    })
-
-    const packageStats = packageDistribution.reduce((acc, item) => {
-      acc[item.selectedPackage] = item._count.selectedPackage
+    // Calculate package distribution
+    const packageDistribution = allContactUs.reduce((acc, contact) => {
+      const packageName = contact.selectedPackage
+      acc[packageName] = (acc[packageName] || 0) + 1
       return acc
     }, {} as Record<string, number>)
 
-    // Get top services from GetStarted
-    const serviceDistribution = await prisma.getStarted.groupBy({
-      by: ['service'],
-      _count: {
-        service: true
-      },
-      orderBy: {
-        _count: {
-          service: 'desc'
-        }
-      },
-      take: 5
-    })
+    // Calculate top services from getStarted
+    const serviceCount = allGetStarted.reduce((acc, entry) => {
+      const service = entry.service
+      acc[service] = (acc[service] || 0) + 1
+      return acc
+    }, {} as Record<string, number>)
 
-    const topServices = serviceDistribution.map(item => ({
-      service: item.service,
-      count: item._count.service
-    }))
+    const topServices = Object.entries(serviceCount)
+      .map(([service, count]) => ({ service, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5)
 
-    // Calculate monthly trends
-    const calculateChange = (current: number, previous: number) => {
-      if (previous === 0) return current > 0 ? 100 : 0
-      return ((current - previous) / previous) * 100
-    }
-
-    const monthlyTrends = {
-      contactUs: {
-        current: contactCurrentMonth,
-        previous: contactPreviousMonth,
-        change: calculateChange(contactCurrentMonth, contactPreviousMonth)
-      },
-      estimator: {
-        current: estimatorCurrentMonth,
-        previous: estimatorPreviousMonth,
-        change: calculateChange(estimatorCurrentMonth, estimatorPreviousMonth)
-      },
-      getStarted: {
-        current: getStartedCurrentMonth,
-        previous: getStartedPreviousMonth,
-        change: calculateChange(getStartedCurrentMonth, getStartedPreviousMonth)
-      },
-      talkToUs: {
-        current: talkToUsCurrentMonth,
-        previous: talkToUsPreviousMonth,
-        change: calculateChange(talkToUsCurrentMonth, talkToUsPreviousMonth)
-      },
-      letsTalk: {
-        current: letsTalkCurrentMonth,
-        previous: letsTalkPreviousMonth,
-        change: calculateChange(letsTalkCurrentMonth, letsTalkPreviousMonth)
-      },
-      contactPage: {
-        current: contactPageCurrentMonth,
-        previous: contactPagePreviousMonth,
-        change: calculateChange(contactPageCurrentMonth, contactPagePreviousMonth)
-      }
-    }
+    // Create recent activities (last 20 items across all forms)
+    const recentActivities = [
+      ...allContactUs.slice(0, 5).map(item => ({
+        id: item.id,
+        type: 'contact' as const,
+        name: item.name,
+        time: item.createdAt.toISOString(),
+        status: 'new' as const,
+        details: `Package: ${item.selectedPackage}`
+      })),
+      ...allEstimator.slice(0, 5).map(item => ({
+        id: item.id,
+        type: 'estimator' as const,
+        name: item.fullName,
+        time: item.createdAt.toISOString(),
+        status: 'new' as const,
+        details: item.projectType || 'Project estimation'
+      })),
+      ...allGetStarted.slice(0, 5).map(item => ({
+        id: item.id,
+        type: 'getstarted' as const,
+        name: item.name,
+        time: item.createdAt.toISOString(),
+        status: 'new' as const,
+        details: `Service: ${item.service}`
+      })),
+      ...allTalkToUs.slice(0, 3).map(item => ({
+        id: item.id,
+        type: 'talktous' as const,
+        name: item.name,
+        time: item.createdAt.toISOString(),
+        status: 'new' as const,
+        details: item.message.substring(0, 50) + '...'
+      })),
+      ...allLetsTalk.slice(0, 2).map(item => ({
+        id: item.id,
+        type: 'letstalk' as const,
+        name: item.email,
+        time: item.createdAt.toISOString(),
+        status: 'new' as const,
+        details: 'Newsletter subscription'
+      })),
+      ...allContactPage.slice(0, 3).map(item => ({
+        id: item.id,
+        type: 'contactpage' as const,
+        name: item.name,
+        time: item.createdAt.toISOString(),
+        status: 'new' as const,
+        details: item.message.substring(0, 50) + '...'
+      }))
+    ]
+      .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime())
+      .slice(0, 20)
 
     return {
-      contactInquiries,
-      estimatorRequests,
-      getStartedForms,
-      talkToUsForms,
-      letsTalkSubscriptions,
-      contactPageForms,
-      totalLeads,
+      contactInquiries: allContactUs.length,
+      estimatorRequests: allEstimator.length,
+      getStartedForms: allGetStarted.length,
+      talkToUsForms: allTalkToUs.length,
+      letsTalkSubscriptions: allLetsTalk.length,
+      contactPageForms: allContactPage.length,
+      totalLeads: allContactUs.length + allEstimator.length + allGetStarted.length + allTalkToUs.length + allContactPage.length,
       recentActivities,
-      packageDistribution: packageStats,
+      packageDistribution,
       topServices,
-      monthlyTrends
+      monthlyTrends: {
+        contactUs: {
+          current: contactUs.length,
+          previous: prevContactUs.length,
+          change: calculatePercentageChange(contactUs.length, prevContactUs.length)
+        },
+        estimator: {
+          current: estimator.length,
+          previous: prevEstimator.length,
+          change: calculatePercentageChange(estimator.length, prevEstimator.length)
+        },
+        getStarted: {
+          current: getStarted.length,
+          previous: prevGetStarted.length,
+          change: calculatePercentageChange(getStarted.length, prevGetStarted.length)
+        },
+        talkToUs: {
+          current: talkToUs.length,
+          previous: prevTalkToUs.length,
+          change: calculatePercentageChange(talkToUs.length, prevTalkToUs.length)
+        },
+        letsTalk: {
+          current: letsTalk.length,
+          previous: prevLetsTalk.length,
+          change: calculatePercentageChange(letsTalk.length, prevLetsTalk.length)
+        },
+        contactPage: {
+          current: contactPage.length,
+          previous: prevContactPage.length,
+          change: calculatePercentageChange(contactPage.length, prevContactPage.length)
+        }
+      }
     }
-
   } catch (error) {
-    console.error('Dashboard stats error:', error)
-    // Return default/empty data in case of error
+    console.error('Error fetching dashboard stats:', error)
+    // Return default stats in case of error
     return {
       contactInquiries: 0,
       estimatorRequests: 0,
@@ -382,8 +278,6 @@ export async function getDashboardStats(): Promise<DashboardStats> {
         contactPage: { current: 0, previous: 0, change: 0 }
       }
     }
-  } finally {
-    await prisma.$disconnect()
   }
 }
 
@@ -405,7 +299,16 @@ export async function getEstimatorEntries() {
   try {
     return await prisma.estimator.findMany({
       orderBy: { createdAt: 'desc' },
-      take: 50
+      take: 50,
+      include: {
+        client: {
+          select: {
+            id: true,
+            email: true,
+            fullName: true
+          }
+        }
+      }
     })
   } catch (error) {
     console.error('Error fetching Estimator entries:', error)
@@ -461,20 +364,73 @@ export async function getContactPageEntries() {
   }
 }
 
-function formatTimeAgo(date: Date): string {
-  const now = new Date()
-  const diffInMs = now.getTime() - date.getTime()
-  const diffInMinutes = Math.floor(diffInMs / (1000 * 60))
-  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60))
-  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24))
+// Get all clients
+export async function getClients() {
+  try {
+    const clients = await prisma.client.findMany({
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        email: true,
+        fullName: true,
+        phone: true,
+        companyName: true,
+        systemPassword: true,
+        hasChangedPassword: true,
+        createdAt: true,
+        lastLoginAt: true,
+        estimators: {
+          select: {
+            id: true,
+            projectType: true,
+            fullName: true,
+            email: true,
+            phone: true,
+            companyName: true,
+            projectPurpose: true,
+            budgetRange: true,
+            deliveryTimeline: true,
+            customRequests: true,
+            createdAt: true
+          }
+        },
+        documents: {
+          select: {
+            id: true,
+            title: true,
+            type: true,
+            uploadedAt: true,
+            fileUrl: true,
+            fileName: true,
+            fileSize: true,
+            uploadedBy: true,
+            requiresSignature: true,
+            isSigned: true,
+            signedAt: true,
+            invoiceNumber: true,
+            invoiceAmount: true,
+            currency: true,
+            dueDate: true,
+            paymentStatus: true,
+            paymentProof: true,
+            verifiedAt: true,
+            verifiedBy: true,
+            paidAt: true
+          }
+        }
+      }
+    })
 
-  if (diffInMinutes < 1) {
-    return 'Just now'
-  } else if (diffInMinutes < 60) {
-    return `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'} ago`
-  } else if (diffInHours < 24) {
-    return `${diffInHours} hour${diffInHours === 1 ? '' : 's'} ago`
-  } else {
-    return `${diffInDays} day${diffInDays === 1 ? '' : 's'} ago`
+    // Convert Decimal values to numbers for client components
+    return clients.map(client => ({
+      ...client,
+      documents: client.documents.map(doc => ({
+        ...doc,
+        invoiceAmount: doc.invoiceAmount ? Number(doc.invoiceAmount) : null
+      }))
+    }))
+  } catch (error) {
+    console.error('Error fetching clients:', error)
+    return []
   }
 } 
