@@ -8,7 +8,16 @@ export async function PUT(
   try {
     const params = await context.params;
     const projectId = params.id;
-    const { projectType, projectPurpose, budget, timeline, status } = await request.json();
+    const { 
+      projectType, 
+      projectPurpose, 
+      budget, 
+      timeline, 
+      status,
+      projectCost,
+      currency,
+      projectStatus
+    } = await request.json();
 
     if (!projectType || !projectPurpose) {
       return NextResponse.json(
@@ -37,7 +46,11 @@ export async function PUT(
         projectPurpose,
         budgetRange: budget,
         deliveryTimeline: timeline,
-        customRequests: status
+        customRequests: status,
+        projectCost: projectCost ? parseFloat(projectCost) : null,
+        currency: currency || 'USD',
+        projectStatus: projectStatus || 'JUST_STARTED',
+        updatedAt: new Date()
       }
     });
 
@@ -51,6 +64,9 @@ export async function PUT(
         budgetRange: updatedProject.budgetRange,
         deliveryTimeline: updatedProject.deliveryTimeline,
         customRequests: updatedProject.customRequests,
+        projectCost: updatedProject.projectCost,
+        currency: updatedProject.currency,
+        projectStatus: updatedProject.projectStatus,
         createdAt: updatedProject.createdAt
       }
     });

@@ -13,24 +13,32 @@ import {
   Building2
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ProjectsList } from '../../components/ProjectsList'
 import { CreateProjectModal } from '../../components/CreateProjectModal'
 
 type ClientEstimator = {
   id: string
   projectType: string | null
-  createdAt: Date
-  projectPurpose?: string
-  budgetRange?: string
-  deliveryTimeline?: string
-  customRequests?: string
+  projectPurpose: string | null
+  budgetRange: string | null
+  deliveryTimeline: string | null
+  customRequests: string | null
+  createdAt: string
   documentsCount?: number
+  projectCost?: number
+  currency?: string
+  projectStatus?: string
+  totalPaid?: number
+  totalVerified?: number
+  isFullyPaid?: boolean
+  exceededAmount?: number
   documents?: Array<{
     id: string
     title: string
     type: string
-    uploadedAt: Date
+    paymentStatus?: string
+    invoiceAmount?: number
     requiresSignature: boolean
     isSigned: boolean
   }>
@@ -56,6 +64,7 @@ interface ClientProjectsPageProps {
 export default function ClientProjectsPage({ params }: ClientProjectsPageProps) {
   const router = useRouter()
   const [client, setClient] = useState<Client | null>(null)
+  const [projects, setProjects] = useState<ClientEstimator[]>([])
   const [loading, setLoading] = useState(true)
   const [showProjectModal, setShowProjectModal] = useState(false)
 
@@ -68,11 +77,20 @@ export default function ClientProjectsPage({ params }: ClientProjectsPageProps) 
       const resolvedParams = await params
       const clientId = resolvedParams.id
 
-      const response = await fetch(`/api/admin/clients/${clientId}`)
-      const result = await response.json()
+      // Load client basic information
+      const clientResponse = await fetch(`/api/admin/clients/${clientId}`)
+      const clientResult = await clientResponse.json()
 
-      if (result.success) {
-        setClient(result.client)
+      if (clientResult.success) {
+        setClient(clientResult.client)
+        
+        // Load projects with payment calculations
+        const projectsResponse = await fetch(`/api/admin/projects?clientId=${clientId}`)
+        const projectsResult = await projectsResponse.json()
+        
+        if (projectsResult.success) {
+          setProjects(projectsResult.projects)
+        }
       } else {
         router.push('/admin/clients')
       }
@@ -86,6 +104,11 @@ export default function ClientProjectsPage({ params }: ClientProjectsPageProps) 
 
   const handleProjectSelect = (project: ClientEstimator) => {
     router.push(`/admin/clients/${client!.id}/projects/${project.id}`)
+  }
+
+  const handleProjectCreated = () => {
+    setShowProjectModal(false)
+    loadClient() // Reload both client and projects data
   }
 
   if (loading) {
@@ -135,7 +158,7 @@ export default function ClientProjectsPage({ params }: ClientProjectsPageProps) 
               Projects for {client.fullName}
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              {client.companyName || 'Individual Client'} • {client.estimators.length} projects
+              {client.companyName || 'Individual Client'} • {projects.length} projects
             </p>
           </div>
         </div>
@@ -193,7 +216,7 @@ export default function ClientProjectsPage({ params }: ClientProjectsPageProps) 
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Projects</p>
-                  <p className="text-sm text-gray-900 dark:text-white">{client.estimators.length}</p>
+                  <p className="text-sm text-gray-900 dark:text-white">{projects.length}</p>
                 </div>
               </div>
               
@@ -202,7 +225,7 @@ export default function ClientProjectsPage({ params }: ClientProjectsPageProps) 
                   <Calendar className="w-5 h-5 text-orange-600 dark:text-orange-400" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Client Since</p>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Member Since</p>
                   <p className="text-sm text-gray-900 dark:text-white">
                     {new Date(client.createdAt).toLocaleDateString()}
                   </p>
@@ -219,25 +242,12 @@ export default function ClientProjectsPage({ params }: ClientProjectsPageProps) 
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <FolderOpen className="w-5 h-5 text-blue-600" />
-              <span>All Projects</span>
-            </CardTitle>
-            <CardDescription>
-              Click on any project to view its documents and details
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ProjectsList
-              projects={client.estimators}
-              clientId={client.id}
-              onProjectSelect={handleProjectSelect}
-              onRefresh={loadClient}
-            />
-          </CardContent>
-        </Card>
+        <ProjectsList
+          projects={projects}
+          clientId={client.id}
+          onProjectSelect={handleProjectSelect}
+          onRefresh={loadClient}
+        />
       </motion.div>
 
       {/* Create Project Modal */}
@@ -245,10 +255,7 @@ export default function ClientProjectsPage({ params }: ClientProjectsPageProps) 
         <CreateProjectModal
           clientId={client.id}
           onClose={() => setShowProjectModal(false)}
-          onSuccess={() => {
-            setShowProjectModal(false)
-            loadClient()
-          }}
+          onSuccess={handleProjectCreated}
         />
       )}
     </div>

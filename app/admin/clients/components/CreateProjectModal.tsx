@@ -1,11 +1,12 @@
 "use client"
 
 import { useState } from 'react'
-import { X, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Loader2 } from 'lucide-react'
 
 interface CreateProjectModalProps {
   clientId: string
@@ -20,7 +21,10 @@ export function CreateProjectModal({ clientId, onClose, onSuccess }: CreateProje
     projectPurpose: '',
     budgetRange: '',
     deliveryTimeline: '',
-    customRequests: ''
+    customRequests: '',
+    projectCost: '',
+    currency: 'USD',
+    projectStatus: 'JUST_STARTED'
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -43,7 +47,10 @@ export function CreateProjectModal({ clientId, onClose, onSuccess }: CreateProje
           projectPurpose: formData.projectPurpose,
           budget: formData.budgetRange,
           timeline: formData.deliveryTimeline,
-          status: formData.customRequests
+          status: formData.customRequests,
+          projectCost: formData.projectCost ? parseFloat(formData.projectCost) : null,
+          currency: formData.currency,
+          projectStatus: formData.projectStatus
         })
       })
 
@@ -61,41 +68,72 @@ export function CreateProjectModal({ clientId, onClose, onSuccess }: CreateProje
     }
   }
 
+  const projectStatusOptions = [
+    { value: 'JUST_STARTED', label: 'Just Started' },
+    { value: 'TEN_PERCENT', label: '10% Completed' },
+    { value: 'THIRTY_PERCENT', label: '30% Completed' },
+    { value: 'FIFTY_PERCENT', label: '50% Completed' },
+    { value: 'SEVENTY_PERCENT', label: '70% Completed' },
+    { value: 'ALMOST_COMPLETED', label: 'Almost Completed' },
+    { value: 'COMPLETED', label: 'Completed' }
+  ]
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full m-4 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full m-4 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">Create New Project</h3>
           <Button variant="ghost" size="sm" onClick={onClose}>
-            <X className="w-4 h-4" />
+            <span className="text-xl">×</span>
           </Button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="projectType">Project Type <span className="text-red-500">*</span></Label>
-            <Select 
-              value={formData.projectType} 
-              onValueChange={(value) => setFormData(prev => ({ ...prev, projectType: value }))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select project type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Website Development">Website Development</SelectItem>
-                <SelectItem value="Mobile App Development">Mobile App Development</SelectItem>
-                <SelectItem value="E-commerce Platform">E-commerce Platform</SelectItem>
-                <SelectItem value="Custom Software">Custom Software</SelectItem>
-                <SelectItem value="UI/UX Design">UI/UX Design</SelectItem>
-                <SelectItem value="Digital Marketing">Digital Marketing</SelectItem>
-                <SelectItem value="Consultation">Consultation</SelectItem>
-                <SelectItem value="Other">Other</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="projectType">Project Type *</Label>
+              <Select 
+                value={formData.projectType} 
+                onValueChange={(value) => setFormData(prev => ({ ...prev, projectType: value }))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select project type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Website Development">Website Development</SelectItem>
+                  <SelectItem value="Mobile App Development">Mobile App Development</SelectItem>
+                  <SelectItem value="E-commerce Platform">E-commerce Platform</SelectItem>
+                  <SelectItem value="Custom Software">Custom Software</SelectItem>
+                  <SelectItem value="UI/UX Design">UI/UX Design</SelectItem>
+                  <SelectItem value="Digital Marketing">Digital Marketing</SelectItem>
+                  <SelectItem value="Consultation">Consultation</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="projectStatus">Project Status</Label>
+              <Select 
+                value={formData.projectStatus} 
+                onValueChange={(value) => setFormData(prev => ({ ...prev, projectStatus: value }))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  {projectStatusOptions.map(option => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div>
-            <Label htmlFor="projectPurpose">Project Purpose <span className="text-red-500">*</span></Label>
+            <Label htmlFor="projectPurpose">Project Purpose *</Label>
             <Textarea
               id="projectPurpose"
               value={formData.projectPurpose}
@@ -106,45 +144,79 @@ export function CreateProjectModal({ clientId, onClose, onSuccess }: CreateProje
             />
           </div>
 
-          <div>
-            <Label htmlFor="budgetRange">Budget Range</Label>
-            <Select 
-              value={formData.budgetRange} 
-              onValueChange={(value) => setFormData(prev => ({ ...prev, budgetRange: value }))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select budget range (optional)" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Under $5,000">Under $5,000</SelectItem>
-                <SelectItem value="$5,000 - $10,000">$5,000 - $10,000</SelectItem>
-                <SelectItem value="$10,000 - $25,000">$10,000 - $25,000</SelectItem>
-                <SelectItem value="$25,000 - $50,000">$25,000 - $50,000</SelectItem>
-                <SelectItem value="$50,000+">$50,000+</SelectItem>
-                <SelectItem value="To be discussed">To be discussed</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="budgetRange">Budget Range</Label>
+              <Select 
+                value={formData.budgetRange} 
+                onValueChange={(value) => setFormData(prev => ({ ...prev, budgetRange: value }))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select budget range" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="$500 - $2,000">$500 - $2,000</SelectItem>
+                  <SelectItem value="$2,000 - $5,000">$2,000 - $5,000</SelectItem>
+                  <SelectItem value="$5,000 - $10,000">$5,000 - $10,000</SelectItem>
+                  <SelectItem value="$10,000 - $25,000">$10,000 - $25,000</SelectItem>
+                  <SelectItem value="$25,000+">$25,000+</SelectItem>
+                  <SelectItem value="Flexible">Flexible</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="deliveryTimeline">Delivery Timeline</Label>
+              <Select 
+                value={formData.deliveryTimeline} 
+                onValueChange={(value) => setFormData(prev => ({ ...prev, deliveryTimeline: value }))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select timeline" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ASAP (Rush)">ASAP (Rush)</SelectItem>
+                  <SelectItem value="1-2 weeks">1-2 weeks</SelectItem>
+                  <SelectItem value="1 month">1 month</SelectItem>
+                  <SelectItem value="2-3 months">2-3 months</SelectItem>
+                  <SelectItem value="3-6 months">3-6 months</SelectItem>
+                  <SelectItem value="6+ months">6+ months</SelectItem>
+                  <SelectItem value="Flexible">Flexible</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
-          <div>
-            <Label htmlFor="deliveryTimeline">Delivery Timeline</Label>
-            <Select 
-              value={formData.deliveryTimeline} 
-              onValueChange={(value) => setFormData(prev => ({ ...prev, deliveryTimeline: value }))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select expected timeline (optional)" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ASAP (Rush)">ASAP (Rush)</SelectItem>
-                <SelectItem value="1-2 weeks">1-2 weeks</SelectItem>
-                <SelectItem value="1 month">1 month</SelectItem>
-                <SelectItem value="2-3 months">2-3 months</SelectItem>
-                <SelectItem value="3-6 months">3-6 months</SelectItem>
-                <SelectItem value="6+ months">6+ months</SelectItem>
-                <SelectItem value="Flexible">Flexible</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="col-span-2">
+              <Label htmlFor="projectCost">Project Cost</Label>
+              <Input
+                id="projectCost"
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.projectCost}
+                onChange={(e) => setFormData(prev => ({ ...prev, projectCost: e.target.value }))}
+                placeholder="Enter total project cost"
+              />
+            </div>
+            <div>
+              <Label htmlFor="currency">Currency</Label>
+              <Select 
+                value={formData.currency} 
+                onValueChange={(value) => setFormData(prev => ({ ...prev, currency: value }))}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="USD">USD</SelectItem>
+                  <SelectItem value="EUR">EUR</SelectItem>
+                  <SelectItem value="GBP">GBP</SelectItem>
+                  <SelectItem value="INR">INR</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div>
@@ -153,7 +225,7 @@ export function CreateProjectModal({ clientId, onClose, onSuccess }: CreateProje
               id="customRequests"
               value={formData.customRequests}
               onChange={(e) => setFormData(prev => ({ ...prev, customRequests: e.target.value }))}
-              placeholder="Any additional requirements, notes, or special considerations..."
+              placeholder="Any additional requirements or notes..."
               rows={3}
             />
           </div>

@@ -9,7 +9,8 @@ import {
   Loader2,
   FolderOpen,
   ArrowLeft,
-  Users
+  Users,
+  Package,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -234,9 +235,25 @@ export default function ClientProjects() {
                                 <FolderOpen className="w-5 h-5 text-blue-600" />
                                 <span>Project #{index + 1}</span>
                               </span>
-                              {project.status && (
-                                <Badge variant="secondary">{project.status}</Badge>
-                              )}
+                              <div className="flex items-center space-x-2">
+                                {project.status && (
+                                  <Badge variant="secondary">{project.status}</Badge>
+                                )}
+                                {project.status === 'COMPLETED' && (
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      router.push(`/client/projects/${project.id}/deliverables`)
+                                    }}
+                                    className="text-green-600 hover:text-green-700 border-green-600 hover:border-green-700"
+                                  >
+                                    <Package className="w-4 h-4 mr-1" />
+                                    Deliverables
+                                  </Button>
+                                )}
+                              </div>
                             </CardTitle>
                             <CardDescription>
                               {project.projectType || 'General Project'}

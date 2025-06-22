@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { v4 as uuidv4 } from 'uuid';
+import { uploadFileToGCS } from '@/lib/googleCloudStorage';
 import { sendEmail } from '@/lib/emailer';
 import { sendWhatsAppMessage } from '@/lib/whatsapp';
 
@@ -117,25 +115,29 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'documents');
-    try {
-      await mkdir(uploadsDir, { recursive: true });
-    } catch (error) {
-      console.error('Error creating uploads directory:', error);
-      // Directory already exists
-    }
+    // Convert file to buffer for Google Cloud Storage
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    // Generate unique filename
+    // Generate filename
+    const timestamp = Date.now();
+    const sanitizedTitle = title.replace(/[^a-zA-Z0-9]/g, '_');
     const fileExtension = file.name.split('.').pop();
-    const uniqueFilename = `${uuidv4()}.${fileExtension}`;
-    const filePath = join(uploadsDir, uniqueFilename);
-    const fileUrl = `/uploads/documents/${uniqueFilename}`;
+    const fileName = `${sanitizedTitle}_${timestamp}.${fileExtension}`;
 
-    // Save file to disk
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    await writeFile(filePath, buffer);
+    // Upload to Google Cloud Storage
+    const uploadResult = await uploadFileToGCS(
+      buffer,
+      fileName,
+      `project-documents/${clientId}/${projectId}/`
+    );
+
+    if (!uploadResult.success) {
+      return NextResponse.json({ 
+        success: false, 
+        error: uploadResult.error || 'Failed to upload file' 
+      }, { status: 500 });
+    }
 
     // Save document record to database with proper project relationship
     const document = await prisma.clientDocument.create({
@@ -145,8 +147,8 @@ export async function POST(request: NextRequest) {
         title,
         description: description || null,
         type: type as any,
-        fileName: file.name,
-        fileUrl,
+        fileName: uploadResult.fileName!,
+        fileUrl: uploadResult.url!,
         fileSize: file.size,
         uploadedBy: uploadedBy || 'varanasiartist.omg@gmail.com',
         requiresSignature,
@@ -156,7 +158,8 @@ export async function POST(request: NextRequest) {
         client: {
           select: {
             fullName: true,
-            email: true
+            email: true,
+            phone: true
           }
         },
         estimator: {

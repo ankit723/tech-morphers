@@ -3,7 +3,17 @@ import { prisma } from '@/lib/db';
 
 export async function POST(request: NextRequest) {
   try {
-    const { clientId, projectType, projectPurpose, budget, timeline, status } = await request.json();
+    const { 
+      clientId, 
+      projectType, 
+      projectPurpose, 
+      budget, 
+      timeline, 
+      status,
+      projectCost,
+      currency,
+      projectStatus
+    } = await request.json();
 
     if (!clientId || !projectType || !projectPurpose) {
       return NextResponse.json(
@@ -35,8 +45,11 @@ export async function POST(request: NextRequest) {
         projectPurpose,
         budgetRange: budget,
         deliveryTimeline: timeline,
-        customRequests: status || 'ACTIVE',
-        clientId
+        customRequests: status || '',
+        clientId,
+        projectCost: projectCost ? parseFloat(projectCost) : null,
+        currency: currency || 'USD',
+        projectStatus: projectStatus || 'JUST_STARTED'
       }
     });
 
@@ -50,6 +63,9 @@ export async function POST(request: NextRequest) {
         budgetRange: project.budgetRange,
         deliveryTimeline: project.deliveryTimeline,
         customRequests: project.customRequests,
+        projectCost: project.projectCost,
+        currency: project.currency,
+        projectStatus: project.projectStatus,
         createdAt: project.createdAt
       }
     });
@@ -76,12 +92,61 @@ export async function GET(request: NextRequest) {
 
     const projects = await prisma.estimator.findMany({
       where: whereClause,
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
+      include: {
+        client: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true
+          }
+        },
+        documents: {
+          where: {
+            type: 'INVOICE',
+            paymentStatus: {
+              in: ['VERIFIED', 'PAID']
+            }
+          },
+          select: {
+            invoiceAmount: true,
+            currency: true,
+            paymentStatus: true
+          }
+        }
+      }
+    });
+
+    // Calculate payment totals for each project
+    const projectsWithPayments = projects.map(project => {
+      const totalPaid = project.documents.reduce((sum, doc) => {
+        if (doc.invoiceAmount && (doc.paymentStatus === 'PAID' || doc.paymentStatus === 'VERIFIED')) {
+          return sum + Number(doc.invoiceAmount);
+        }
+        return sum;
+      }, 0);
+
+      const totalVerified = project.documents.reduce((sum, doc) => {
+        if (doc.invoiceAmount && (doc.paymentStatus === 'VERIFIED' || doc.paymentStatus === 'PAID')) {
+          return sum + Number(doc.invoiceAmount);
+        }
+        return sum;
+      }, 0);
+
+      return {
+        ...project,
+        totalPaid,
+        totalVerified,
+        isFullyPaid: project.projectCost ? totalPaid >= Number(project.projectCost) : false,
+        exceededAmount: project.projectCost && totalPaid > Number(project.projectCost) 
+          ? totalPaid - Number(project.projectCost) 
+          : 0
+      };
     });
 
     return NextResponse.json({
       success: true,
-      projects
+      projects: projectsWithPayments
     });
 
   } catch (error: any) {

@@ -45,8 +45,14 @@ model Estimator {
   clientId            String?
   client              Client?  @relation(fields: [clientId], references: [id])
   
+  // Project management fields
+  projectStatus       ProjectStatus @default(JUST_STARTED)
+  projectCost         Decimal? @db.Decimal(10,2)
+  currency            String? @default("USD")
+  
   // Document relations
   documents           ClientDocument[]
+  deliverables        ProjectDeliverable[]
   
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
@@ -618,4 +624,41 @@ enum PaymentStatus {
   FAILED
   DISPUTED
   REFUNDED
+}
+
+// Project Deliverables Model
+model ProjectDeliverable {
+  id          String      @id @default(uuid())
+  projectId   String
+  project     Estimator   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  // File details
+  fileName    String
+  originalName String
+  fileUrl     String
+  fileSize    Int         // in bytes
+  
+  // Upload info
+  uploadedBy  String      // Admin who uploaded
+  uploadedAt  DateTime    @default(now())
+  
+  // Client signature for delivery confirmation
+  isDelivered           Boolean @default(false)
+  deliveredAt           DateTime?
+  clientSignature       String? // Digital confirmation by client
+  clientSignedAt        DateTime?
+  signatureIpAddress    String?
+  
+  @@index([projectId])
+  @@index([isDelivered])
+}
+
+enum ProjectStatus {
+  JUST_STARTED
+  TEN_PERCENT
+  THIRTY_PERCENT
+  FIFTY_PERCENT
+  SEVENTY_PERCENT
+  ALMOST_COMPLETED
+  COMPLETED
 }

@@ -1,13 +1,7 @@
- cron job node server to send continous followups depending age of user creation
-
-
-Issue :
-
-1) in the payment approval the admin is not able tyo see the payment proof 
-2) in the client projects, when client clink on the project it shows all the  documents rather then which are realated to that particular project, and in there in the document there is only download no sign button, 
-
-3) to avoid these issue, iwould suggest to use single compnent to show ever where, like one docment card to show uniformly in the client dashboard and projects and one document card to show uniformly in the admin clients or admin clients project to maaintain uniformity and consistentency and scalabilirty
-
-note: and this time do not miss any fearture make it production grade
-
-understand the whole project and ask me clarifying questioons befor coding
+1: cron job node server to send continous followups depending age of user creation
+2: Adding preapproved template in twilio for whatapp 
+3: Creatign google Buisness Profile
+4: Creating Perfect WhatsApp Buisness Profile
+5: Listing the Comapany in differnt sites and pages
+6: adding razorpay payment option 
+7: basic rbac implementation

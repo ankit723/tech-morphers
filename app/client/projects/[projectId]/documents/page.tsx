@@ -17,7 +17,8 @@ import {
   FolderOpen,
   ArrowLeft,
   User,
-  X
+  X,
+  Package
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -327,6 +328,15 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
                   Project Documents
                 </h1>
               </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                onClick={() => router.push(`/client/projects/${project.id}/deliverables`)}
+                className="flex items-center space-x-2"
+              >
+                <Package className="w-4 h-4" />
+                <span>Project Deliverables</span>
+              </Button>
             </div>
           </div>
         </div>
