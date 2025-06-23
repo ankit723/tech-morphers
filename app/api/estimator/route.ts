@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
       currency: null,
       projectStatus: 'JUST_STARTED',
       projectCost: null,
+      assignedUserId: null,
     };
 
     const savedEstimator = await prisma.estimator.create({

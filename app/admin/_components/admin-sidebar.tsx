@@ -24,9 +24,11 @@ import {
   Users,
   ChevronLeft,
   ChevronRight,
-  CreditCard
+  CreditCard,
+  Package
 } from "lucide-react"
 import { ModeToggle } from "@/components/ui/themeToggle"
+import { User as PrismaUser } from "@prisma/client"
 
 const navItems = [
   {
@@ -34,89 +36,127 @@ const navItems = [
     href: "/admin",
     icon: LayoutDashboard,
     description: "Overview and analytics",
-    category: "main"
+    category: "main",
+    role: ["ADMIN"]
   },
   {
     title: "Clients",
     href: "/admin/clients",
     icon: Users,
     description: "Manage client accounts",
-    category: "main"
+    category: "main",
+    role: ["ADMIN"]
   },
   {
     title: "Payments",
     href: "/admin/payments",
     icon: CreditCard,
     description: "Review payment submissions",
-    category: "main"
+    category: "finance",
+    role: ["ADMIN"]
+  },
+  {
+    title: "Invoices",
+    href: "/admin/invoices",
+    icon: FileText,
+    description: "Manage invoices",
+    category: "finance",
+    role: ["ADMIN"]
+  },
+  {
+    title: "Client Deliveries",
+    href: "/admin/deliveries",
+    icon: Package,
+    description: "Upload project deliverables",
+    category: "main",
+    role: ["ADMIN", "DEVELOPER"]
   },
   {
     title: "Case Studies",
     href: "/admin/case-studies",
     icon: FileText,
     description: "Manage case studies",
-    category: "content"
+    category: "content",
+    role: ["ADMIN", "MARKETING"]
   },
   {
     title: "Blogs",
     href: "/admin/blogs",
     icon: FileText,
     description: "Content management",
-    category: "content"
+    category: "content",
+    role: ["ADMIN", "MARKETING"]
   },
   {
     title: "Contact Us",
     href: "/admin/contact-us",
     icon: MessageSquare,
     description: "Customer messages",
-    category: "leads"
+    category: "leads",
+    role: ["ADMIN"]
   },
   {
     title: "Get Started",
     href: "/admin/get-started",
     icon: MessageSquare,
     description: "Customer messages",
-    category: "leads"
+    category: "leads",
+    role: ["ADMIN"]
+
   },
   {
     title: "Talk to Us",
     href: "/admin/talk-to-us",
     icon: MessageSquare,
     description: "Customer messages",
-    category: "leads"
+    category: "leads",
+    role: ["ADMIN"]
   },
   {
     title: "Let's Talk",
     href: "/admin/lets-talk",
     icon: Mail,
     description: "Newsletter subscriptions",
-    category: "leads"
+    category: "leads",
+    role: ["ADMIN"]
   },
   {
     title: "Contact Page",
     href: "/admin/contact-page",
     icon: Contact,
     description: "General contact inquiries",
-    category: "leads"
+    category: "leads",
+    role: ["ADMIN"]
   },
   {
     title: "Estimator Requests",
     href: "/admin/estimators",
     icon: Calculator,
     description: "Project estimates",
-    category: "leads"
+    category: "leads",
+    role: ["ADMIN"]
   },
   {
     title: "Scheduled Calls",
     href: "/admin/scheduled-calls",
     icon: Calendar,
     description: "Manage scheduled calls",
-    category: "leads"
+    category: "leads",
+    role: ["ADMIN"]
   },
+  {
+    title: "Manage Resources",
+    href: "/admin/resources",
+    icon: FileText,
+    description: "Manage resources",
+    category: "main",
+    role: ["ADMIN", "DEVELOPER"]
+  }
 ]
 
 const categories = {
   main: { title: "Main", items: navItems.filter(item => item.category === "main") },
+  finance: { title: "Finance", items: navItems.filter(item => item.category === "finance") },
   leads: { title: "Lead Management", items: navItems.filter(item => item.category === "leads") },
   content: { title: "Content", items: navItems.filter(item => item.category === "content") },
 }
@@ -124,9 +164,11 @@ const categories = {
 interface AdminSidebarProps {
   isCollapsed: boolean
   setIsCollapsed: (collapsed: boolean) => void
+  user: PrismaUser
+  logout: () => void
 }
 
-export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps) {
+export function AdminSidebar({ isCollapsed, setIsCollapsed, user, logout }: AdminSidebarProps) {
   const [mounted, setMounted] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
@@ -136,7 +178,7 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
   }, [])
 
   const handleLogout = () => {
-    // Add logout logic here
+    logout()
     router.push("/login")
   }
 
@@ -213,7 +255,8 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: AdminSidebarProps)
                 {category.items.map((item) => {
                   const isActive = pathname === item.href
                   const Icon = item.icon
-                  
+                  const isAllowed = item.role.includes(user?.role)
+                  if (!isAllowed) return null
                   return (
                     <Link key={item.href} href={item.href}>
                       <motion.div
@@ -291,9 +334,11 @@ interface AdminTopBarProps {
   setIsCollapsed: (collapsed: boolean) => void
   isMobileMenuOpen: boolean
   setIsMobileMenuOpen: (open: boolean) => void
+  user: PrismaUser
+  logout: () => void
 }
 
-export function AdminTopBar({ isCollapsed, isMobileMenuOpen, setIsMobileMenuOpen }: AdminTopBarProps) {
+export function AdminTopBar({ isCollapsed, isMobileMenuOpen, setIsMobileMenuOpen, user, logout }: AdminTopBarProps) {
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const router = useRouter()
@@ -303,6 +348,7 @@ export function AdminTopBar({ isCollapsed, isMobileMenuOpen, setIsMobileMenuOpen
   }, [])
 
   const handleLogout = () => {
+    logout()
     router.push("/login")
   }
 
@@ -362,7 +408,7 @@ export function AdminTopBar({ isCollapsed, isMobileMenuOpen, setIsMobileMenuOpen
                 <User className="w-4 h-4 text-white" />
               </div>
               <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Admin
+                {user?.role}
               </span>
               <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
             </motion.button>

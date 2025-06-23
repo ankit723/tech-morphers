@@ -8,6 +8,29 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum UserRole {
+  ADMIN
+  DEVELOPER
+  MARKETING
+}
+
+model User {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+  role UserRole
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Project assignments (legacy - keep for backward compatibility)
+  assignedProjects Estimator[] @relation("AssignedUser")
+  
+  // New many-to-many project assignments
+  projectAssignments ProjectAssignment[]
+}
+
 model ContactUs {
   id              String   @id @default(uuid())
   name            String
@@ -49,6 +72,13 @@ model Estimator {
   projectStatus       ProjectStatus @default(JUST_STARTED)
   projectCost         Decimal? @db.Decimal(10,2)
   currency            String? @default("USD")
+  
+  // Legacy single user assignment (keep for backward compatibility)
+  assignedUserId      String?
+  assignedUser        User?    @relation("AssignedUser", fields: [assignedUserId], references: [id])
+  
+  // New many-to-many project assignments
+  projectAssignments  ProjectAssignment[]
   
   // Document relations
   documents           ClientDocument[]
@@ -661,4 +691,55 @@ enum ProjectStatus {
   SEVENTY_PERCENT
   ALMOST_COMPLETED
   COMPLETED
+}
+
+// New model for project assignments with work descriptions
+model ProjectAssignment {
+  id          String   @id @default(uuid())
+  
+  // Relations
+  projectId   String
+  project     Estimator @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Assignment details
+  workDescription String? // What the user is working on
+  role            String? // Role in this specific project (e.g., "Lead Developer", "UI Designer")
+  priority        AssignmentPriority @default(MEDIUM)
+  status          AssignmentStatus @default(ACTIVE)
+  
+  // Progress tracking
+  hoursEstimated  Int?
+  hoursWorked     Int? @default(0)
+  progressNotes   String?
+  lastUpdated     DateTime @default(now())
+  
+  // Assignment metadata
+  assignedBy      String? // Admin who made the assignment
+  assignedAt      DateTime @default(now())
+  completedAt     DateTime?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@unique([projectId, userId])
+  @@index([projectId])
+  @@index([userId])
+  @@index([status])
+}
+
+enum AssignmentPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum AssignmentStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
 }

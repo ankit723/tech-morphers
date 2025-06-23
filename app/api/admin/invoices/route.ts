@@ -61,9 +61,9 @@ export async function POST(request: NextRequest) {
       invoiceSettings = await prisma.invoiceSettings.create({
         data: {
           companyName: 'Tech Morphers',
-          companyAddress: 'Your Company Address',
+          companyAddress: 'Panday Ghat',
           companyEmail: 'hello@techmorphers.com',
-          companyPhone: '+1 (555) 123-4567',
+          companyPhone: '+91 9795786303',
           companyWebsite: 'https://www.techmorphers.com',
           taxRate: 18.0, // Default GST rate
           invoicePrefix: 'INV',
@@ -125,8 +125,8 @@ export async function POST(request: NextRequest) {
     // Company details for invoice (removed tax number)
     const companyDetails = {
       name: 'Tech Morphers',
-      address: 'Your Company Address\nCity, State, ZIP',
-      email: 'contact@techmorphers.com',
+      address: 'Panday Ghat\nVaranasi, Uttar Pradesh, 221001 India',
+      email: 'hello@techmorphers.com',
       phone: '+919795786303',
       website: 'www.techmorphers.com'
       // Removed taxNumber field

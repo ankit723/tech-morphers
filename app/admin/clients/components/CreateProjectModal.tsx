@@ -155,12 +155,10 @@ export function CreateProjectModal({ clientId, onClose, onSuccess }: CreateProje
                   <SelectValue placeholder="Select budget range" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="$500 - $2,000">$500 - $2,000</SelectItem>
-                  <SelectItem value="$2,000 - $5,000">$2,000 - $5,000</SelectItem>
-                  <SelectItem value="$5,000 - $10,000">$5,000 - $10,000</SelectItem>
-                  <SelectItem value="$10,000 - $25,000">$10,000 - $25,000</SelectItem>
-                  <SelectItem value="$25,000+">$25,000+</SelectItem>
-                  <SelectItem value="Flexible">Flexible</SelectItem>
+                  <SelectItem value="₹10000 - ₹25000">₹10000 - ₹25000</SelectItem>
+                  <SelectItem value="₹25000 - ₹50000">₹25000 - ₹50000</SelectItem>
+                  <SelectItem value="₹50000 - ₹75000">₹50000 - ₹75000</SelectItem>
+                  <SelectItem value="₹75000 +">₹75000 +</SelectItem>
                 </SelectContent>
               </Select>
             </div>

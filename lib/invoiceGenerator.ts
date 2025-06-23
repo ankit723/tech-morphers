@@ -232,6 +232,7 @@ export async function generateInvoicePDF(
   if (bankInfo.upiId) {
     try {
       const upiUrl = `upi://pay?pa=${bankInfo.upiId}&pn=${encodeURIComponent(bankInfo.accountHolderName)}&am=${invoiceData.total}&cu=${invoiceData.currency}&tn=${encodeURIComponent(`Invoice ${invoiceData.invoiceNumber}`)}`;
+      console.log("UPI URL", upiUrl);
       const qrCodeDataUrl = await QRCode.toDataURL(upiUrl, { width: 100, margin: 1 });
       
       // Add QR code to the right side

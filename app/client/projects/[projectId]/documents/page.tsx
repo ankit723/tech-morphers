@@ -27,6 +27,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/components/ui/accordion"
+import { BankInfo } from '@/lib/invoiceGenerator'
+import QRCode from 'qrcode'
+import Image from 'next/image'
 
 type ClientDocument = {
   id: string
@@ -57,7 +61,8 @@ type Project = {
   id: string
   projectType: string | null
   projectPurpose?: string
-  budgetRange?: string
+  projectCost?: string
+  currency?: string
   deliveryTimeline?: string
   createdAt: string
   customRequests?: string
@@ -81,6 +86,9 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
   const [documents, setDocuments] = useState<ClientDocument[]>([])
   const [loading, setLoading] = useState(true)
   const [downloadingDocumentId, setDownloadingDocumentId] = useState<string | null>(null)
+  const [bankDetails, setBankDetails] = useState<BankInfo | null>(null)
+  const [upiQRCode, setUpiQRCode] = useState<string | null>(null)
+  const [upiAmount, setUpiAmount] = useState<number>(0)
   
   // Payment modal state
   const [showPaymentModal, setShowPaymentModal] = useState(false)
@@ -100,9 +108,24 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
   const [signingLoading, setSigningLoading] = useState(false)
   const [signingError, setSigningError] = useState('')
 
+  const fetchBankDetails = async () => {
+    const response = await fetch('/api/admin/bank-details')
+    const data = await response.json()
+    setBankDetails(data)
+  }
+
+  const createQRCode=async()=>{
+    const upiUrl = `upi://pay?pa=${bankDetails?.upiId}&pn=${encodeURIComponent(bankDetails?.accountHolderName || "")}&am=${upiAmount}&cu=${project?.currency}&tn=${encodeURIComponent(`Invoice ${project?.id}`)}`;
+      console.log("UPI URL", upiUrl);
+      const qrCodeDataUrl = await QRCode.toDataURL(upiUrl, { width: 100, margin: 1 });
+      setUpiQRCode(qrCodeDataUrl)
+  }
+
   useEffect(() => {
     loadProjectData()
-  }, [])
+    fetchBankDetails()
+    createQRCode()
+  }, [bankDetails, project, upiAmount])
 
   const loadProjectData = async () => {
     try {
@@ -373,11 +396,11 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
                       </p>
                     </div>
                   )}
-                  {project.budgetRange && (
+                  {project.projectCost && (
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">Budget Range</Label>
+                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Project Price</Label>
                       <p className="mt-1 text-sm text-gray-900 dark:text-white">
-                        {project.budgetRange}
+                        {project.currency} {project.projectCost}
                       </p>
                     </div>
                   )}
@@ -531,6 +554,7 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
                                 onClick={() => {
                                   setSelectedDocument(document)
                                   setShowPaymentModal(true)
+                                  setUpiAmount(document.invoiceAmount || 0)
                                 }}
                                 className="flex items-center space-x-2 bg-green-600 hover:bg-green-700"
                               >
@@ -594,6 +618,27 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
                   Due: {new Date(selectedDocument.dueDate).toLocaleDateString()}
                 </p>
               )}
+              <Accordion type="single" collapsible defaultValue="item-2">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger>Bank Details</AccordionTrigger>
+                  <AccordionContent>
+                    <div>
+                      Bank Name: {bankDetails?.bankName}
+                      Account Holder Name: {bankDetails?.accountHolderName}
+                      Account Number: {bankDetails?.accountNumber}
+                      IFSC Code: {bankDetails?.ifscCode}
+                      Branch Name: {bankDetails?.branchName}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="item-2">
+                  <AccordionTrigger>UPI Details</AccordionTrigger>
+                  <AccordionContent>
+                    UPI ID: {bankDetails?.upiId}
+                    <Image src={upiQRCode || ""} alt="UPI QR Code" width={100} height={100} />
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
 
             <form onSubmit={handlePaymentSubmission} className="space-y-4">
@@ -611,6 +656,7 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
                     <SelectItem value="Bank Transfer">Bank Transfer</SelectItem>
                   </SelectContent>
                 </Select>
+
               </div>
 
               <div>

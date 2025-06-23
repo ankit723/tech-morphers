@@ -1,8 +1,10 @@
+"use server"
 import bcrypt from 'bcryptjs';
 import { prisma } from './db';
+import { cookies } from 'next/headers';
 
 // Generate random password
-export function generatePassword(length: number = 12): string {
+export async function generatePassword(length: number = 12): Promise<string> {
   const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
   let password = '';
   for (let i = 0; i < length; i++) {
@@ -62,7 +64,7 @@ export async function convertEstimatorToClient(estimatorId: string) {
     }
 
     // Generate system password
-    const systemPassword = generatePassword();
+    const systemPassword = await generatePassword();
     const hashedPassword = await hashPassword(systemPassword);
 
     // Create new client
@@ -221,3 +223,82 @@ export async function getClientDashboardData(clientId: string) {
     throw error;
   }
 } 
+
+export async function authenticateAdminUser(email: string, password: string){
+  const user = await prisma.user.findUnique({
+    where: { email }
+  })
+
+  if (!user) {
+    return { success: false, error: 'User not found' }
+  }
+
+  const isValid = await verifyPassword(password, user.password)
+
+  if (!isValid) {
+    return { success: false, error: 'Invalid credentials' }
+  }
+
+  //set cookie
+  const cookieStore = await cookies();
+  cookieStore.set("token", user.id);
+  cookieStore.set("role", user.role);
+  cookieStore.set("email", user.email);
+  cookieStore.set("name", user.name);
+  
+  return { success: true, user }
+}
+
+export async function getCurrentAdminUser() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
+    const email = cookieStore.get("email")?.value;
+
+    if (!token) {
+      return { success: false, error: 'No authentication token found' };
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: email }
+    });
+
+    if (!user) {
+      return { success: false, error: 'User not found' };
+    }
+
+    console.log("User", user);
+
+    return {
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        isActive: user.isActive,
+        createdAt: user.createdAt
+      }
+    };
+  } catch (error) {
+    console.error('Error getting current admin user:', error);
+    return { success: false, error: 'Failed to get user data' };
+  }
+}
+
+export async function logoutAdminUser() {
+  try {
+    const cookieStore = await cookies();
+    cookieStore.delete("token");
+    cookieStore.delete("role");
+    cookieStore.delete("email");
+    cookieStore.delete("name");
+
+    console.log("Logged out");
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Error logging out user:', error);
+    return { success: false, error: 'Failed to logout' };
+  }
+}

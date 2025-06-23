@@ -12,7 +12,8 @@ import {
   Eye,
   Download,
   Loader2,
-  DollarSign
+  DollarSign,
+  IndianRupeeIcon
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -241,10 +242,10 @@ export default function AdminPayments() {
           className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
         >
           <div className="flex items-center">
-            <DollarSign className="w-8 h-8 text-purple-600 mr-3" />
+            <IndianRupeeIcon className="w-8 h-8 text-purple-600 mr-3" />
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Received</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">${totalAmount.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">₹{totalAmount.toFixed(2)}</p>
             </div>
           </div>
         </motion.div>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import { ProjectStatus } from '@prisma/client'
 
 export async function PATCH(
   request: NextRequest,
@@ -18,7 +19,7 @@ export async function PATCH(
     }
 
     // Validate status
-    const validStatuses = [
+    const validStatuses: ProjectStatus[] = [
       'JUST_STARTED',
       'TEN_PERCENT', 
       'THIRTY_PERCENT',
@@ -36,11 +37,11 @@ export async function PATCH(
     }
 
     // Check if project exists
-    const project = await prisma.estimator.findUnique({
+    const existingProject = await prisma.estimator.findUnique({
       where: { id: projectId }
     })
 
-    if (!project) {
+    if (!existingProject) {
       return NextResponse.json(
         { error: 'Project not found' },
         { status: 404 }
@@ -55,6 +56,14 @@ export async function PATCH(
         updatedAt: new Date()
       },
       include: {
+        assignedUser: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true
+          }
+        },
         client: {
           select: {
             id: true,
@@ -68,13 +77,7 @@ export async function PATCH(
     return NextResponse.json({
       success: true,
       message: 'Project status updated successfully',
-      project: {
-        id: updatedProject.id,
-        projectStatus: updatedProject.projectStatus,
-        projectType: updatedProject.projectType,
-        projectPurpose: updatedProject.projectPurpose,
-        client: updatedProject.client
-      }
+      project: updatedProject
     })
 
   } catch (error: any) {

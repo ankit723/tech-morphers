@@ -652,7 +652,7 @@ const Navbar = () => {
         {[
           { label: "Contact", path: "/contact" },
           { label: "Estimate", path: "/estimator" },
-          { label: "Schedule Call", path: "/schedule-call" },
+          { label: "Login", path: "/client/login" },
         ].map((item, i) => (
           <motion.div
             key={item.label}
@@ -751,7 +751,7 @@ const Navbar = () => {
                 {[
                   { label: "Contact", path: "/contact" },
                   { label: "Support", path: "/support" },
-                  { label: "Schedule Call", path: "/schedule-call" },
+                  { label: "Login", path: "/client/login" },
                 ].map((item) => (
                   <Link
                     key={item.label}

@@ -5,3 +5,4 @@
 5: Listing the Comapany in differnt sites and pages
 6: adding razorpay payment option 
 7: basic rbac implementation
+8: Manual Task Manager

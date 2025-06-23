@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
         budgetRange: project.budgetRange,
         deliveryTimeline: project.deliveryTimeline,
         customRequests: project.customRequests,
-        projectCost: project.projectCost,
+        projectCost: project.projectCost ? Number(project.projectCost) : null,
         currency: project.currency,
         projectStatus: project.projectStatus,
         createdAt: project.createdAt
@@ -101,6 +101,32 @@ export async function GET(request: NextRequest) {
             email: true
           }
         },
+        assignedUser: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true
+          }
+        },
+        projectAssignments: {
+          where: {
+            status: 'ACTIVE'
+          },
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true
+              }
+            }
+          },
+          orderBy: {
+            assignedAt: 'asc'
+          }
+        },
         documents: {
           where: {
             type: 'INVOICE',
@@ -135,6 +161,7 @@ export async function GET(request: NextRequest) {
 
       return {
         ...project,
+        projectCost: project.projectCost ? Number(project.projectCost) : null,
         totalPaid,
         totalVerified,
         isFullyPaid: project.projectCost ? totalPaid >= Number(project.projectCost) : false,
