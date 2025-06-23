@@ -198,13 +198,6 @@ export function exportInvoicesToExcel(
 
     // Export file
     XLSX.writeFile(workbook, filename);
-
-    return {
-      success: true,
-      filename,
-      recordCount: invoices.length,
-      statistics
-    };
   } catch (error) {
     console.error('Error exporting to Excel:', error);
     throw new Error('Failed to export to Excel');

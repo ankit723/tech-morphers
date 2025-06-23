@@ -4,5 +4,4 @@
 4: Creating Perfect WhatsApp Buisness Profile
 5: Listing the Comapany in differnt sites and pages
 6: adding razorpay payment option 
-7: basic rbac implementation
-8: Manual Task Manager
+7: fixin  the the authorization of pages of developer roles

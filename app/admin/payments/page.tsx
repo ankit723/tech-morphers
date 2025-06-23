@@ -12,7 +12,6 @@ import {
   Eye,
   Download,
   Loader2,
-  DollarSign,
   IndianRupeeIcon
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
