@@ -6,6 +6,7 @@ import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import Image from "next/image";
 import { WhatsappButton } from "@/components/ui/whatsapp";
+import { Toaster } from "sonner";
 
 const gothamBook = localFont({
   src: "../public/Gotham-font-family/Gotham/Gotham-Book.otf",
@@ -71,6 +72,7 @@ export default function RootLayout({
       <head>
         <link rel="canonical" href="https://www.techmorphers.com" />
         <Script id="json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="beforeInteractive" />
       </head>
       <body
         className={`antialiased bg-gradient-to-b dark:from-[#0A0A1B] dark:to-[#1A1A35] from-white to-white ${gothamBook.className}`}
@@ -82,6 +84,7 @@ export default function RootLayout({
           storageKey="techmorphers-theme"
         >
           {children}
+          <Toaster />
           <WhatsappButton />
         </ThemeProvider>
         <Analytics />

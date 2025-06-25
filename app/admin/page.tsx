@@ -12,18 +12,45 @@ import {
   Contact
 } from "lucide-react"
 import { getDashboardStats, type DashboardStats } from "@/lib/actions"
-import { useEffect } from "react"
+import { useTransition, useEffect } from "react"
 import { useState } from "react"
+import { getCurrentAdminUser } from "@/lib/auth"
+import { User, UserRole } from "@prisma/client"
+import { redirect } from "next/navigation"
 
 export default function AdminDashboard() {
   // Fetch real data using server actions
   const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, startTransition] = useTransition();
+
+  useEffect(() => {
+    startTransition(async () => {
+      const fetchUser = async () => {
+        const userResult = await getCurrentAdminUser();
+        if (userResult.success) {
+          setUser(userResult.user as User);
+        } else {
+          setUser(null);
+        }
+      }
+      fetchUser();
+    });
+  }, []);
 
   useEffect(() => {
     getDashboardStats().then((stats) => {
       setStats(stats)
     })
   }, [])
+
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-[95vh]"><Loader2 className="w-10 h-10 animate-spin text-blue-700" /></div>
+  }
+
+  if(user?.role !== UserRole.ADMIN) {
+    return redirect("/admin/resources")
+  }
 
   if (!stats) {
     return <div className="flex justify-center items-center h-[95vh]"><Loader2 className="w-10 h-10 animate-spin text-blue-700" /></div>

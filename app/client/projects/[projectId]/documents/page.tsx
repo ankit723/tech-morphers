@@ -31,6 +31,7 @@ import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/c
 import { BankInfo } from '@/lib/invoiceGenerator'
 import QRCode from 'qrcode'
 import Image from 'next/image'
+import PaymentButton from '@/components/payment-button'
 
 type ClientDocument = {
   id: string
@@ -72,6 +73,7 @@ type Client = {
   id: string
   fullName: string
   email: string
+  phone: string
   companyName?: string | null
 }
 
@@ -142,6 +144,7 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
           id: clientData.client.id,
           fullName: clientData.client.fullName,
           email: clientData.client.email,
+          phone: clientData.client.phone,
           companyName: clientData.client.companyName
         })
 
@@ -549,6 +552,7 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
                             
                             {/* Payment button for pending invoices */}
                             {document.type === 'INVOICE' && document.paymentStatus === 'PENDING' && (
+                              <>
                               <Button
                                 size="sm"
                                 onClick={() => {
@@ -561,6 +565,8 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
                                 <CreditCard className="w-4 h-4" />
                                 <span>Pay Now</span>
                               </Button>
+                              <PaymentButton invoiceNumber={document.invoiceNumber || ""} amount={document.invoiceAmount || 0} currency={document.currency || "INR"} receipt={document.invoiceNumber || ""} name={client.fullName} email={client.email} phone={client.phone} />
+                              </>
                             )}
                             
                             {/* Sign button for documents requiring signature */}

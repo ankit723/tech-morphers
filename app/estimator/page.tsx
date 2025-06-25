@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Shield, Users, Award, CheckCircle, Star, Lock, Clock, Zap, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
@@ -21,6 +21,38 @@ const EstimatorPage = () => {
   const [formData, setFormData] = useState<any>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false); // flag to control write sync
+
+  // Load data on first render
+  useEffect(() => {
+    const storedData = localStorage.getItem('estimatorFormData');
+    const storedStep = localStorage.getItem('estimatorCurrentStep');
+    
+
+    if (storedData) {
+      try {
+        setFormData(JSON.parse(storedData));
+      } catch (e) {
+        console.error("Invalid JSON in formData:", storedData);
+      }
+    }
+
+    if (storedStep) {
+      setCurrentStep(parseInt(storedStep));
+    }
+
+    // allow localStorage writes only after load
+    setIsLoaded(true);
+  }, []);
+
+  // Save data to localStorage only after initial load
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    localStorage.setItem('estimatorFormData', JSON.stringify(formData));
+    localStorage.setItem('estimatorCurrentStep', currentStep.toString());
+  }, [formData, currentStep, isLoaded]);
+
 
   const nextStep = () => {
     if (currentStep < totalSteps) {
@@ -97,14 +129,7 @@ const EstimatorPage = () => {
       case 6:
         return <StepAddonsCustom formData={formData} setFormData={updateFormData} onNext={nextStep} onPrev={prevStep} />;
       case 7:
-        return <StepYourDetails 
-                  formData={formData} 
-                  setFormData={updateFormData} 
-                  onSubmit={handleSubmitDetails} 
-                  onPrev={prevStep} 
-                  isSubmitting={isSubmitting}
-                  submitError={submitError}
-                />;
+        return <StepYourDetails formData={formData} setFormData={updateFormData} onSubmit={handleSubmitDetails} onPrev={prevStep} isSubmitting={isSubmitting} submitError={submitError} />;
       case finalQuoteStepNumber:
         return <StepFinalQuote formData={formData} onStartOver={handleStartOver} />;
       default:

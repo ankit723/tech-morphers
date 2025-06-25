@@ -263,7 +263,7 @@ const OurBrands = () => {
                 }}
             >
                 <div className="container mx-auto">
-                    <div ref={firstRowRef} className="flex gap-5 md:gap-20 justify-center">
+                    <div ref={firstRowRef} className="flex gap-5 md:gap-8 justify-center">
                         <LetterHover 
                             text="WE" 
                             initialColor="blue-700" 
@@ -284,7 +284,7 @@ const OurBrands = () => {
                         />
                     </div>
 
-                    <div ref={secondRowRef} className="flex gap-5 md:gap-20 justify-center md:-mt-10">
+                    <div ref={secondRowRef} className="flex gap-5 md:gap-8 justify-center md:-mt-10">
                         <LetterHover 
                             text="THAT" 
                             initialColor="dark-adaptive" 
@@ -305,7 +305,7 @@ const OurBrands = () => {
                         />
                     </div>
 
-                    <div ref={thirdRowRef} className="flex gap-5 md:gap-20 justify-center  md:-mt-10">
+                    <div ref={thirdRowRef} className="flex gap-5 md:gap-8 justify-center  md:-mt-10">
                         <LetterHover 
                             text="TALKING" 
                             initialColor="dark-adaptive" 

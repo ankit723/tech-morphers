@@ -35,7 +35,7 @@ const testimonials: Testimonial[] = [
   {
     id: 2,
     name: "Aashay Kapoor",
-    title: "CEO of Aashay Creations",
+    title: "CEO of Creova",
     company: "Creova",
     content:
       "From start to finish, working with Redbird was an amazing experience. They were professional, creative, and went above and beyond. We're thrilled to be working with them again in the future!",

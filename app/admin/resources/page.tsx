@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Users, 
@@ -20,6 +20,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { UserManagement } from './components/UserManagement';
 import { ProjectKanban } from './components/ProjectKanban';
 import { User, Project, UserWithStats, ResourceStats } from './types';
+import { getCurrentAdminUser } from '@/lib/auth';
+import { UserRole } from '@prisma/client';
 
 export default function ResourcesPage() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -28,6 +30,26 @@ export default function ResourcesPage() {
   const [stats, setStats] = useState<ResourceStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, startTransition] = useTransition();
+
+  useEffect(() => {
+    startTransition(async () => {
+      const fetchUser = async () => {
+        const userResult = await getCurrentAdminUser();
+        if (userResult.success) {
+          setUser(userResult.user as User);
+          if(userResult.user?.role !== UserRole.ADMIN) {
+            setActiveTab('projects');
+          }
+        } else {
+          setUser(null);
+        }
+      }
+      fetchUser();
+    });
+  }, []);
 
   const loadData = async (showRefreshState = false) => {
     if (showRefreshState) setRefreshing(true);
@@ -141,7 +163,7 @@ export default function ResourcesPage() {
       </div>
 
       {/* Overview Stats */}
-      {stats && (
+      {stats && user?.role === UserRole.ADMIN && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -318,15 +340,19 @@ export default function ResourcesPage() {
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="overview" className="flex items-center gap-2">
-            <BarChart3 className="w-4 h-4" />
-            Overview
-          </TabsTrigger>
-          <TabsTrigger value="users" className="flex items-center gap-2">
-            <Users className="w-4 h-4" />
-            User Management
-          </TabsTrigger>
+        <TabsList className={`grid w-full ${user?.role === UserRole.ADMIN ? 'grid-cols-3' : 'grid-cols-1'}`}>
+          {user?.role === UserRole.ADMIN && (
+            <>
+            <TabsTrigger value="overview" className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="users" className="flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              User Management
+            </TabsTrigger>
+            </>
+          )}
           <TabsTrigger value="projects" className="flex items-center gap-2">
             <FolderKanban className="w-4 h-4" />
             Project Board

@@ -21,6 +21,7 @@ import {
   Github,
   CheckCircle
 } from 'lucide-react';
+import Image from "next/image";
 
 const AboutUs = () => {
   const stats = [
@@ -74,55 +75,51 @@ const AboutUs = () => {
       name: "Ankit Biswas",
       role: "CEO & Founder",
       bio: "Visionary leader with 8+ years in tech industry. Passionate about transforming businesses through innovative digital solutions.",
-      image: "/team/ankit.jpg",
+      image: "/team/ankit.jpeg",
       skills: ["Strategic Planning", "Business Development", "Team Leadership", "Innovation"],
       social: {
-        linkedin: "#",
-        twitter: "#",
-        github: "#"
+        linkedin: "https://www.linkedin.com/in/ankitbiswas27/",
+        twitter: "https://x.com/ankitbiswas27",
+        github: "https://github.com/ankit723"
       }
     },
     {
-      name: "Priya Sharma",
+      name: "Sumit Yadav",
       role: "Lead UI/UX Designer",
       bio: "Award-winning designer with expertise in creating user-centered designs that drive engagement and conversion.",
-      image: "/team/priya.jpg",
       skills: ["UI/UX Design", "User Research", "Prototyping", "Design Systems"],
       social: {
-        linkedin: "#",
-        twitter: "#"
+        linkedin: "https://www.linkedin.com/in/sumit-yadav-28475825b/",
+        twitter: "https://x.com/sumit_yadav_0000000000"
       }
     },
     {
       name: "Rahul Kumar",
-      role: "Technical Architect",
+      role: "Full Stack Web Developer",
       bio: "Full-stack expert specializing in scalable architectures and modern web technologies. 10+ years of development experience.",
-      image: "/team/rahul.jpg",
       skills: ["System Architecture", "Full-Stack Development", "Cloud Solutions", "DevOps"],
       social: {
-        linkedin: "#",
-        github: "#"
+        linkedin: "https://www.linkedin.com/in/rahul-kumar-6b1b1b1b1b/",
+        github: "https://github.com/rahul-kumar-6b1b1b1b1b"
       }
     },
     {
       name: "Sneha Patel",
-      role: "Project Manager",
+      role: "Full Stack Web Developer",
       bio: "Agile project management expert ensuring smooth delivery and client satisfaction across all projects.",
-      image: "/team/sneha.jpg",
       skills: ["Project Management", "Agile Methodology", "Client Relations", "Quality Assurance"],
       social: {
-        linkedin: "#",
-        twitter: "#"
+        linkedin: "https://www.linkedin.com/in/sneha-patel-6b1b1b1b1b/",
+        github: "https://github.com/sneha-patel-6b1b1b1b1b"
       }
     },
     {
       name: "Arjun Singh",
-      role: "Senior Developer",
+      role: "Full Stack Mobile Developer",
       bio: "Passionate developer with expertise in modern frameworks and a keen eye for performance optimization.",
-      image: "/team/arjun.jpg",
-      skills: ["React/Next.js", "Node.js", "Database Design", "API Development"],
+      skills: ["React/Next.js", "Node.js", "Database Design", "API Development", "Flutter", "React Native"],
       social: {
-        linkedin: "#",
+        linkedin: "https://www.linkedin.com/in/arjun-singh-6b1b1b1b1b/",
         github: "#"
       }
     },
@@ -130,11 +127,10 @@ const AboutUs = () => {
       name: "Kavya Reddy",
       role: "Mobile App Developer",
       bio: "Mobile development specialist creating intuitive apps for iOS and Android platforms.",
-      image: "/team/kavya.jpg",
       skills: ["React Native", "Flutter", "iOS Development", "Android Development"],
       social: {
-        linkedin: "#",
-        github: "#"
+        linkedin: "https://www.linkedin.com/in/kavya-reddy-6b1b1b1b1b/",
+        github: "https://github.com/kavya-reddy-6b1b1b1b1b"
       }
     }
   ];
@@ -230,30 +226,76 @@ const AboutUs = () => {
 
   const testimonials = [
     {
-      name: "David Chen",
-      role: "CTO, InnovateHub",
-      content: "Tech Morphers transformed our outdated system into a modern, scalable platform. Their technical expertise and project management are exceptional.",
+      id: 1,
+      name: "Mrinmai Sharma",
+      title: "CTO of Arbre Creations",
+      company: "Arbre Creations",
+      content:
+        "Working with tech morphers has been an incredible experience. They truly listened to our needs and delivered a stunning design that exceeded our expectations. We couldn't be happier with the product!",
+      avatar: "/company-logo/arbre.jpeg",
       rating: 5,
-      company: "InnovateHub",
-      image: "/testimonials/david.jpg"
     },
     {
-      name: "Lisa Rodriguez",
-      role: "Founder, StartupXYZ",
-      content: "From concept to launch, Tech Morphers guided us through every step. Their team's dedication and expertise made our vision a reality.",
-      rating: 5,
-      company: "StartupXYZ",
-      image: "/testimonials/lisa.jpg"
+      id: 2,
+      name: "Aashay Kapoor",
+      title: "CEO of Creova",
+      company: "Creova",
+      content:
+        "From start to finish, working with Redbird was an amazing experience. They were professional, creative, and went above and beyond. We're thrilled to be working with them again in the future!",
+      avatar: "/company-logo/creova.svg",
+      rating: 5
     },
     {
-      name: "Michael Thompson",
-      role: "Marketing Director, GrowthCo",
-      content: "The mobile app they developed exceeded our expectations. User engagement increased by 300% within the first month of launch.",
-      rating: 5,
-      company: "GrowthCo",
-      image: "/testimonials/michael.jpg"
-    }
-  ];
+      id: 3,
+      name: "Anik Adhikari",
+      title: "CEO of Iotron",
+      company: "Iotron",
+      content:
+        "A pleasure to work with. They were provided valuable insights that we highly recommend them to any business looking for solutions.",
+      avatar: "/company-logo/iotron.jpeg",
+      rating: 5
+    },
+    {
+      id: 4,
+      name: "Jayesh Shinde",
+      title: "CTO of Confetti Media",
+      company: "Confetti Media",
+      content:
+        "Tech morphers didn't just build our website, rather built the perfect platform using cutting edge technology and providing us with a premium experience.",
+      avatar: "/company-logo/confetti.png",
+      rating: 5
+    },
+    {
+      id: 5,
+      name: "Ankit Singh",
+      title: "CEO of Bharat Care",
+      company: "Bharat Care",
+      content:
+        "Working with Tech Morphers was like having an internal tech team — minus the overhead. They delivered our MVP in 4 weeks, pixel-perfect and exactly how we envisioned it. The whole experience was smoother than I imagined.",
+      avatar: "/company-logo/bharatcare.jpeg",
+      rating: 5
+    },
+    {
+      id: 6,
+      name: "Laksmikant Sahoo",
+      title: "Govt. of Odisha",
+      company: "Odisha Police",
+      content:
+        "Every agency talks about communication — Tech Morphers actually delivers on it. Daily updates, clean handoffs, and a dashboard that made me feel in control at every step.",
+      avatar: "/company-logo/odisha.png",
+      rating: 5
+    },
+    {
+      id: 7,
+      name: "Chiranjit Singha",
+      title: "CEO of Salzelift Solutions",
+      company: "Salzelift Solutions",
+      content:
+        "We started with a one-month project. It's been 11 months now, and they're practically our extended tech team. Their consistency and obsession with quality is why we keep coming back.",
+      avatar: "/company-logo/salzelift.jpeg",
+      rating: 5
+    },
+  ]
 
   return (
     <div className="min-h-screen bg-gradient-to-br dark:from-[#0A0A1B] dark:via-[#1A1A35] dark:to-[#0A0A1B] from-gray-50 via-white to-gray-100">
@@ -545,7 +587,11 @@ const AboutUs = () => {
               >
                 <div className="relative w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 p-1">
                   <div className="w-full h-full bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                    <Users className="w-16 h-16 text-gray-400" />
+                    {member.image ? (
+                      <Image src={member.image} alt={member.name} width={200} height={200} className="rounded-full" />
+                    ) : (
+                      <Users className="w-16 h-16 text-gray-400" />
+                    )}
                   </div>
                 </div>
                 
@@ -669,15 +715,15 @@ const AboutUs = () => {
                   &quot;{testimonial.content}&quot;
                 </p>
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
-                    {testimonial.name.split(' ').map(n => n[0]).join('')}
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                    <Image src={testimonial.avatar} alt={testimonial.name} width={100} height={100} className="rounded-full" />
                   </div>
                   <div>
                     <div className="font-semibold text-gray-900 dark:text-white">
                       {testimonial.name}
                     </div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">
-                      {testimonial.role}
+                      {testimonial.title}
                     </div>
                     <div className="text-sm text-blue-600 dark:text-blue-400">
                       {testimonial.company}

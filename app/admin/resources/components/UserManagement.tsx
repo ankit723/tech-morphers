@@ -335,6 +335,7 @@ export function UserManagement({ users, onRefresh }: UserManagementProps) {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="DEVELOPER">Developer</SelectItem>
+                    <SelectItem value="DESIGNER">Designer</SelectItem>
                     <SelectItem value="MARKETING">Marketing</SelectItem>
                     <SelectItem value="ADMIN">Admin</SelectItem>
                   </SelectContent>
@@ -534,6 +535,7 @@ export function UserManagement({ users, onRefresh }: UserManagementProps) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="DEVELOPER">Developer</SelectItem>
+                  <SelectItem value="DESIGNER">Designer</SelectItem>
                   <SelectItem value="MARKETING">Marketing</SelectItem>
                   <SelectItem value="ADMIN">Admin</SelectItem>
                 </SelectContent>

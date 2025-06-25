@@ -84,7 +84,11 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const clientId = searchParams.get('clientId');
 
-    const whereClause: any = {};
+    const whereClause: any = {
+      clientId: {
+        not: null
+      }
+    };
 
     if (clientId) {
       whereClause.clientId = clientId;

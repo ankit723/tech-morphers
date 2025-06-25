@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, AlertTriangle, Loader2 } from 'lucide-react';
 import EstimatorLoader from './EstimatorLoader';
+import Image from 'next/image';
 
 interface StepYourDetailsProps {
   formData: any;
@@ -53,21 +54,74 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({
   //   }
   // };
 
+  const fakeNames = [
+    "test", "testing", "tester", "test user", "abc", "xyz", "asdf", "qwerty",
+    "user", "guest", "name", "username", "demo", "temp", "no name", "none",
+    "n/a", "not sure", "something", "someone", "random", "aaa", "bbb", "ccc",
+    "abc abc", "example", "sample", "dummy", "user user", "user123", "a", "b", "c"
+  ];
+  
+  const fakeEmails = [
+    "test@test.com", "test123@test.com", "demo@demo.com", "abc@abc.com", "hello@gmail.com","hello@hello.com",
+    "hello@yahoo.com", "hello@outlook.com", "hello@aol.com", "hello@live.com", "hello@msn.com", "hello@yahoo.com", "hello@outlook.com", "hello@aol.com", "hello@live.com", "hello@msn.com",
+    "user@user.com", "user123@user.com", "asdf@asdf.com", "qwerty@qwerty.com", "hi@hi.com", "hi@hotmail.com", "hi@yahoo.com", "hi@outlook.com", "hi@aol.com", "hi@live.com", "hi@msn.com", "hi@yahoo.com", "hi@outlook.com", "hi@aol.com", "hi@live.com", "hi@msn.com",
+    "temp@email.com", "fake@email.com", "noreply@noreply.com", "none@none.com",
+    "a@a.com", "b@b.com", "sample@sample.com", "example@example.com",
+    "123@123.com", "xxx@xxx.com", "abc123@mail.com", "noemail@noemail.com"
+  ];
+  
+  const fakePhoneNumbers = [
+    "1234567890", "0000000000", "1111111111", "2222222222", "3333333333",
+    "4444444444", "5555555555", "6666666666", "7777777777", "8888888888",
+    "9999999999", "1231231231", "9876543210", "1010101010", "1231231234", "1122334455"
+  ];
+  
+  const disposableDomains = [
+    "mailinator.com", "10minutemail.com", "tempmail.com", "yopmail.com",
+    "getnada.com", "sharklasers.com", "guerrillamail.com", "trashmail.com",
+    "fakeinbox.com", "maildrop.cc", "dispostable.com", "throwawaymail.com",
+    "mailnesia.com", "mintemail.com", "spamgourmet.com", "emailondeck.com",
+    "incognitomail.org", "mail-temp.com", "moakt.com"
+  ];
+  
   const validateForm = () => {
-    const newErrors: {[key: string]: string} = {};
-    if (!formData.fullName?.trim()) newErrors.fullName = 'Full name is required.';
-    if (!formData.email?.trim()) {
+    const newErrors: { [key: string]: string } = {};
+  
+    // Check name
+    const fullName = formData.fullName?.trim().toLowerCase();
+    if (!fullName) {
+      newErrors.fullName = 'Full name is required.';
+    } else if (fakeNames.includes(fullName)) {
+      newErrors.fullName = 'Please enter a valid name.';
+    }
+  
+    // Check email
+    const email = formData.email?.trim().toLowerCase();
+    if (!email) {
       newErrors.email = 'Email is required.';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = 'Email is invalid.';
+    } else {
+      const domain = email.split('@')[1];
+      if (fakeEmails.includes(email) || disposableDomains.includes(domain)) {
+        newErrors.email = 'Please use a valid business or personal email.';
+      }
     }
-    if (formData.phone && !/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/.test(formData.phone)) {
-      newErrors.phone = 'Please enter a valid phone number.';
+  
+    // Check phone number
+    const phone = formData.phone?.trim();
+    if (phone) {
+      if (!/^[6-9]\d{9}$/.test(phone)) {
+        newErrors.phone = 'Please enter a valid 10-digit phone number.';
+      } else if (fakePhoneNumbers.includes(phone)) {
+        newErrors.phone = 'Please enter a real phone number.';
+      }
     }
-    
+  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  
 
   const handleLocalSubmit = async () => {
     if (!validateForm()) {
@@ -102,6 +156,8 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({
             We need these details to process your request and send your personalized estimate.
           </p>
         </div>
+
+
 
         <form className="space-y-4 md:space-y-5" onSubmit={(e) => { e.preventDefault(); handleLocalSubmit(); }}>
           <div>

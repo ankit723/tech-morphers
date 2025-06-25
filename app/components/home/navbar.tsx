@@ -750,7 +750,7 @@ const Navbar = () => {
 
                 {[
                   { label: "Contact", path: "/contact" },
-                  { label: "Support", path: "/support" },
+                  { label: "Estimate", path: "/estimator" },
                   { label: "Login", path: "/client/login" },
                 ].map((item) => (
                   <Link
