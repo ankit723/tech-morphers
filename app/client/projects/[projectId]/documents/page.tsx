@@ -563,7 +563,7 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
                                 className="flex items-center space-x-2 bg-green-600 hover:bg-green-700"
                               >
                                 <CreditCard className="w-4 h-4" />
-                                <span>Pay Now</span>
+                                <span>Pay Manually</span>
                               </Button>
                               <PaymentButton invoiceNumber={document.invoiceNumber || ""} amount={document.invoiceAmount || 0} currency={document.currency || "INR"} receipt={document.invoiceNumber || ""} name={client.fullName} email={client.email} phone={client.phone} />
                               </>

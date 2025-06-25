@@ -1,46 +1,49 @@
-// pages/refund-policy.tsx
-import Head from 'next/head';
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Refund Policy - Tech Morphers",
+  description: "Refund Policy for Tech Morphers - Learn how we handle refunds for our services.",
+  keywords: ["refund policy", "Tech Morphers refund", "refund policy"],
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default function RefundPolicyPage() {
   return (
     <>
-      <Head>
-        <title>Refund Policy | Tech Morphers</title>
-      </Head>
-
-      <div className="min-h-screen bg-gradient-to-br from-[#f3f4f6] to-[#e5e7eb] dark:from-[#1e293b] dark:to-[#0f172a] text-gray-800 dark:text-gray-100 py-16 px-6 sm:px-12">
-        <div className="max-w-4xl mx-auto bg-white/90 dark:bg-[#0f172a]/80 backdrop-blur-md rounded-xl shadow-xl p-8 sm:p-12">
+      <div className="min-h-screen bg-gradient-to-b dark:from-[#0A0A1B] dark:to-[#1A1A35] from-white to-white">
+        <div className="container mx-auto px-4 py-16 max-w-4xl">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 md:p-12">
           <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Refund Policy</h1>
           <p className="mb-6 text-sm text-gray-500">Effective from: June 25, 2025</p>
 
           <div className="space-y-6 text-sm sm:text-base leading-relaxed">
             <p>
-              At Tech Morphers, customer satisfaction is our top priority. We provide a transparent refund policy as outlined below.
+              At Tech Morphers, we strive to deliver high-quality services tailored to your specific project needs. As a service-based company, our work begins shortly after project confirmation, which makes refunds generally non-applicable.
             </p>
 
-            <h2 className="text-lg font-semibold mt-4">Eligibility for Refund</h2>
+            <h2 className="text-lg font-semibold mt-4">No Refunds Policy</h2>
+            <p>
+              We do not provide refunds once a project has been initiated or resources have been allocated. This policy is in place to protect the time, effort, and custom development invested by our team.
+            </p>
+
+            <h2 className="text-lg font-semibold mt-4">Exceptional Cases</h2>
+            <p>
+              Refunds may only be considered if:
+            </p>
             <ul className="list-disc pl-5">
-              <li>If the service was not delivered as promised.</li>
-              <li>If cancellation is requested within 3 days of payment and no work has begun.</li>
-              <li>If technical issues prevent us from fulfilling your order.</li>
+              <li>No work has commenced within 24 hours of payment AND</li>
+              <li>You request cancellation within that timeframe AND</li>
+              <li>No resources or time were allocated to the project</li>
             </ul>
 
-            <h2 className="text-lg font-semibold mt-4">Non-Refundable Cases</h2>
-            <ul className="list-disc pl-5">
-              <li>If the service has already been initiated or partially delivered.</li>
-              <li>Change of mind after project initiation.</li>
-              <li>Failure to provide necessary inputs within deadlines.</li>
-            </ul>
-
-            <h2 className="text-lg font-semibold mt-4">Refund Process</h2>
+            <h2 className="text-lg font-semibold mt-4">Questions?</h2>
             <p>
-              Approved refunds will be processed within 7–10 business days back to your original method of payment.
+              For clarifications, please email us at <a href="mailto:support@techmorphers.com" className="text-blue-500 underline">support@techmorphers.com</a>
             </p>
-
-            <h2 className="text-lg font-semibold mt-4">Need Help?</h2>
-            <p>
-              For refund-related questions, contact us at <a href="mailto:support@techmorphers.com" className="text-blue-500 underline">support@techmorphers.com</a>
-            </p>
+          </div>
           </div>
         </div>
       </div>
