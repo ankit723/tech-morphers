@@ -33,6 +33,8 @@ export default function ResourcesPage() {
 
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, startTransition] = useTransition();
+  
+  console.log(isLoading)
 
   useEffect(() => {
     startTransition(async () => {

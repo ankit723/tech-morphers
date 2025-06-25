@@ -33,6 +33,7 @@ const EstimatorPage = () => {
       try {
         setFormData(JSON.parse(storedData));
       } catch (e) {
+        console.log("Error in estimator page", e)
         console.error("Invalid JSON in formData:", storedData);
       }
     }

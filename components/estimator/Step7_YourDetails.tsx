@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, AlertTriangle, Loader2 } from 'lucide-react';
 import EstimatorLoader from './EstimatorLoader';
-import Image from 'next/image';
 
 interface StepYourDetailsProps {
   formData: any;

@@ -1,28 +1,26 @@
 //razorpay webhook
 export const config = {api: {bodyParser: false}};
 
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { prisma } from "@/lib/db";
-import Razorpay from "razorpay";
-import getRawBody from "raw-body";
 
 function verifySignature(body: Buffer, signature: string, secret: string) {
     const expected = crypto.createHmac('sha256', secret).update(body).digest('hex');
     return expected === signature;
 }
 
-export async function POST(request: NextApiRequest, response: NextApiResponse) {
-    if (request.method !== 'POST') return response.status(405).json({error: "Method Not Allowed"});
+export async function POST(request: NextRequest) {
+    if (request.method !== 'POST') return NextResponse.json({error: "Method Not Allowed"}, {status: 405});
     
     const secret = process.env.RAZORPAY_WEBHOOK_SECRET!;
-    const rawBody = await getRawBody(request);
-    const signature = request.headers["x-razorpay-signature"];
+    const rawBody = await request.text();
+    const signature = request.headers.get("x-razorpay-signature");
 
-    const isValid = verifySignature(rawBody, signature as string, secret);
-    if (!isValid) return response.status(400).json({error: "Invalid Signature"});
+    const isValid = verifySignature(Buffer.from(rawBody), signature as string, secret);
+    if (!isValid) return NextResponse.json({error: "Invalid Signature"}, {status: 400});
 
-    const event = JSON.parse(rawBody.toString());
+    const event = JSON.parse(rawBody);
     console.log(event);
 
     if (event.event === "payment.captured") {
@@ -30,7 +28,6 @@ export async function POST(request: NextApiRequest, response: NextApiResponse) {
         const orderId = payment.order_id;
         const amount = payment.amount;
         const currency = payment.currency;
-        const receipt = payment.receipt;
         const invoiceNumber = payment.notes.invoiceNumber;
 
         const project = await prisma.clientDocument.findFirst({
@@ -39,7 +36,7 @@ export async function POST(request: NextApiRequest, response: NextApiResponse) {
             },
         });
 
-        if (!project) return response.status(400).json({error: "Project not found"});
+        if (!project) return NextResponse.json({error: "Project not found"}, {status: 400});
 
         await prisma.clientDocument.update({
             where: {
@@ -69,7 +66,9 @@ export async function POST(request: NextApiRequest, response: NextApiResponse) {
                 verifiedAt: new Date(),
             },
         });
+
+        return NextResponse.json({message: "Payment captured successfully"}, {status: 200});
     }
 
-    return response.status(200).json({message: "Webhook received"});
+    return NextResponse.json({message: "Webhook received"}, {status: 200});
 }
