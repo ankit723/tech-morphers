@@ -32,6 +32,7 @@ import { BankInfo } from '@/lib/invoiceGenerator'
 import QRCode from 'qrcode'
 import Image from 'next/image'
 import PaymentButton from '@/components/payment-button'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table'
 
 type ClientDocument = {
   id: string
@@ -127,7 +128,7 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
     loadProjectData()
     fetchBankDetails()
     createQRCode()
-  }, [bankDetails, project, upiAmount])
+  }, [])
 
   const loadProjectData = async () => {
     try {
@@ -628,13 +629,36 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
                 <AccordionItem value="item-1">
                   <AccordionTrigger>Bank Details</AccordionTrigger>
                   <AccordionContent>
-                    <div>
-                      Bank Name: {bankDetails?.bankName}
-                      Account Holder Name: {bankDetails?.accountHolderName}
-                      Account Number: {bankDetails?.accountNumber}
-                      IFSC Code: {bankDetails?.ifscCode}
-                      Branch Name: {bankDetails?.branchName}
-                    </div>
+                    <Table>
+                      <TableHeader className="bg-accent">
+                        <TableRow>
+                          <TableHead className="w-[100px]">Type</TableHead>
+                          <TableHead>Value</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                          <TableRow>
+                            <TableCell><b>Bank Name:</b></TableCell>
+                            <TableCell>{bankDetails?.bankName}</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell><b>Account Holder Name:</b></TableCell>
+                            <TableCell>{bankDetails?.accountHolderName}</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell><b>Account Number:</b></TableCell>
+                            <TableCell>{bankDetails?.accountNumber}</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell><b>IFSC Code:</b></TableCell>
+                            <TableCell>{bankDetails?.ifscCode}</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell><b>Branch Name:</b></TableCell>
+                            <TableCell>{bankDetails?.branchName}</TableCell>
+                          </TableRow>
+                      </TableBody>
+                    </Table>
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-2">
@@ -709,6 +733,14 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
                   {paymentError}
                 </div>
               )}
+
+              <div className="flex flex-col justify-center items-center gap-5">
+                <p className='text-center text-xs text-primary'>Too many process, Pay directly using dashboard</p>
+
+                <PaymentButton invoiceNumber={selectedDocument.invoiceNumber || ""} amount={2} currency={selectedDocument.currency || "INR"} receipt={selectedDocument.invoiceNumber || ""} name={client.fullName} email={client.email} phone={client.phone} />
+              </div>
+
+
 
               <div className="flex space-x-3 pt-4">
                 <Button

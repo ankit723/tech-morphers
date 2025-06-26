@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     console.log(event);
 
     if (event.event === "payment.captured") {
-        const payment = event.payload.payment;
+        const payment = event.payload.payment.entity;
         const orderId = payment.order_id;
         const amount = payment.amount;
         const currency = payment.currency;
