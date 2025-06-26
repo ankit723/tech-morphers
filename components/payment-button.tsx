@@ -2,6 +2,7 @@
 
 import {Button} from "@/components/ui/button"
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function PaymentButton({invoiceNumber, amount, currency, receipt, name, email, phone}: {invoiceNumber: string, amount: number, currency: string, receipt: string, name: string, email: string, phone: string}) {
     const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +35,7 @@ export default function PaymentButton({invoiceNumber, amount, currency, receipt,
                     body: JSON.stringify(response),
                 });
                 const json = await verifyResponse.json();
+                toast.success(json.message);
                 window.location.reload()
             },
             prefill: {
