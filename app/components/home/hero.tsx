@@ -7,6 +7,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import GetStarted from '@/components/forms/getStarted'
+import Link from 'next/link'
 
 // Dynamically import Lottie to prevent server-side rendering issues
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
@@ -327,7 +328,9 @@ const Hero = () => {
               whileHover="hover"
               whileTap="tap"
             >
-              Our Work
+              <Link href={"#our-projects"}>
+                Our Work
+              </Link>
             </motion.button>
           </div>
 

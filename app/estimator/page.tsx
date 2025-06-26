@@ -81,6 +81,7 @@ const EstimatorPage = () => {
   const handleSubmitDetails = async () => {
     setIsSubmitting(true);
     setSubmitError(null);
+    localStorage.removeItem('estimatorFormData')
     console.log("Attempting to save Final Form Data:", formData);
 
     try {

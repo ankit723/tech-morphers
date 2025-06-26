@@ -68,7 +68,7 @@ export default function RootLayout({
     ],
   }
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <head>
         <link rel="canonical" href="https://www.techmorphers.com" />
         <Script id="json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />

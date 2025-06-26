@@ -120,41 +120,41 @@ const OurProjects = () => {
     }, [])
     
     return (
-        <div className="relative mb-20 mt-14 md:-mt-10" ref={sectionRef}>
+        <div className="relative mb-20 mt-14 md:-mt-10" ref={sectionRef} id='our-projects'>
             <div className="container mx-auto">
-                <div ref={firstRowRef} className="flex gap-10 justify-center">
+                <div ref={firstRowRef} className="flex gap-5 md:gap-8 justify-center">
                     <LetterHover 
                         text="OUR" 
                         initialColor="blue-700" 
                         endColor="dark-adaptive" 
-                        className="text-[2.3rem] md:text-[8rem] font-semibold" 
+                        className="text-[2rem] md:text-[8rem] font-semibold" 
                     />
                     <LetterHover 
                         text="RECENT" 
                         initialColor="blue-700" 
                         endColor="dark-adaptive" 
-                        className="text-[2.3rem] md:text-[8rem] font-semibold" 
+                        className="text-[2rem] md:text-[8rem] font-semibold" 
                     />
                 </div>
 
-                <div ref={secondRowRef} className="flex gap-10 md:gap-20 justify-center md:-mt-10">
+                <div ref={secondRowRef} className="flex gap-5 md:gap-8  justify-center md:-mt-10">
                     <LetterHover 
                         text="PROJECTS" 
                         initialColor="dark-adaptive" 
                         endColor="blue-700" 
-                        className="text-[2.4rem] md:text-[8rem] font-semibold" 
+                        className="text-[2rem] md:text-[8rem] font-semibold" 
                     />
                     <LetterHover 
                         text="&" 
                         initialColor="dark-adaptive" 
                         endColor="blue-700" 
-                        className="text-[2.4rem] md:text-[8rem] font-semibold" 
+                        className="text-[2rem] md:text-[8rem] font-semibold" 
                     />
                     <LetterHover 
                         text="PRODUCTS" 
                         initialColor="dark-adaptive" 
                         endColor="blue-700" 
-                        className="text-[2.4rem] md:text-[8rem] font-semibold" 
+                        className="text-[2rem] md:text-[8rem] font-semibold" 
                     />
                 </div>
             </div>
@@ -179,10 +179,10 @@ const OurProjects = () => {
                     ))}
                 </Swiper>
                 {/* Left Gradient Overlay */}
-                <div className="absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white via-white/80 to-transparent z-50 pointer-events-none" />
+                <div className="absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white dark:from-background via-white/80 dark:via-background/80 to-transparent z-20 pointer-events-none" />
 
                 {/* Right Gradient Overlay */}
-                <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white via-white/80 to-transparent z-50 pointer-events-none" />
+                <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white dark:from-background via-white/80 dark:via-background/80 to-transparent z-20 pointer-events-none" />
             </div>
         </div>
     )

@@ -37,7 +37,9 @@ import { plans } from '@/lib/plansData';
 const WebDevelopment = () => {
 
   // Filter plans relevant to web development (all plans since they include web development)
-  const webPlans = plans.filter(plan => plan.id !== 'custom').concat(plans.find(plan => plan.id === 'custom')!);
+  const basicWebPlans = plans.filter(plan => plan.id !== 'custom')
+  basicWebPlans.pop()
+  const webPlans=basicWebPlans?.concat(plans.find(plan => plan.id === 'custom')!);
 
   const features = [
     {
@@ -530,10 +532,10 @@ const WebDevelopment = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`relative bg-white/70 dark:bg-white/10 backdrop-blur-sm rounded-3xl p-8 border ${
+                className={`relative bg-white dark:bg-white/10 backdrop-blur-sm rounded-3xl p-8 border ${
                   tier.popular 
                     ? 'border-blue-500 shadow-2xl scale-105' 
-                    : 'border-white/20'
+                    : ''
                 }`}
               >
                 {tier.popular && (

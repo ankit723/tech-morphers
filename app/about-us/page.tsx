@@ -74,9 +74,9 @@ const AboutUs = () => {
     {
       name: "Ankit Biswas",
       role: "CEO & Founder",
-      bio: "Visionary leader with 8+ years in tech industry. Passionate about transforming businesses through innovative digital solutions.",
+      bio: "Visionary leader with 4+ years in tech industry. Passionate about transforming businesses through innovative digital solutions.",
       image: "/team/ankit.jpeg",
-      skills: ["Strategic Planning", "Business Development", "Team Leadership", "Innovation"],
+      skills: ["Experienced Lead Developer", "Strategic Planning", "Business Development", "Team Leadership", "Innovation"],
       social: {
         linkedin: "https://www.linkedin.com/in/ankitbiswas27/",
         twitter: "https://x.com/ankitbiswas27",
@@ -88,6 +88,7 @@ const AboutUs = () => {
       role: "Lead UI/UX Designer",
       bio: "Award-winning designer with expertise in creating user-centered designs that drive engagement and conversion.",
       skills: ["UI/UX Design", "User Research", "Prototyping", "Design Systems"],
+      image: "/team/sumit_design.jpeg",
       social: {
         linkedin: "https://www.linkedin.com/in/sumit-yadav-28475825b/",
         twitter: "https://x.com/sumit_yadav_0000000000"
