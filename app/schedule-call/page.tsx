@@ -624,6 +624,7 @@ const ScheduleCallPage = () => {
                           id="name"
                           name="name"
                           type="text"
+                          autoComplete='name'
                           required
                           value={formData.name}
                           onChange={handleInputChange}
@@ -646,6 +647,7 @@ const ScheduleCallPage = () => {
                           onChange={handleInputChange}
                           className="h-12"
                           placeholder="john@company.com"
+                          autoComplete='email'
                         />
                       </div>
                     </div>
@@ -660,6 +662,7 @@ const ScheduleCallPage = () => {
                           id="phone"
                           name="phone"
                           type="tel"
+                          autoComplete='tel'
                           required
                           value={formData.phone}
                           onChange={handleInputChange}

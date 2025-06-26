@@ -194,6 +194,7 @@ export default function FAQWithCTA() {
                 name="email"
                 placeholder="Enter Your Email"
                 className="rounded-full px-5 py-2"
+                autoComplete="email"
                 required
               />
               <Button className="rounded-full px-6 bg-blue-600 hover:bg-blue-700 transition text-white" type="submit">

@@ -456,6 +456,7 @@ const Contact = () => {
                         placeholder="John Doe"
                         onChange={handleChange}
                         className="w-full px-4 py-3 rounded-xl bg-orange-50 dark:bg-gray-700 border border-orange-200 dark:border-orange-700 focus:border-orange-500 focus:ring-orange-500"
+                        autoComplete="name"
                         required
                       />
                     </div>
@@ -472,6 +473,7 @@ const Contact = () => {
                         onChange={handleChange}
                         className="w-full px-4 py-3 rounded-xl bg-orange-50 dark:bg-gray-700 border border-orange-200 dark:border-orange-700 focus:border-orange-500 focus:ring-orange-500"
                         required
+                        autoComplete="email"
                       />
                     </div>
                   </div>
@@ -489,6 +491,7 @@ const Contact = () => {
                         placeholder="+91 9876543210"
                         onChange={handleChange}
                         className="w-full px-4 py-3 rounded-xl bg-orange-50 dark:bg-gray-700 border border-orange-200 dark:border-orange-700 focus:border-orange-500 focus:ring-orange-500"
+                        autoComplete="tel"
                       />
                     </div>
                     <div>

@@ -151,6 +151,14 @@ const navItems = [
     description: "Manage resources",
     category: "main",
     role: ["ADMIN", "DEVELOPER"]
+  },
+  {
+    title: "Profit Estimator",
+    href: "/admin/profit-estimator",
+    icon: Calculator,
+    description: "Profit estimator",
+    category: "finance",
+    role: ["ADMIN"]  
   }
 ]
 

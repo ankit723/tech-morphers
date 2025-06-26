@@ -80,6 +80,7 @@ const Register = () => {
                     onChange={handleChange}
                     className="w-full px-4 py-3 rounded-lg"
                     placeholder="Enter your first name"
+                    autoComplete="name"
                   />
                 </div>
 
@@ -96,6 +97,7 @@ const Register = () => {
                     onChange={handleChange}
                     className="w-full px-4 py-3 rounded-lg"
                     placeholder="Enter your last name"
+                    autoComplete="name"
                   />
                 </div>
               </div>
@@ -130,6 +132,7 @@ const Register = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg"
                   placeholder="Create a password"
+                  autoComplete="current-password"
                 />
               </div>
 
@@ -146,6 +149,7 @@ const Register = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg"
                   placeholder="Confirm your password"
+                  autoComplete="current-password"
                 />
               </div>
 

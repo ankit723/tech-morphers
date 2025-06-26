@@ -163,6 +163,7 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({
             <Label htmlFor="fullName" className="text-sm font-medium text-muted-foreground dark:text-slate-300">Full Name <span className="text-red-500">*</span></Label>
             <Input 
               id="fullName" 
+              autoComplete='name'
               type="text" 
               value={formData.fullName || ''} 
               onChange={handleChange} 
@@ -181,6 +182,7 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({
             <Input 
               id="email" 
               type="email" 
+              autoComplete='email'
               value={formData.email || ''} 
               onChange={handleChange} 
               placeholder="you@example.com" 
@@ -199,6 +201,7 @@ const StepYourDetails: React.FC<StepYourDetailsProps> = ({
               <Input 
                 id="phone" 
                 type="tel" 
+                autoComplete='tel'
                 value={formData.phone || ''} 
                 onChange={handleChange} 
                 placeholder="+91 12345 67890"

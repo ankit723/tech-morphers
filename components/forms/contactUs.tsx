@@ -163,6 +163,7 @@ const ContactUs: React.FC<ContactUsProps> = ({ defaultPackage, onFormSubmit, hid
             <Input 
               id="contact-fullName" 
               type="text" 
+              autoComplete='name'
               value={fullName} 
               onChange={(e) => setFullName(e.target.value)} 
               placeholder="John Doe" 
@@ -178,6 +179,7 @@ const ContactUs: React.FC<ContactUsProps> = ({ defaultPackage, onFormSubmit, hid
                 <Input 
                   id="contact-email" 
                   type="email" 
+                  autoComplete='email'
                   value={email} 
                   onChange={(e) => setEmail(e.target.value)} 
                   placeholder="you@example.com" 
@@ -191,6 +193,7 @@ const ContactUs: React.FC<ContactUsProps> = ({ defaultPackage, onFormSubmit, hid
                 <Input 
                   id="contact-phone" 
                   type="tel" 
+                  autoComplete='tel'
                   value={phone} 
                   onChange={(e) => setPhone(e.target.value)} 
                   placeholder="123-456-7890" 

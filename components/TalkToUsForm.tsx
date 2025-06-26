@@ -134,6 +134,7 @@ export default function TalkToUsForm() {
         <Input
           id="name"
           placeholder="John Doe"
+          autoComplete='name'
           value={formData.name}
           onChange={handleChange}
           required
@@ -147,6 +148,7 @@ export default function TalkToUsForm() {
         <Input
           id="email"
           type="email"
+          autoComplete='email'
           placeholder="john.doe@example.com"
           value={formData.email}
           onChange={handleChange}
@@ -161,6 +163,7 @@ export default function TalkToUsForm() {
         <Input
           id="phone"
           type="tel"
+          autoComplete='tel'
           placeholder="(123) 456-7890"
           value={formData.phone}
           onChange={handleChange}
