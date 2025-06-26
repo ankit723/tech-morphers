@@ -737,7 +737,7 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
               <div className="flex flex-col justify-center items-center gap-5">
                 <p className='text-center text-xs text-primary'>Too many process, Pay directly using dashboard</p>
 
-                <PaymentButton invoiceNumber={selectedDocument.invoiceNumber || ""} amount={2} currency={selectedDocument.currency || "INR"} receipt={selectedDocument.invoiceNumber || ""} name={client.fullName} email={client.email} phone={client.phone} />
+                <PaymentButton invoiceNumber={selectedDocument.invoiceNumber || ""} amount={selectedDocument.invoiceAmount || 0} currency={selectedDocument.currency || "INR"} receipt={selectedDocument.invoiceNumber || ""} name={client.fullName} email={client.email} phone={client.phone} />
               </div>
 
 
