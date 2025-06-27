@@ -13,6 +13,7 @@ export default function TalkToUsForm() {
     name: "",
     email: "",
     phone: "",
+    companyName: "",
     message: "",
   });
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
@@ -32,6 +33,14 @@ export default function TalkToUsForm() {
     if (res.ok) {
       console.log("TalkToUs form submitted")
       setShowSuccessMessage(true)
+      // Reset form data after successful submission
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        companyName: "",
+        message: "",
+      });
       setTimeout(() => {
         setShowSuccessMessage(false)
       }, 4000)
@@ -39,7 +48,10 @@ export default function TalkToUsForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-6">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg"
+    >
       <AnimatePresence>
         {showSuccessMessage && (
           <motion.div 
@@ -47,7 +59,7 @@ export default function TalkToUsForm() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-100"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50"
           >
             <motion.div
               initial={{ scale: 0.8, opacity: 0, y: 20 }}
@@ -168,7 +180,19 @@ export default function TalkToUsForm() {
           value={formData.phone}
           onChange={handleChange}
           className=""
-          required
+        />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="companyName" className="">
+          Company Name <span className="text-gray-500">(Optional)</span>
+        </Label>
+        <Input
+          id="companyName"
+          type="text"
+          placeholder="Your Company Inc."
+          value={formData.companyName}
+          onChange={handleChange}
+          className=""
         />
       </div>
       <div className="grid gap-2">
