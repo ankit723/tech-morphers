@@ -4,3 +4,11 @@
 4: Creating Perfect WhatsApp Buisness Profile
 5: Listing the Comapany in differnt sites and pages
 8: whatsapp notification in all contact
+
+
+@estimator-prices.ts i want you to check the estimator price s and implement that in the @Step5_TimelineBudget.tsx timeline budget component of the estimator based on from which place the website is being access and do the same thing for pages like 
+1) all service pages
+2) /service page
+3) /packages page
+
+and also overall improve the [rice structure based on the location user is opeing like if in india then in rupees and cheap categpries and if not india then prices in $ and more expensive then indian as in the file estimator prices
