@@ -90,7 +90,7 @@ async function resetDatabase() {
     await prisma.bankDetails.create({
       data: {
         bankName: "Bank of Baroda",
-        accountNumber: "4017179008978",
+        accountNumber: "40170100008677",
         accountHolderName: "Ankit Biswas",
         ifscCode: "BARB0SONARP",
         upiId: "varanasiartist.omg@okaxis",

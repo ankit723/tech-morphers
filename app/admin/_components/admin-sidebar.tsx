@@ -137,6 +137,14 @@ const navItems = [
     role: ["ADMIN"]
   },
   {
+    title: "Partial Submissions",
+    href: "/admin/partial-submissions",
+    icon: FileText,
+    description: "Partial submissions",
+    category: "leads",
+    role: ["ADMIN"]
+  },
+  {
     title: "Scheduled Calls",
     href: "/admin/scheduled-calls",
     icon: Calendar,

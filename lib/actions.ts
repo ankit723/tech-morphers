@@ -299,7 +299,13 @@ export async function getEstimatorEntries() {
   try {
     return await prisma.estimator.findMany({
       orderBy: { createdAt: 'desc' },
-      take: 50,
+      where: {
+        customRequests: {
+        not: {
+            contains: 'PARTIAL SUBMISSION'
+          }
+        }
+      },
       include: {
         client: {
           select: {
