@@ -83,6 +83,9 @@ async function resetDatabase() {
     
     await prisma.contactPage.deleteMany({});
     console.log("✅ ContactPage records deleted");
+
+    await prisma.user.deleteMany({});
+    console.log("✅ User records deleted");
     
     console.log("🎉 Database reset completed successfully!");
 

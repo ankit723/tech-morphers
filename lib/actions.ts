@@ -297,14 +297,21 @@ export async function getContactUsEntries() {
 
 export async function getEstimatorEntries() {
   try {
-    return await prisma.estimator.findMany({
+    const data = await prisma.estimator.findMany({
       orderBy: { createdAt: 'desc' },
       where: {
-        customRequests: {
-        not: {
-            contains: 'PARTIAL SUBMISSION'
+        OR: [
+          {
+            customRequests: null
+          },
+          {
+            customRequests: {
+              not: {
+                contains: 'PARTIAL SUBMISSION'
+              }
+            }
           }
-        }
+        ]
       },
       include: {
         client: {
@@ -316,6 +323,8 @@ export async function getEstimatorEntries() {
         }
       }
     })
+    console.log("data", data)
+    return data
   } catch (error) {
     console.error('Error fetching Estimator entries:', error)
     return []

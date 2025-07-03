@@ -167,6 +167,14 @@ const navItems = [
     description: "Profit estimator",
     category: "finance",
     role: ["ADMIN"]  
+  },
+  {
+    title: "Documents",
+    href: "/admin/documents",
+    icon: FileText,
+    description: "Manage documents",
+    category: "main",
+    role: ["ADMIN"]
   }
 ]
 
