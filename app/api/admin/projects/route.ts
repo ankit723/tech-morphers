@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { getCurrentAdminUser } from '@/lib/auth';
+import { UserRole } from '@prisma/client';
 
 export async function POST(request: NextRequest) {
   try {
@@ -81,6 +83,16 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
+    // Get current user and check authorization
+    const userCheck = await getCurrentAdminUser()
+    if (!userCheck.success) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
+    const user = userCheck.user
     const { searchParams } = new URL(request.url);
     const clientId = searchParams.get('clientId');
 
@@ -92,6 +104,80 @@ export async function GET(request: NextRequest) {
 
     if (clientId) {
       whereClause.clientId = clientId;
+    }
+
+    // If user is a project manager, only show projects from their assigned clients
+    if (user?.role === UserRole.PROJECT_MANAGER) {
+      const assignedClients = await prisma.clientAssignment.findMany({
+        where: {
+          projectManagerId: user.id,
+          isActive: true
+        },
+        select: {
+          clientId: true
+        }
+      });
+
+      const assignedClientIds = assignedClients.map(assignment => assignment.clientId);
+      
+      if (assignedClientIds.length === 0) {
+        // If PM has no assigned clients, return empty array
+        return NextResponse.json({
+          success: true,
+          projects: []
+        });
+      }
+
+      whereClause.clientId = {
+        in: assignedClientIds
+      };
+    }
+
+    // If user is a designer or developer, only show projects from clients assigned to their project manager
+    if (user?.role === UserRole.DESIGNER || user?.role === UserRole.DEVELOPER || user?.role === UserRole.MARKETING) {
+      // First, find which project manager this user is assigned to
+      const teamAssignment = await prisma.teamAssignment.findFirst({
+        where: {
+          teamMemberId: user.id,
+          isActive: true
+        },
+        select: {
+          projectManagerId: true
+        }
+      });
+
+      if (!teamAssignment) {
+        // If user is not assigned to any project manager, return empty array
+        return NextResponse.json({
+          success: true,
+          projects: []
+        });
+      }
+
+      // Now find clients assigned to that project manager
+      const assignedClients = await prisma.clientAssignment.findMany({
+        where: {
+          projectManagerId: teamAssignment.projectManagerId,
+          isActive: true
+        },
+        select: {
+          clientId: true
+        }
+      });
+
+      const assignedClientIds = assignedClients.map(assignment => assignment.clientId);
+      
+      if (assignedClientIds.length === 0) {
+        // If the PM has no assigned clients, return empty array
+        return NextResponse.json({
+          success: true,
+          projects: []
+        });
+      }
+
+      whereClause.clientId = {
+        in: assignedClientIds
+      };
     }
 
     const projects = await prisma.estimator.findMany({

@@ -255,7 +255,9 @@ export function UserManagement({ users, onRefresh }: UserManagementProps) {
             <SelectContent>
               <SelectItem value="all">All Roles</SelectItem>
               <SelectItem value="ADMIN">Admin</SelectItem>
+              <SelectItem value="PROJECT_MANAGER">Project Manager</SelectItem>
               <SelectItem value="DEVELOPER">Developer</SelectItem>
+              <SelectItem value="DESIGNER">Designer</SelectItem>
               <SelectItem value="MARKETING">Marketing</SelectItem>
             </SelectContent>
           </Select>
@@ -334,10 +336,11 @@ export function UserManagement({ users, onRefresh }: UserManagementProps) {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="ADMIN">Admin</SelectItem>
+                    <SelectItem value="PROJECT_MANAGER">Project Manager</SelectItem>
                     <SelectItem value="DEVELOPER">Developer</SelectItem>
                     <SelectItem value="DESIGNER">Designer</SelectItem>
                     <SelectItem value="MARKETING">Marketing</SelectItem>
-                    <SelectItem value="ADMIN">Admin</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -534,10 +537,11 @@ export function UserManagement({ users, onRefresh }: UserManagementProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="ADMIN">Admin</SelectItem>
+                  <SelectItem value="PROJECT_MANAGER">Project Manager</SelectItem>
                   <SelectItem value="DEVELOPER">Developer</SelectItem>
                   <SelectItem value="DESIGNER">Designer</SelectItem>
                   <SelectItem value="MARKETING">Marketing</SelectItem>
-                  <SelectItem value="ADMIN">Admin</SelectItem>
                 </SelectContent>
               </Select>
             </div>

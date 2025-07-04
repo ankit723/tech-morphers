@@ -25,8 +25,6 @@ import {
   UserCheck,
   GripVertical,
   Clock,
-  Star,
-  AlertCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,9 +33,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ProjectStatus } from '@prisma/client';
+import { ProjectStatus, UserRole } from '@prisma/client';
 import { Project, User as UserType, KanbanColumn, ProjectFilters } from '../types';
 import { ProjectAssignments } from './ProjectAssignments';
+import { getCurrentAdminUser } from '@/lib/auth';
 
 interface ProjectKanbanProps {
   projects: Project[];
@@ -57,9 +56,10 @@ const PROJECT_STATUS_CONFIG = {
 };
 
 // Draggable Project Card Component
-function DraggableProjectCard({ project, onShowDetails }: { 
+function DraggableProjectCard({ project, onShowDetails, currentUser }: { 
   project: Project; 
   onShowDetails: (project: Project) => void;
+  currentUser: UserType | null;
 }) {
   const {
     attributes,
@@ -108,13 +108,26 @@ function DraggableProjectCard({ project, onShowDetails }: {
     });
   }
 
-  const getPriorityIcon = (priority: string) => {
-    switch (priority) {
-      case 'HIGH': return <Star className="w-3 h-3 text-orange-500" />;
-      case 'URGENT': return <AlertCircle className="w-3 h-3 text-red-500" />;
-      default: return null;
+  const getRoleIcon = (role: string) => {
+    switch (role) {
+      case 'DESIGNER': return '🎨';
+      case 'DEVELOPER': return '💻';
+      case 'MARKETING': return '📢';
+      case 'PROJECT_MANAGER': return '👨‍💼';
+      default: return '👤';
     }
   };
+
+  // Group assignees by role for better organization
+  const assigneesByRole = allAssignees.reduce((acc, assignment) => {
+    const role = assignment.user.role;
+    if (!acc[role]) acc[role] = [];
+    acc[role].push(assignment);
+    return acc;
+  }, {} as Record<string, typeof allAssignees>);
+
+  // Check if current user can assign team members (only ADMIN and PROJECT_MANAGER)
+  const canAssignTeam = currentUser && (currentUser.role === UserRole.ADMIN || currentUser.role === UserRole.PROJECT_MANAGER);
 
   return (
     <div
@@ -169,57 +182,53 @@ function DraggableProjectCard({ project, onShowDetails }: {
             {/* Multiple Assignees */}
             <div className="space-y-2">
               {allAssignees.length > 0 ? (
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
-                      Team ({allAssignees.length})
-                    </span>
-                  </div>
-                  
-                  {/* First 2 assignees shown, rest as "+X more" */}
-                  <div className="flex items-center gap-1 flex-wrap">
-                    {allAssignees.slice(0, 2).map((assignment) => (
-                      <div key={assignment.id} className="flex items-center gap-1">
-                        <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-semibold">
-                          {assignment.user.name.charAt(0).toUpperCase()}
-                        </div>
-                        {assignment.priority && getPriorityIcon(assignment.priority) && (
-                          <div className="flex items-center">
-                            {getPriorityIcon(assignment.priority)}
-                          </div>
-                        )}
+                <div className="space-y-2">
+                  {/* Role summary with counters */}
+                  <div className="flex flex-wrap gap-1">
+                    {Object.entries(assigneesByRole).map(([role, assignments]) => (
+                      <div key={role} className="flex items-center gap-1">
+                        <span className="text-xs">
+                          {getRoleIcon(role)}
+                        </span>
+                        <span className="text-xs text-gray-600 dark:text-gray-400">
+                          {assignments.length}
+                        </span>
                       </div>
                     ))}
-                    
-                    {allAssignees.length > 2 && (
-                      <Badge variant="outline" className="text-xs px-1 py-0">
-                        +{allAssignees.length - 2}
-                      </Badge>
-                    )}
                   </div>
 
-                  {/* Show work descriptions for active assignments */}
-                  {activeAssignments.slice(0, 2).map((assignment) => (
-                    assignment.workDescription && (
-                      <div key={assignment.id} className="text-xs bg-blue-50 dark:bg-blue-950 p-2 rounded border-l-2 border-blue-300">
-                        <span className="font-medium">{assignment.user.name}:</span> {assignment.workDescription}
-                      </div>
-                    )
+                  {/* Show specialized work descriptions */}
+                  {Object.entries(assigneesByRole).slice(0, 2).map(([role, assignments]) => (
+                    assignments.slice(0, 1).map((assignment) => (
+                      assignment.workDescription && (
+                        <div key={assignment.id} className={`text-xs p-2 rounded border-l-2 ${
+                          role === 'DESIGNER' ? 'bg-pink-50 dark:bg-pink-950 border-pink-300' :
+                          role === 'DEVELOPER' ? 'bg-green-50 dark:bg-green-950 border-green-300' :
+                          role === 'MARKETING' ? 'bg-orange-50 dark:bg-orange-950 border-orange-300' :
+                          'bg-blue-50 dark:bg-blue-950 border-blue-300'
+                        }`}>
+                          <span className="font-medium">{getRoleIcon(role)} {assignment.user.name}:</span> {assignment.workDescription}
+                        </div>
+                      )
+                    ))
                   ))}
                 </div>
               ) : (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onShowDetails(project);
-                  }}
-                  className="text-xs w-full"
-                >
-                  <UserCheck className="w-3 h-3 mr-1" />
-                  Assign Team
-                </Button>
+                // Only show assign team button if user has permission
+                canAssignTeam && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onShowDetails(project);
+                    }}
+                    className="text-xs w-full"
+                  >
+                    <UserCheck className="w-3 h-3 mr-1" />
+                    Assign Team
+                  </Button>
+                )
               )}
             </div>
 
@@ -327,11 +336,65 @@ export function ProjectKanban({ projects, users, onRefresh }: ProjectKanbanProps
   // Local state for optimistic updates
   const [localProjects, setLocalProjects] = useState<Project[]>(projects);
   const [pendingUpdates, setPendingUpdates] = useState<Set<string>>(new Set());
+  
+  // Current user state for filtering
+  const [currentUser, setCurrentUser] = useState<UserType | null>(null);
+  const [assignedTeamMembers, setAssignedTeamMembers] = useState<UserType[]>([]);
 
   // Update local state when props change
   React.useEffect(() => {
     setLocalProjects(projects);
   }, [projects]);
+
+  // Load current user and their assigned team members
+  React.useEffect(() => {
+    const loadCurrentUser = async () => {
+      try {
+        const userResult = await getCurrentAdminUser();
+        if (userResult.success && userResult.user) {
+          const user = userResult.user as UserType;
+          setCurrentUser(user);
+
+          // If user is a project manager, get their assigned team members
+          if (user.role === UserRole.PROJECT_MANAGER) {
+            const response = await fetch('/api/admin/team-assignments');
+            const result = await response.json();
+            
+            if (result.success) {
+              const myTeamMembers = result.assignments.map((assignment: any) => assignment.teamMember);
+              
+              // Sort team members by role for better organization
+              const sortedTeamMembers = myTeamMembers.sort((a: UserType, b: UserType) => {
+                const roleOrder = { 'DESIGNER': 1, 'DEVELOPER': 2, 'MARKETING': 3 };
+                return (roleOrder[a.role as keyof typeof roleOrder] || 4) - (roleOrder[b.role as keyof typeof roleOrder] || 4);
+              });
+              
+              setAssignedTeamMembers(sortedTeamMembers);
+            } else {
+              console.error('Failed to load team members for project manager:', result.error);
+              setAssignedTeamMembers([]);
+            }
+          } else {
+            // If admin, they can assign all users (excluding admins and PMs)
+            const filteredUsers = users.filter(user => 
+              user.role !== UserRole.ADMIN && 
+              user.role !== UserRole.PROJECT_MANAGER && 
+              user.isActive
+            ).sort((a, b) => {
+              const roleOrder = { 'DESIGNER': 1, 'DEVELOPER': 2, 'MARKETING': 3 };
+              return (roleOrder[a.role as keyof typeof roleOrder] || 4) - (roleOrder[b.role as keyof typeof roleOrder] || 4);
+            });
+            setAssignedTeamMembers(filteredUsers);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading current user:', error);
+        setAssignedTeamMembers([]);
+      }
+    };
+
+    loadCurrentUser();
+  }, [users]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -508,6 +571,27 @@ export function ProjectKanban({ projects, users, onRefresh }: ProjectKanbanProps
         </div>
       )}
 
+      {/* Debug Info for Project Managers */}
+      {process.env.NODE_ENV === 'development' && currentUser?.role === UserRole.PROJECT_MANAGER && (
+        <div className="bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
+          <div className="text-sm text-yellow-700 dark:text-yellow-300">
+            <div className="font-medium mb-2">Project Manager Debug Info:</div>
+            <div>Current user: {currentUser.name} ({currentUser.role})</div>
+            <div>Assigned team members: {assignedTeamMembers.length}</div>
+            {assignedTeamMembers.length > 0 && (
+              <div className="mt-2">
+                <div className="font-medium">Team members:</div>
+                {assignedTeamMembers.map(member => (
+                  <div key={member.id} className="ml-2">
+                    • {member.name} ({member.role})
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -533,7 +617,26 @@ export function ProjectKanban({ projects, users, onRefresh }: ProjectKanbanProps
             <SelectContent>
               <SelectItem value="all">All Assignees</SelectItem>
               <SelectItem value="unassigned">Unassigned</SelectItem>
-              {users.map(user => (
+              {/* Group users by role in the filter */}
+              {['DESIGNER', 'DEVELOPER', 'MARKETING'].map(role => {
+                const roleUsers = users.filter(user => user.role === role);
+                return roleUsers.length > 0 ? (
+                  <div key={role}>
+                    <div className="px-2 py-1 text-xs font-semibold text-gray-500 bg-gray-100 dark:bg-gray-800">
+                      {role === 'DESIGNER' ? '🎨 Designers' :
+                       role === 'DEVELOPER' ? '💻 Developers' :
+                       role === 'MARKETING' ? '📢 Marketing' : role}
+                    </div>
+                    {roleUsers.map(user => (
+                      <SelectItem key={user.id} value={user.id} className="pl-6">
+                        {user.name}
+                      </SelectItem>
+                    ))}
+                  </div>
+                ) : null;
+              })}
+              {/* Other roles */}
+              {users.filter(user => !['DESIGNER', 'DEVELOPER', 'MARKETING'].includes(user.role)).map(user => (
                 <SelectItem key={user.id} value={user.id}>
                   {user.name} ({user.role})
                 </SelectItem>
@@ -589,6 +692,7 @@ export function ProjectKanban({ projects, users, onRefresh }: ProjectKanbanProps
                     <DraggableProjectCard 
                       project={project} 
                       onShowDetails={setSelectedProject}
+                      currentUser={currentUser}
                     />
                   </motion.div>
                 ))}
@@ -612,6 +716,7 @@ export function ProjectKanban({ projects, users, onRefresh }: ProjectKanbanProps
               <DraggableProjectCard 
                 project={activeProject} 
                 onShowDetails={() => {}}
+                currentUser={currentUser}
               />
             </div>
           ) : null}
@@ -716,8 +821,9 @@ export function ProjectKanban({ projects, users, onRefresh }: ProjectKanbanProps
               <ProjectAssignments
                 projectId={selectedProject.id}
                 assignments={selectedProject.projectAssignments || []}
-                availableUsers={users}
+                availableUsers={assignedTeamMembers}
                 onRefresh={onRefresh}
+                currentUser={currentUser}
               />
 
               {/* Actions */}

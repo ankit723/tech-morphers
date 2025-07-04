@@ -10,6 +10,7 @@ datasource db {
 
 enum UserRole {
   ADMIN
+  PROJECT_MANAGER
   DEVELOPER
   DESIGNER
   MARKETING
@@ -30,6 +31,13 @@ model User {
   
   // New many-to-many project assignments
   projectAssignments ProjectAssignment[]
+  
+  // Client-Project Manager relations
+  managedClients ClientAssignment[] @relation("ClientProjectManager")
+  
+  // Team Member-Project Manager relations
+  teamAssignment TeamAssignment? @relation("AssignedTeamMember")
+  managedTeamMembers TeamAssignment[] @relation("ProjectManagerTeam")
 }
 
 model ContactUs {
@@ -146,6 +154,9 @@ model Client {
   estimators      Estimator[]
   documents       ClientDocument[]
   paymentRecords  PaymentRecord[]
+  
+  // Project Manager assignment
+  projectManagerAssignment ClientAssignment?
   
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -743,4 +754,42 @@ enum AssignmentStatus {
   PAUSED
   COMPLETED
   CANCELLED
+}
+
+// Client-Project Manager Assignment Model
+model ClientAssignment {
+  id               String   @id @default(uuid())
+  clientId         String   @unique  // One client can only have one PM
+  client           Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  projectManagerId String
+  projectManager   User     @relation("ClientProjectManager", fields: [projectManagerId], references: [id], onDelete: Cascade)
+  assignedAt       DateTime @default(now())
+  assignedBy       String   // Admin who made assignment
+  isActive         Boolean  @default(true)
+  notes           String?   // Optional notes about assignment
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([projectManagerId])
+  @@index([isActive])
+}
+
+// Team Member-Project Manager Assignment Model  
+model TeamAssignment {
+  id               String   @id @default(uuid())
+  teamMemberId     String   @unique  // Team member can only be assigned to one PM
+  teamMember       User     @relation("AssignedTeamMember", fields: [teamMemberId], references: [id], onDelete: Cascade)
+  projectManagerId String
+  projectManager   User     @relation("ProjectManagerTeam", fields: [projectManagerId], references: [id], onDelete: Cascade)
+  assignedAt       DateTime @default(now())
+  assignedBy       String   // Admin who made assignment
+  isActive         Boolean  @default(true)
+  notes           String?   // Optional notes about assignment
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([projectManagerId])
+  @@index([isActive])
 }

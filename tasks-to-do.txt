@@ -3,7 +3,6 @@
 3: Creatign google Buisness Profile
 4: Creating Perfect WhatsApp Buisness Profile
 5: Listing the Comapany in differnt sites and pages
-8: whatsapp notification in all contact
 
 
 @estimator-prices.ts i want you to check the estimator price s and implement that in the @Step5_TimelineBudget.tsx timeline budget component of the estimator based on from which place the website is being access and do the same thing for pages like 
@@ -11,4 +10,17 @@
 2) /service page
 3) /packages page
 
-and also overall improve the [rice structure based on the location user is opeing like if in india then in rupees and cheap categpries and if not india then prices in $ and more expensive then indian as in the file estimator prices
+and also overall improve the price structure based on the location user is opeing like if in india then in rupees and cheap categpries and if not india then prices in $ and more expensive then indian as in the file estimator prices
+
+
+
+
+✅ FIXED - Designer and developer role restrictions:
+1) ✅ FIXED - Designers and developers now only see projects from clients assigned to their project manager
+2) ✅ FIXED - Designers and developers cannot assign or reassign team members in project cards
+
+Implementation details:
+- Modified /api/admin/projects/route.ts to filter projects based on team assignments for DESIGNER/DEVELOPER/MARKETING roles
+- Updated ProjectKanban component to hide "Assign Team" buttons for non-admin/non-PM users
+- Modified ProjectAssignments component to prevent assignment management for designers/developers
+- Added role-based permissions throughout the project management workflow 

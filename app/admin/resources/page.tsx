@@ -19,6 +19,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { UserManagement } from './components/UserManagement';
 import { ProjectKanban } from './components/ProjectKanban';
+import { ProjectManagerDashboard } from './components/ProjectManagerDashboard';
 import { User, Project, UserWithStats, ResourceStats } from './types';
 import { getCurrentAdminUser } from '@/lib/auth';
 import { UserRole } from '@prisma/client';
@@ -42,9 +43,11 @@ export default function ResourcesPage() {
         const userResult = await getCurrentAdminUser();
         if (userResult.success) {
           setUser(userResult.user as User);
-          if(userResult.user?.role !== UserRole.ADMIN) {
-            setActiveTab('projects');
-          }
+                  if(userResult.user?.role === UserRole.PROJECT_MANAGER) {
+          setActiveTab('project-manager');
+        } else if(userResult.user?.role !== UserRole.ADMIN) {
+          setActiveTab('projects');
+        }
         } else {
           setUser(null);
         }
@@ -342,18 +345,31 @@ export default function ResourcesPage() {
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className={`grid w-full ${user?.role === UserRole.ADMIN ? 'grid-cols-3' : 'grid-cols-1'}`}>
+        <TabsList className={`grid w-full ${
+          user?.role === UserRole.ADMIN ? 'grid-cols-4' : 
+          user?.role === UserRole.PROJECT_MANAGER ? 'grid-cols-2' : 'grid-cols-1'
+        }`}>
           {user?.role === UserRole.ADMIN && (
             <>
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="w-4 h-4" />
               Overview
             </TabsTrigger>
+            <TabsTrigger value="project-manager" className="flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              Project Manager
+            </TabsTrigger>
             <TabsTrigger value="users" className="flex items-center gap-2">
               <Users className="w-4 h-4" />
               User Management
             </TabsTrigger>
             </>
+          )}
+          {user?.role === UserRole.PROJECT_MANAGER && (
+            <TabsTrigger value="project-manager" className="flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              My Dashboard
+            </TabsTrigger>
           )}
           <TabsTrigger value="projects" className="flex items-center gap-2">
             <FolderKanban className="w-4 h-4" />
@@ -498,6 +514,13 @@ export default function ResourcesPage() {
 
         <TabsContent value="users" className="space-y-6">
           <UserManagement 
+            users={users} 
+            onRefresh={handleRefresh} 
+          />
+        </TabsContent>
+
+        <TabsContent value="project-manager" className="space-y-6">
+          <ProjectManagerDashboard 
             users={users} 
             onRefresh={handleRefresh} 
           />

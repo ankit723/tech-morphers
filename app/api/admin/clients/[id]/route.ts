@@ -47,6 +47,18 @@ export async function GET(
               }
             }
           }
+        },
+        projectManagerAssignment: {
+          include: {
+            projectManager: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true
+              }
+            }
+          }
         }
       }
     });

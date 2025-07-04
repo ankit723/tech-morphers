@@ -40,12 +40,20 @@ const navItems = [
     role: ["ADMIN"]
   },
   {
+    title: "Estimator Requests",
+    href: "/admin/estimators",
+    icon: Calculator,
+    description: "Project estimates",
+    category: "leads",
+    role: ["ADMIN"]
+  },
+  {
     title: "Clients",
     href: "/admin/clients",
     icon: Users,
     description: "Manage client accounts",
     category: "main",
-    role: ["ADMIN"]
+    role: ["ADMIN", "PROJECT_MANAGER"]
   },
   {
     title: "Payments",
@@ -53,7 +61,7 @@ const navItems = [
     icon: CreditCard,
     description: "Review payment submissions",
     category: "finance",
-    role: ["ADMIN"]
+    role: ["ADMIN", "PROJECT_MANAGER"]
   },
   {
     title: "Invoices",
@@ -61,7 +69,7 @@ const navItems = [
     icon: FileText,
     description: "Manage invoices",
     category: "finance",
-    role: ["ADMIN"]
+    role: ["ADMIN", "PROJECT_MANAGER"]
   },
   {
     title: "Client Deliveries",
@@ -69,7 +77,7 @@ const navItems = [
     icon: Package,
     description: "Upload project deliverables",
     category: "main",
-    role: ["ADMIN", "DEVELOPER"]
+    role: ["ADMIN", "DEVELOPER" , "PROJECT_MANAGER", "DESIGNER"]
   },
   {
     title: "Case Studies",
@@ -129,14 +137,6 @@ const navItems = [
     role: ["ADMIN"]
   },
   {
-    title: "Estimator Requests",
-    href: "/admin/estimators",
-    icon: Calculator,
-    description: "Project estimates",
-    category: "leads",
-    role: ["ADMIN"]
-  },
-  {
     title: "Partial Submissions",
     href: "/admin/partial-submissions",
     icon: FileText,
@@ -158,7 +158,7 @@ const navItems = [
     icon: FileText,
     description: "Manage resources",
     category: "main",
-    role: ["ADMIN", "DEVELOPER"]
+    role: ["ADMIN", "DEVELOPER", "PROJECT_MANAGER", "DESIGNER"]
   },
   {
     title: "Profit Estimator",
@@ -174,7 +174,7 @@ const navItems = [
     icon: FileText,
     description: "Manage documents",
     category: "main",
-    role: ["ADMIN"]
+    role: ["ADMIN", "PROJECT_MANAGER"]
   }
 ]
 
@@ -267,7 +267,7 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed, user, logout }: Admi
         <nav className="space-y-6">
           {Object.entries(categories).map(([key, category]) => (
             <div key={key}>
-              {!isCollapsed && (
+              {!isCollapsed && category.items.some(item => item.role.includes(user?.role)) && (
                 <div className="px-4 mb-2">
                   <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     {category.title}

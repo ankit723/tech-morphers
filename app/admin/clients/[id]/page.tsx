@@ -15,10 +15,18 @@ import {
   FileText,
   TrendingUp,
   Clock,
+  UserCheck,
+  UserX,
+  Edit3,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import { toast } from 'sonner'
 
 type ClientEstimator = {
   id: string
@@ -60,6 +68,24 @@ type Client = {
     isSigned: boolean
   }>
   estimators: ClientEstimator[]
+  projectManagerAssignment?: {
+    id: string
+    projectManager: {
+      id: string
+      name: string
+      email: string
+      role: string
+    }
+    assignedAt: Date
+    notes?: string
+  }
+}
+
+type ProjectManager = {
+  id: string
+  name: string
+  email: string
+  role: string
 }
 
 interface ClientPageProps {
@@ -70,9 +96,17 @@ export default function ClientPage({ params }: ClientPageProps) {
   const router = useRouter()
   const [client, setClient] = useState<Client | null>(null)
   const [loading, setLoading] = useState(true)
+  
+  // PM Assignment states
+  const [projectManagers, setProjectManagers] = useState<ProjectManager[]>([])
+  const [pmAssignDialogOpen, setPmAssignDialogOpen] = useState(false)
+  const [selectedPmId, setSelectedPmId] = useState<string>('')
+  const [assignmentNotes, setAssignmentNotes] = useState<string>('')
+  const [assignmentLoading, setAssignmentLoading] = useState(false)
 
   useEffect(() => {
     loadClient()
+    loadProjectManagers()
   }, [])
 
   const loadClient = async () => {
@@ -93,6 +127,79 @@ export default function ClientPage({ params }: ClientPageProps) {
       router.push('/admin/clients')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadProjectManagers = async () => {
+    try {
+      const response = await fetch('/api/admin/users')
+      const result = await response.json()
+      
+      if (result.success) {
+        const pms = result.users.filter((user: any) => 
+          user.role === 'PROJECT_MANAGER' && user.isActive
+        )
+        setProjectManagers(pms)
+      }
+    } catch (error) {
+      console.error('Error loading project managers:', error)
+    }
+  }
+
+  const handleAssignPM = async () => {
+    if (!selectedPmId || !client) return
+
+    setAssignmentLoading(true)
+    try {
+      const response = await fetch(`/api/admin/clients/${client.id}/assign-pm`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          projectManagerId: selectedPmId,
+          notes: assignmentNotes
+        })
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        toast.success(result.message)
+        setPmAssignDialogOpen(false)
+        setSelectedPmId('')
+        setAssignmentNotes('')
+        await loadClient() // Reload client data
+      } else {
+        toast.error(result.error || 'Failed to assign project manager')
+      }
+    } catch (error) {
+      console.error('Error assigning project manager:', error)
+      toast.error('Failed to assign project manager')
+    } finally {
+      setAssignmentLoading(false)
+    }
+  }
+
+  const handleRemovePM = async () => {
+    if (!client) return
+
+    try {
+      const response = await fetch(`/api/admin/clients/${client.id}/assign-pm`, {
+        method: 'DELETE'
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        toast.success(result.message)
+        await loadClient() // Reload client data
+      } else {
+        toast.error(result.error || 'Failed to remove project manager')
+      }
+    } catch (error) {
+      console.error('Error removing project manager:', error)
+      toast.error('Failed to remove project manager')
     }
   }
 
@@ -228,6 +335,202 @@ export default function ClientPage({ params }: ClientPageProps) {
                 </span>
               )}
             </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Project Manager Assignment */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <UserCheck className="w-5 h-5 text-purple-600" />
+                <span>Project Manager Assignment</span>
+              </div>
+              
+              {client.projectManagerAssignment ? (
+                <div className="flex items-center space-x-2">
+                  <Dialog open={pmAssignDialogOpen} onOpenChange={setPmAssignDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        <Edit3 className="w-4 h-4 mr-2" />
+                        Change PM
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Assign Project Manager</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div>
+                          <Label htmlFor="pm-select">Select Project Manager</Label>
+                          <Select value={selectedPmId} onValueChange={setSelectedPmId}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a project manager" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {projectManagers.map((pm) => (
+                                <SelectItem key={pm.id} value={pm.id}>
+                                  {pm.name} ({pm.email})
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="notes">Assignment Notes (Optional)</Label>
+                          <Textarea
+                            id="notes"
+                            value={assignmentNotes}
+                            onChange={(e) => setAssignmentNotes(e.target.value)}
+                            placeholder="Add any specific notes about this assignment..."
+                            rows={3}
+                          />
+                        </div>
+                        
+                        <div className="flex justify-end space-x-2">
+                          <Button 
+                            variant="outline" 
+                            onClick={() => setPmAssignDialogOpen(false)}
+                            disabled={assignmentLoading}
+                          >
+                            Cancel
+                          </Button>
+                          <Button 
+                            onClick={handleAssignPM}
+                            disabled={!selectedPmId || assignmentLoading}
+                          >
+                            {assignmentLoading ? (
+                              <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                            ) : null}
+                            Assign PM
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                  
+                  <Button 
+                    variant="destructive" 
+                    size="sm"
+                    onClick={handleRemovePM}
+                  >
+                    <UserX className="w-4 h-4 mr-2" />
+                    Remove PM
+                  </Button>
+                </div>
+              ) : (
+                <Dialog open={pmAssignDialogOpen} onOpenChange={setPmAssignDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button>
+                      <UserCheck className="w-4 h-4 mr-2" />
+                      Assign PM
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Assign Project Manager</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="pm-select">Select Project Manager</Label>
+                        <Select value={selectedPmId} onValueChange={setSelectedPmId}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a project manager" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {projectManagers.map((pm) => (
+                              <SelectItem key={pm.id} value={pm.id}>
+                                {pm.name} ({pm.email})
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="notes">Assignment Notes (Optional)</Label>
+                        <Textarea
+                          id="notes"
+                          value={assignmentNotes}
+                          onChange={(e) => setAssignmentNotes(e.target.value)}
+                          placeholder="Add any specific notes about this assignment..."
+                          rows={3}
+                        />
+                      </div>
+                      
+                      <div className="flex justify-end space-x-2">
+                        <Button 
+                          variant="outline" 
+                          onClick={() => setPmAssignDialogOpen(false)}
+                          disabled={assignmentLoading}
+                        >
+                          Cancel
+                        </Button>
+                        <Button 
+                          onClick={handleAssignPM}
+                          disabled={!selectedPmId || assignmentLoading}
+                        >
+                          {assignmentLoading ? (
+                            <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                          ) : null}
+                          Assign PM
+                        </Button>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {client.projectManagerAssignment ? (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                    <span className="text-purple-600 dark:text-purple-400 font-semibold">
+                      {client.projectManagerAssignment.projectManager.name.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {client.projectManagerAssignment.projectManager.name}
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {client.projectManagerAssignment.projectManager.email}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <Badge variant="default">Active</Badge>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Assigned {new Date(client.projectManagerAssignment.assignedAt).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-6">
+                <UserX className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                <p className="text-gray-500 dark:text-gray-400">No project manager assigned</p>
+                <p className="text-sm text-gray-400 dark:text-gray-500">
+                  Assign a project manager to manage this client&apos;s projects
+                </p>
+              </div>
+            )}
+            
+            {client.projectManagerAssignment?.notes && (
+              <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <strong>Notes:</strong> {client.projectManagerAssignment.notes}
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
       </motion.div>
