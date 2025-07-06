@@ -6,6 +6,7 @@ import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import Image from "next/image";
 import { WhatsappButton } from "@/components/ui/whatsapp";
+import { ScrollExitPopup } from "@/components/ui/scroll-exit-popup";
 import { Toaster } from "sonner";
 
 const gothamBook = localFont({
@@ -86,6 +87,7 @@ export default function RootLayout({
           {children}
           <Toaster />
           <WhatsappButton />
+          <ScrollExitPopup debug={false} />
         </ThemeProvider>
         <Analytics />
         

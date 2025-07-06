@@ -526,7 +526,7 @@ const EstimatorPage = () => {
       )}
 
       {/* Testimonials Section - Only show on step 1 and desktop */}
-      {currentStep === 1 && !isMobile && (
+      {(
         <motion.div
           initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
           animate={{ opacity: 1, y: 0 }}
