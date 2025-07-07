@@ -59,9 +59,10 @@ type Client = {
 interface ClientsListProps {
   clients: Client[]
   onClientSelect: (client: Client) => void
+  onDeleteClient: (client: Client) => void
 }
 
-export function ClientsList({ clients, onClientSelect }: ClientsListProps) {
+export function ClientsList({ clients, onClientSelect, onDeleteClient }: ClientsListProps) {
   const [searchTerm, setSearchTerm] = useState('')
 
   // Filter clients based on search term
@@ -116,6 +117,7 @@ export function ClientsList({ clients, onClientSelect }: ClientsListProps) {
               client={client}
               index={index}
               onClientSelect={onClientSelect}
+              onDeleteClient={onDeleteClient}
             />
           ))}
         </div>

@@ -76,6 +76,7 @@ export async function GET(request: NextRequest) {
         id: doc.id,
         title: doc.title,
         type: doc.type,
+        contentType: doc.contentType,
         uploadedAt: doc.uploadedAt.toISOString(),
         fileUrl: doc.fileUrl,
         fileName: doc.fileName,

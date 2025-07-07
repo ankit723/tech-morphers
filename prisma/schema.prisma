@@ -177,6 +177,7 @@ model ClientDocument {
   title       String
   description String?
   type        DocumentType
+  contentType ContentType @default(FILE)
   fileUrl     String
   fileName    String
   fileSize    Int         // in bytes
@@ -650,6 +651,13 @@ enum DocumentType {
   PROPOSAL
   REPORT
   OTHER
+  LINK
+}
+
+enum ContentType {
+  FILE
+  VIDEO
+  LINK
 }
 
 enum AdminRole {

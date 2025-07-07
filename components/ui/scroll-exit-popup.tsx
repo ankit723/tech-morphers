@@ -17,6 +17,7 @@ export function ScrollExitPopup({ debug = false, intervalSeconds = 45 }: TimeBas
   const [countdown, setCountdown] = useState(intervalSeconds);
   const [isActive, setIsActive] = useState(false);
   const [hasShownOnce, setHasShownOnce] = useState(false);
+  const [exitIntentTriggered, setExitIntentTriggered] = useState(false);
   const pathname = usePathname();
 
   // Debug function
@@ -31,7 +32,7 @@ export function ScrollExitPopup({ debug = false, intervalSeconds = 45 }: TimeBas
     if (!pathname) return false;
     
     // Exclude /estimator and /admin/* pages
-    if (pathname.startsWith('/estimator') || pathname.startsWith('/admin')) {
+    if (pathname.startsWith('/estimator') || pathname.startsWith('/admin') || pathname.startsWith('/client') || pathname.startsWith('/login')) {
       debugLog(`Popup disabled on page: ${pathname}`);
       return false;
     }
@@ -58,6 +59,63 @@ export function ScrollExitPopup({ debug = false, intervalSeconds = 45 }: TimeBas
     
     setTimeout(checkSession, 100);
   }, [debugLog]);
+
+  // Exit intent detection
+  useEffect(() => {
+    if (!isClient || !shouldShowOnCurrentPage() || hasShownOnce || exitIntentTriggered) {
+      return;
+    }
+
+    let mouseLeaveDelay: NodeJS.Timeout;
+    
+    const handleMouseLeave = (e: MouseEvent) => {
+      // Check if mouse is leaving from the top of the page
+      if (e.clientY <= 0) {
+        debugLog('Exit intent detected - mouse left from top');
+        
+        // Add a small delay to avoid false positives
+        mouseLeaveDelay = setTimeout(() => {
+          if (!hasShownOnce && !exitIntentTriggered) {
+            setExitIntentTriggered(true);
+            setIsVisible(true);
+            setHasShownOnce(true);
+            debugLog('Exit intent popup triggered');
+            
+            // Save to sessionStorage
+            sessionStorage.setItem('popup-last-shown', Date.now().toString());
+            
+            // Track popup impression
+            if (typeof window !== 'undefined' && (window as any).gtag) {
+              (window as any).gtag('event', 'popup_shown', {
+                event_category: 'engagement',
+                event_label: 'exit_intent_popup'
+              });
+            }
+          }
+        }, 100);
+      }
+    };
+
+    const handleMouseEnter = () => {
+      // Clear the delay if mouse re-enters quickly
+      if (mouseLeaveDelay) {
+        clearTimeout(mouseLeaveDelay);
+      }
+    };
+
+    // Add event listeners
+    document.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('mouseenter', handleMouseEnter);
+
+    return () => {
+      document.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('mouseenter', handleMouseEnter);
+      if (mouseLeaveDelay) {
+        clearTimeout(mouseLeaveDelay);
+      }
+      debugLog('Exit intent listeners removed');
+    };
+  }, [isClient, shouldShowOnCurrentPage, hasShownOnce, exitIntentTriggered, debugLog]);
 
   // Main timer logic
   useEffect(() => {
@@ -112,7 +170,7 @@ export function ScrollExitPopup({ debug = false, intervalSeconds = 45 }: TimeBas
     if (isClient && typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'popup_dismissed', {
         event_category: 'engagement',
-        event_label: 'time_based_popup'
+        event_label: exitIntentTriggered ? 'exit_intent_popup' : 'time_based_popup'
       });
     }
   };
@@ -125,7 +183,7 @@ export function ScrollExitPopup({ debug = false, intervalSeconds = 45 }: TimeBas
     if (isClient && typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'popup_cta_clicked', {
         event_category: 'conversion',
-        event_label: 'time_based_popup_to_estimator'
+        event_label: exitIntentTriggered ? 'exit_intent_popup_to_estimator' : 'time_based_popup_to_estimator'
       });
     }
     
@@ -149,8 +207,9 @@ export function ScrollExitPopup({ debug = false, intervalSeconds = 45 }: TimeBas
   if (!isVisible && debug) {
     return (
       <div className="fixed bottom-4 right-4 z-40 bg-gray-800 text-white p-2 rounded text-xs max-w-xs">
-        <div className="font-bold">Time-Based Popup Debug</div>
-        <div>Active: {isActive ? 'Yes' : 'No'}</div>
+        <div className="font-bold">Smart Popup Debug</div>
+        <div>Timer Active: {isActive ? 'Yes' : 'No'}</div>
+        <div>Exit Intent: {exitIntentTriggered ? 'Triggered' : 'Watching'}</div>
         <div>Shown Once: {hasShownOnce ? 'Yes' : 'No'}</div>
         <div>Next popup in: {hasShownOnce ? 'N/A' : `${countdown}s`}</div>
         <div>Page: {pathname}</div>
@@ -164,6 +223,7 @@ export function ScrollExitPopup({ debug = false, intervalSeconds = 45 }: TimeBas
         <button 
           onClick={() => {
             setHasShownOnce(false);
+            setExitIntentTriggered(false);
             setCountdown(intervalSeconds);
             sessionStorage.removeItem('popup-last-shown');
           }}
@@ -196,10 +256,13 @@ export function ScrollExitPopup({ debug = false, intervalSeconds = 45 }: TimeBas
               <Calculator className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              Get Your Custom Quote
+              {exitIntentTriggered ? "Wait! Get Your Free Quote" : "Get Your Custom Quote"}
             </h2>
             <p className="text-gray-600 dark:text-gray-300 text-sm">
-              Want a pricing estimate tailored for you? Try our 2-minute quote tool — no calls, no spam.
+              {exitIntentTriggered 
+                ? "Before you go, get a pricing estimate tailored for you. Try our 2-minute quote tool — no calls, no spam."
+                : "Want a pricing estimate tailored for you? Try our 2-minute quote tool — no calls, no spam."
+              }
             </p>
           </div>
 
@@ -231,7 +294,7 @@ export function ScrollExitPopup({ debug = false, intervalSeconds = 45 }: TimeBas
               onClick={handleEstimatorClick}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-base font-medium"
             >
-              Get My Free Quote
+              {exitIntentTriggered ? "Get My Free Quote Now" : "Get My Free Quote"}
             </Button>
             <Button
               onClick={handleClose}

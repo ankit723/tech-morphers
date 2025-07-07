@@ -1,21 +1,31 @@
 "use client"
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Eye, EyeOff, Lock, Mail, Loader2, LogIn, Shield } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Eye, EyeOff, Loader2, LogIn, Mail, Lock } from 'lucide-react'
 import Link from 'next/link'
 
-export default function ClientLogin() {
+function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const emailParam = searchParams.get('email')
+  const passwordParam = searchParams.get('password')
+
+  useEffect(() => {
+    if (emailParam && passwordParam) {
+      setEmail(emailParam)
+      setPassword(passwordParam)
+    }
+  }, [emailParam, passwordParam])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -47,42 +57,26 @@ export default function ClientLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-20 w-64 h-64 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 blur-3xl" />
-        <div className="absolute bottom-20 right-20 w-64 h-64 rounded-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 blur-3xl" />
-      </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative w-full max-w-md"
-      >
-        {/* Header */}
-        <div className="text-center mb-8">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg"
-          >
-            <Shield className="w-8 h-8 text-white" />
-          </motion.div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Client Portal
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Access your project documents and quotations
-          </p>
-        </div>
-
-        {/* Login Form */}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-blue-900 dark:to-purple-900 p-4">
+      <div className="w-full max-w-md">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-8"
+        >
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Welcome Back
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Sign in to your client portal
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
           className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/50 p-8"
         >
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -165,45 +159,25 @@ export default function ClientLogin() {
           {/* Help Text */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Need help accessing your account?
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
-              Contact us at{' '}
-              <a 
-                href="mailto:hello@techmorphers.com" 
+              Need help? Contact our support team at{' '}
+              <Link 
+                href="mailto:support@techmorphers.com" 
                 className="text-blue-600 dark:text-blue-400 hover:underline"
               >
-                hello@techmorphers.com
-              </a>
+                support@techmorphers.com
+              </Link>
             </p>
           </div>
         </motion.div>
-
-        {/* Security Notice */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mt-6 text-center"
-        >
-          <div className="flex items-center justify-center text-sm text-gray-500 dark:text-gray-400">
-            <Shield className="w-4 h-4 mr-2" />
-            <span>Your data is secure and encrypted</span>
-          </div>
-        </motion.div>
-
-        {/* Back to Main Site */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="mt-4 text-center"
-        >
-          <Link href="/" className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors">
-            ← Back to Home
-          </Link>
-        </motion.div>
-      </motion.div>
+      </div>
     </div>
+  )
+}
+
+export default function ClientLoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   )
 } 

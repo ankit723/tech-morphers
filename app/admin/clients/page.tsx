@@ -2,9 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Plus } from 'lucide-react'
 import { getClients } from '@/lib/actions'
 import { ClientsList } from './components/ClientsList'
+import { CreateClientModal } from './components/CreateClientModal'
+import DeleteClientModal from './components/DeleteClientModal'
+import { Button } from '@/components/ui/button'
 
 type ClientDocument = {
   id: string
@@ -61,6 +64,9 @@ export default function AdminClients() {
   const router = useRouter()
   const [clients, setClients] = useState<Client[]>([])
   const [loading, setLoading] = useState(true)
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [clientToDelete, setClientToDelete] = useState<Client | null>(null)
 
   useEffect(() => {
     loadClients()
@@ -79,6 +85,15 @@ export default function AdminClients() {
 
   const handleClientSelect = (client: Client) => {
     router.push(`/admin/clients/${client.id}`)
+  }
+
+  const handleDeleteClient = (client: Client) => {
+    setClientToDelete(client)
+    setShowDeleteModal(true)
+  }
+
+  const handleDeleteConfirm = () => {
+    loadClients() // Refresh the clients list after deletion
   }
 
   if (loading) {
@@ -102,16 +117,56 @@ export default function AdminClients() {
           </p>
         </div>
         
-        <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-          <span>{clients.length} total clients</span>
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+            <span>{clients.length} total clients</span>
+          </div>
+          <Button
+            onClick={() => setShowCreateModal(true)}
+            className="flex items-center space-x-2"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Create Client</span>
+          </Button>
         </div>
       </div>
 
       {/* Clients List */}
       <ClientsList 
         clients={clients} 
-        onClientSelect={handleClientSelect} 
+        onClientSelect={handleClientSelect}
+        onDeleteClient={handleDeleteClient}
       />
+
+      {/* Create Client Modal */}
+      {showCreateModal && (
+        <CreateClientModal
+          onClose={() => setShowCreateModal(false)}
+          onSuccess={() => {
+            setShowCreateModal(false)
+            loadClients() // Refresh the clients list
+          }}
+        />
+      )}
+
+      {/* Delete Client Modal */}
+      {showDeleteModal && clientToDelete && (
+        <DeleteClientModal
+          isOpen={showDeleteModal}
+          onClose={() => {
+            setShowDeleteModal(false)
+            setClientToDelete(null)
+          }}
+          client={{
+            id: clientToDelete.id,
+            fullName: clientToDelete.fullName,
+            email: clientToDelete.email,
+            documentsCount: clientToDelete.documents.length,
+            estimatorsCount: clientToDelete.estimators.length
+          }}
+          onDelete={handleDeleteConfirm}
+        />
+      )}
     </div>
   )
 }

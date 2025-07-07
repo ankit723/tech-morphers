@@ -16,7 +16,10 @@ import {
   Loader2,
   CreditCard,
   AlertTriangle,
-  FileSignature
+  FileSignature,
+  Video,
+  Link,
+  ExternalLink
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -28,6 +31,7 @@ export interface DocumentData {
   id: string
   title: string
   type: string
+  contentType?: string
   uploadedAt: Date
   fileUrl: string
   fileName: string
@@ -86,7 +90,8 @@ export function DocumentCard({
 }: DocumentCardProps) {
   const [actionLoading, setActionLoading] = useState<string | null>(null)
 
-  const formatFileSize = (bytes: number) => {
+  const formatFileSize = (bytes: number, contentType?: string) => {
+    if (contentType === 'LINK') return 'External Link'
     if (bytes === 0) return '0 Bytes'
     const k = 1024
     const sizes = ['Bytes', 'KB', 'MB', 'GB']
@@ -100,8 +105,29 @@ export function DocumentCard({
       case 'PROPOSAL': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
       case 'INVOICE': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300'
       case 'REPORT': return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300'
+      case 'VIDEO': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+      case 'LINK': return 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-300'
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300'
     }
+  }
+
+  const getContentIcon = (type: string, fileUrl: string, contentType?: string) => {
+    if (contentType === 'VIDEO') {
+      return <Video className="w-8 h-8 text-red-600" />
+    }
+    if (contentType === 'LINK' || type === 'LINK' || (fileUrl && (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) && !fileUrl.includes('/uploads/'))) {
+      return <Link className="w-8 h-8 text-cyan-600" />
+    }
+    // Default document icon with color based on type
+    const iconColor = type === 'INVOICE' ? "text-purple-600" :
+                     type === 'CONTRACT' ? "text-blue-600" :
+                     type === 'PROPOSAL' ? "text-green-600" :
+                     "text-gray-600"
+    return <FileText className={`w-8 h-8 ${iconColor}`} />
+  }
+
+  const isLink = (fileUrl: string, contentType?: string) => {
+    return contentType === 'LINK' || (fileUrl && (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) && !fileUrl.includes('/uploads/'))
   }
 
   const getPaymentStatusIcon = (status: string) => {
@@ -175,13 +201,7 @@ export function DocumentCard({
           <div className="flex items-start justify-between">
             <div className="flex items-start space-x-3 flex-1 min-w-0">
               <div className="flex-shrink-0 mt-1">
-                <FileText className={cn(
-                  "w-8 h-8",
-                  document.type === 'INVOICE' ? "text-purple-600" :
-                  document.type === 'CONTRACT' ? "text-blue-600" :
-                  document.type === 'PROPOSAL' ? "text-green-600" :
-                  "text-gray-600"
-                )} />
+                {getContentIcon(document.type, document.fileUrl, document.contentType)}
               </div>
               
               <div className="flex-1 min-w-0">
@@ -202,7 +222,7 @@ export function DocumentCard({
                     <Calendar className="w-3 h-3 mr-1" />
                     {new Date(document.uploadedAt).toLocaleDateString()}
                   </span>
-                  <span>{formatFileSize(document.fileSize)}</span>
+                  <span>{formatFileSize(document.fileSize, document.contentType)}</span>
                   {variant === 'admin' && (
                     <span className="flex items-center">
                       <User className="w-3 h-3 mr-1" />
@@ -309,14 +329,18 @@ export function DocumentCard({
                 onClick={() => handleAction('download', onDownload)}
                 disabled={actionLoading === 'download'}
                 className="flex items-center space-x-1"
-                title="Download document"
+                title={isLink(document.fileUrl, document.contentType) ? "Open link" : "Download document"}
               >
                 {actionLoading === 'download' ? (
                   <Loader2 className="w-3 h-3 animate-spin" />
+                ) : isLink(document.fileUrl, document.contentType) ? (
+                  <ExternalLink className="w-3 h-3" />
                 ) : (
                   <Download className="w-3 h-3" />
                 )}
-                <span className="hidden sm:inline">Download</span>
+                <span className="hidden sm:inline">
+                  {isLink(document.fileUrl, document.contentType) ? 'Open' : 'Download'}
+                </span>
               </Button>
 
               {/* Context-Aware Actions */}

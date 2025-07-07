@@ -18,7 +18,11 @@ import {
   ArrowLeft,
   User,
   X,
-  Package
+  Package,
+  Video,
+  Link,
+  ExternalLink,
+  Eye
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -33,11 +37,13 @@ import QRCode from 'qrcode'
 import Image from 'next/image'
 import PaymentButton from '@/components/payment-button'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table'
+import { toast } from 'sonner'
 
 type ClientDocument = {
   id: string
   title: string
   type: string
+  contentType: string
   uploadedAt: string
   fileUrl: string
   fileName: string
@@ -80,6 +86,104 @@ type Client = {
 
 interface ClientProjectDocumentsPageProps {
   params: Promise<{ projectId: string }>
+}
+
+// Helper function to get the appropriate icon based on content type
+const getContentIcon = (contentType: string, type: string) => {
+  switch (contentType) {
+    case 'VIDEO':
+      return <Video className="w-6 h-6 text-red-600" />
+    case 'LINK':
+      return <Link className="w-6 h-6 text-blue-600" />
+    default:
+      // Different icons for different document types
+      switch (type) {
+        case 'INVOICE':
+          return <CreditCard className="w-6 h-6 text-green-600" />
+        case 'CONTRACT':
+          return <FileText className="w-6 h-6 text-purple-600" />
+        case 'PROPOSAL':
+          return <FileText className="w-6 h-6 text-orange-600" />
+        case 'REPORT':
+          return <FileText className="w-6 h-6 text-indigo-600" />
+        default:
+          return <FileText className="w-6 h-6 text-gray-600" />
+      }
+  }
+}
+
+// Helper function to check if the document is a link
+const isLink = (contentType: string, type?: string, fileUrl?: string, fileName?: string) => {
+  // Primary check: contentType should be 'LINK'
+  if (contentType === 'LINK') return true;
+  
+  // Backward compatibility: check if it's a link based on other indicators
+  if (type === 'LINK') return true;
+  if (fileUrl && fileName && 
+      (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) && 
+      fileName.startsWith('link_')) return true;
+  
+  return false;
+}
+
+// Helper function to check if the document is a video
+const isVideo = (contentType: string, fileName?: string) => {
+  // Primary check: contentType should be 'VIDEO'
+  if (contentType === 'VIDEO') return true;
+  
+  // Backward compatibility: check file extension
+  if (fileName && /\.(mp4|avi|mov|wmv|flv|webm|mkv|m4v)$/i.test(fileName)) return true;
+  
+  return false;
+}
+
+// Helper function to format file size for display
+const formatFileSize = (fileSize: number, contentType: string, type?: string, fileUrl?: string, fileName?: string) => {
+  if (isLink(contentType, type, fileUrl, fileName)) {
+    return 'External Link'
+  }
+  
+  if (fileSize < 1024) {
+    return `${fileSize} B`
+  } else if (fileSize < 1024 * 1024) {
+    return `${(fileSize / 1024).toFixed(1)} KB`
+  } else {
+    return `${(fileSize / (1024 * 1024)).toFixed(1)} MB`
+  }
+}
+
+// Helper function to get content type badge with appropriate colors
+const getContentTypeBadge = (contentType: string, type: string, fileUrl?: string, fileName?: string) => {
+  if (isLink(contentType, type, fileUrl, fileName)) {
+    return <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">🔗 Link</Badge>
+  }
+  
+  if (isVideo(contentType, fileName)) {
+    return <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">📹 Video</Badge>
+  }
+  
+  // Handle document types
+  switch (type) {
+    case 'INVOICE':
+      return <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">💰 Invoice</Badge>
+    case 'CONTRACT':
+      return <Badge className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300">📄 Contract</Badge>
+    case 'PROPOSAL':
+      return <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300">📋 Proposal</Badge>
+    case 'REPORT':
+      return <Badge className="bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300">📊 Report</Badge>
+    default:
+      return <Badge className="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300">📄 Document</Badge>
+  }
+}
+
+// Helper function to check if document can be viewed in browser
+const canViewInBrowser = (contentType: string, fileName: string, type?: string, fileUrl?: string) => {
+  if (isLink(contentType, type, fileUrl, fileName)) return true // Links can always be "viewed" (opened)
+  
+  const extension = fileName.split('.').pop()?.toLowerCase()
+  const viewableExtensions = ['pdf', 'txt', 'jpg', 'jpeg', 'png', 'gif', 'svg', 'mp4', 'webm', 'mov', 'avi']
+  return viewableExtensions.includes(extension || '')
 }
 
 export default function ClientProjectDocumentsPage({ params }: ClientProjectDocumentsPageProps) {
@@ -171,26 +275,72 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
     }
   }
 
-  const downloadDocument = async (documentId: string, title: string) => {
+  const downloadDocument = async (documentId: string, title: string, fileName: string) => {
     setDownloadingDocumentId(documentId)
     try {
+      console.log('Downloading document:', { documentId, title, fileName })
+      
       const response = await fetch(`/api/client/documents/${documentId}`)
-      if (response.ok) {
-        const blob = await response.blob()
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = title
-        document.body.appendChild(a)
-        a.click()
-        window.URL.revokeObjectURL(url)
-        document.body.removeChild(a)
+      
+      if (!response.ok) {
+        throw new Error(`Download failed with status: ${response.status} ${response.statusText}`)
       }
+      
+      // Check content type
+      const contentType = response.headers.get('content-type')
+      console.log('Response content type:', contentType)
+      
+      const blob = await response.blob()
+      console.log('Downloaded blob size:', blob.size, 'bytes')
+      
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      
+      // Use the original filename if available, otherwise use title
+      const downloadFileName = fileName || title
+      a.download = downloadFileName
+      
+      console.log('Downloading as:', downloadFileName)
+      
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+      
+      toast.success(`Downloaded ${downloadFileName}`)
+      
     } catch (error) {
       console.error('Download failed:', error)
-      alert('Failed to download document')
+      toast.error(`Failed to download document: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setDownloadingDocumentId(null)
+    }
+  }
+
+  const openDocument = (document: ClientDocument) => {
+    if (isLink(document.contentType, document.type, document.fileUrl, document.fileName)) {
+      // For links, open in new tab
+      window.open(document.fileUrl, '_blank')
+    } else {
+      // For files, trigger download with proper filename
+      downloadDocument(document.id, document.title, document.fileName)
+    }
+  }
+
+  const viewDocument = (document: ClientDocument) => {
+    if (isLink(document.contentType, document.type, document.fileUrl, document.fileName)) {
+      // For links, open in new tab
+      window.open(document.fileUrl, '_blank')
+    } else if (isVideo(document.contentType, document.fileName)) {
+      // For videos and media files, open the direct file URL in new tab
+      window.open(document.fileUrl, '_blank')
+    } else if (canViewInBrowser(document.contentType, document.fileName, document.type, document.fileUrl)) {
+      // For other viewable files (PDFs, etc.), open direct URL
+      window.open(document.fileUrl, '_blank')
+    } else {
+      // Fallback to download for non-viewable files
+      downloadDocument(document.id, document.title, document.fileName)
     }
   }
 
@@ -251,7 +401,7 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
         setSelectedDocument(null)
         // Refresh project data
         await loadProjectData()
-        alert('Payment proof submitted successfully! It will be reviewed by our team.')
+        toast.success('Payment proof submitted successfully! It will be reviewed by our team.')
       } else {
         setPaymentError(result.error || 'Failed to submit payment')
       }
@@ -282,7 +432,7 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
         setSigningDocument(null)
         // Refresh project data
         await loadProjectData()
-        alert('Document signed successfully!')
+        toast.success('Document signed successfully!')
       } else {
         setSigningError(result.error || 'Failed to sign document')
       }
@@ -471,102 +621,173 @@ export default function ClientProjectDocumentsPage({ params }: ClientProjectDocu
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {documents.map((document) => (
-                      <div key={document.id} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <FileText className="w-5 h-5 text-blue-600" />
-                            <div>
-                              <h3 className="font-medium text-gray-900 dark:text-white">{document.title}</h3>
-                              <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                                <Badge variant="secondary">{document.type}</Badge>
-                                <span>{new Date(document.uploadedAt).toLocaleDateString()}</span>
-                                
-                                {/* Invoice specific info */}
-                                {document.type === 'INVOICE' && (
-                                  <>
-                                    <span className="text-gray-400">•</span>
-                                    <span className="font-medium">
-                                      {document.currency} {document.invoiceAmount?.toFixed(2)}
-                                    </span>
-                                    {document.dueDate && (
-                                      <>
-                                        <span className="text-gray-400">•</span>
-                                        <span>Due: {new Date(document.dueDate).toLocaleDateString()}</span>
-                                      </>
-                                    )}
-                                  </>
-                                )}
+                      <div key={document.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-start space-x-4 flex-1">
+                            {/* Icon */}
+                            <div className="flex-shrink-0 p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
+                              {getContentIcon(document.contentType, document.type)}
+                            </div>
+                            
+                            {/* Content */}
+                            <div className="flex-1 min-w-0">
+                              {/* Title and Content Type Badge */}
+                              <div className="flex items-center space-x-3 mb-2">
+                                <h3 className="font-semibold text-lg text-gray-900 dark:text-white truncate">
+                                  {document.title}
+                                </h3>
+                                {getContentTypeBadge(document.contentType, document.type, document.fileUrl, document.fileName)}
                               </div>
                               
-                              {/* Payment status for invoices */}
-                              {document.type === 'INVOICE' && document.paymentStatus && (
-                                <div className="flex items-center space-x-2 mt-2">
-                                  {getPaymentStatusIcon(document.paymentStatus)}
-                                  <span className="text-sm font-medium">
-                                    {getPaymentStatusText(document.paymentStatus)}
-                                  </span>
+                              {/* Basic Info */}
+                              <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400 mb-3">
+                                <div className="flex items-center space-x-1">
+                                  <Calendar className="w-4 h-4" />
+                                  <span>{new Date(document.uploadedAt).toLocaleDateString()}</span>
+                                </div>
+                                <div className="flex items-center space-x-1">
+                                  <Package className="w-4 h-4" />
+                                  <span>{formatFileSize(document.fileSize, document.contentType, document.type, document.fileUrl, document.fileName)}</span>
+                                </div>
+                              </div>
+
+                              {/* Invoice specific info */}
+                              {document.type === 'INVOICE' && (
+                                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md p-3 mb-3">
+                                  <div className="flex items-center justify-between">
+                                    <div>
+                                      <div className="flex items-center space-x-2">
+                                        <Badge variant="outline" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                                          Invoice #{document.invoiceNumber}
+                                        </Badge>
+                                        <span className="font-semibold text-green-800 dark:text-green-300">
+                                          {document.currency} {document.invoiceAmount?.toFixed(2)}
+                                        </span>
+                                      </div>
+                                      {document.dueDate && (
+                                        <p className="text-sm text-green-700 dark:text-green-400 mt-1">
+                                          Due: {new Date(document.dueDate).toLocaleDateString()}
+                                        </p>
+                                      )}
+                                    </div>
+                                    {document.paymentStatus && (
+                                      <div className="flex items-center space-x-2">
+                                        {getPaymentStatusIcon(document.paymentStatus)}
+                                        <span className="text-sm font-medium text-green-800 dark:text-green-300">
+                                          {getPaymentStatusText(document.paymentStatus)}
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
                               )}
                               
                               {/* Signature status for non-invoices */}
                               {document.type !== 'INVOICE' && document.requiresSignature && (
-                                <div className="flex items-center space-x-2 mt-2">
-                                  {document.isSigned ? (
-                                    <>
-                                      <CheckCircle className="w-4 h-4 text-green-500" />
-                                      <span className="text-sm text-green-600 dark:text-green-400">
-                                        Signed on {document.signedAt ? new Date(document.signedAt).toLocaleDateString() : 'N/A'}
-                                      </span>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <Pen className="w-4 h-4 text-orange-500" />
-                                      <span className="text-sm text-orange-600 dark:text-orange-400">
-                                        Signature Required
-                                      </span>
-                                    </>
-                                  )}
+                                <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-md p-3 mb-3">
+                                  <div className="flex items-center space-x-2">
+                                    {document.isSigned ? (
+                                      <>
+                                        <CheckCircle className="w-4 h-4 text-green-500" />
+                                        <span className="text-sm text-green-600 dark:text-green-400">
+                                          ✅ Signed on {document.signedAt ? new Date(document.signedAt).toLocaleDateString() : 'N/A'}
+                                        </span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Pen className="w-4 h-4 text-orange-500" />
+                                        <span className="text-sm text-orange-600 dark:text-orange-400">
+                                          ⚠️ Signature Required
+                                        </span>
+                                      </>
+                                    )}
+                                  </div>
                                 </div>
+                              )}
+
+                              {/* Description */}
+                              {document.description && (
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                  {document.description}
+                                </p>
                               )}
                             </div>
                           </div>
                           
-                          <div className="flex items-center space-x-2">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => downloadDocument(document.id, document.title)}
-                              className="flex items-center space-x-2"
-                              disabled={downloadingDocumentId === document.id}
-                            >
-                              {downloadingDocumentId === document.id ? (
-                                <Loader2 className="w-4 h-4 animate-spin" />
-                              ) : (
-                                <>
-                                  <Download className="w-4 h-4" />
-                                  <span>Download</span>
-                                </>
-                              )}
-                            </Button>
+                          {/* Action Buttons */}
+                          <div className="flex items-center space-x-2 ml-4">
+                            {/* View Button - Show for viewable content */}
+                            {(canViewInBrowser(document.contentType, document.fileName, document.type, document.fileUrl) || isLink(document.contentType, document.type, document.fileUrl, document.fileName)) && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => viewDocument(document)}
+                                className="flex items-center space-x-2"
+                                disabled={downloadingDocumentId === document.id}
+                              >
+                                {downloadingDocumentId === document.id ? (
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                ) : (
+                                  <>
+                                    {isLink(document.contentType, document.type, document.fileUrl, document.fileName) ? (
+                                      <>
+                                        <ExternalLink className="w-4 h-4" />
+                                        <span>Open Link</span>
+                                      </>
+                                    ) : isVideo(document.contentType, document.fileName) ? (
+                                      <>
+                                        <Eye className="w-4 h-4" />
+                                        <span>Watch</span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Eye className="w-4 h-4" />
+                                        <span>View</span>
+                                      </>
+                                    )}
+                                  </>
+                                )}
+                              </Button>
+                            )}
+                            
+                            {/* Download Button - Show for non-link content */}
+                            {!isLink(document.contentType, document.type, document.fileUrl, document.fileName) && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => openDocument(document)}
+                                className="flex items-center space-x-2"
+                                disabled={downloadingDocumentId === document.id}
+                              >
+                                {downloadingDocumentId === document.id ? (
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                ) : (
+                                  <>
+                                    <Download className="w-4 h-4" />
+                                    <span>Download</span>
+                                  </>
+                                )}
+                              </Button>
+                            )}
                             
                             {/* Payment button for pending invoices */}
                             {document.type === 'INVOICE' && document.paymentStatus === 'PENDING' && (
                               <>
-                              <Button
-                                size="sm"
-                                onClick={() => {
-                                  setSelectedDocument(document)
-                                  setShowPaymentModal(true)
-                                  setUpiAmount(document.invoiceAmount || 0)
-                                }}
-                                className="flex items-center space-x-2 bg-green-600 hover:bg-green-700"
-                              >
-                                <CreditCard className="w-4 h-4" />
-                                <span>Pay Manually</span>
-                              </Button>
-                              <PaymentButton invoiceNumber={document.invoiceNumber || ""} amount={document.invoiceAmount || 0} currency={document.currency || "INR"} receipt={document.invoiceNumber || ""} name={client.fullName} email={client.email} phone={client.phone} />
+                                <Button
+                                  size="sm"
+                                  onClick={() => {
+                                    setSelectedDocument(document)
+                                    setShowPaymentModal(true)
+                                    setUpiAmount(document.invoiceAmount || 0)
+                                  }}
+                                  className="flex items-center space-x-2 bg-green-600 hover:bg-green-700"
+                                >
+                                  <CreditCard className="w-4 h-4" />
+                                  <span>Pay Manually</span>
+                                </Button>
+                                <PaymentButton invoiceNumber={document.invoiceNumber || ""} amount={document.invoiceAmount || 0} currency={document.currency || "INR"} receipt={document.invoiceNumber || ""} name={client.fullName} email={client.email} phone={client.phone} />
                               </>
                             )}
                             

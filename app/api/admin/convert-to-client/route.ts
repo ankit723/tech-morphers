@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
                   </div>
                   
                   <div style="text-align: center; margin: 24px 0;">
-                    <a href="${process.env.NEXT_PUBLIC_APP_URL}/client/login" style="background: #1d76d3; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
+                    <a href="${process.env.NEXT_PUBLIC_APP_URL}/client/login?email=${result.client.email}&password=${result.systemPassword}" style="background: #1d76d3; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
                       🚀 Access Your Portal
                     </a>
                   </div>
@@ -86,7 +86,7 @@ Password: ${result.systemPassword}
 
 Please change your password after first login for security.
 
-Access your portal: ${process.env.NEXT_PUBLIC_APP_URL}/client/login
+Access your portal: ${process.env.NEXT_PUBLIC_APP_URL}/client/login?email=${result.client.email}&password=${result.systemPassword}
 
 What you can do:
 - View and download project quotations

@@ -7,10 +7,19 @@ import {
   Phone, 
   FolderOpen,
   FileText,
-  Calendar
+  Calendar,
+  Trash2,
+  MoreVertical
 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 type ClientDocument = {
   id: string
@@ -67,9 +76,19 @@ interface ClientCardProps {
   client: Client
   index: number
   onClientSelect: (client: Client) => void
+  onDeleteClient: (client: Client) => void
 }
 
-export function ClientCard({ client, index, onClientSelect }: ClientCardProps) {
+export function ClientCard({ client, index, onClientSelect, onDeleteClient }: ClientCardProps) {
+  const handleDropdownClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onDeleteClient(client);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -86,9 +105,27 @@ export function ClientCard({ client, index, onClientSelect }: ClientCardProps) {
               <Users className="w-5 h-5 text-blue-600" />
               <span className="truncate">{client.fullName}</span>
             </span>
-            <Badge variant={client.hasChangedPassword ? "default" : "secondary"}>
-              {client.hasChangedPassword ? 'Active' : 'New'}
-            </Badge>
+            <div className="flex items-center space-x-2">
+              <Badge variant={client.hasChangedPassword ? "default" : "secondary"}>
+                {client.hasChangedPassword ? 'Active' : 'New'}
+              </Badge>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild onClick={handleDropdownClick}>
+                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem 
+                    className="text-red-600 focus:text-red-600"
+                    onClick={handleDeleteClick}
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete Client
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </CardTitle>
           <CardDescription className="truncate">
             {client.companyName || 'Individual Client'}
